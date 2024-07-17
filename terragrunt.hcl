@@ -7,12 +7,14 @@ terraform {
       "plan",
       "import",
       "push",
-      "refresh"
+      "refresh",
+      "destroy"
     ]
     required_var_files = [
       "${get_original_terragrunt_dir()}/../HomeOpsData/ros.tfvars",
       "${get_original_terragrunt_dir()}/../HomeOpsData/wan.tfvars",
       "${get_original_terragrunt_dir()}/../HomeOpsData/lan.tfvars",
+      "${get_original_terragrunt_dir()}/../HomeOpsData/wifi.tfvars",
     ]
   }
 }

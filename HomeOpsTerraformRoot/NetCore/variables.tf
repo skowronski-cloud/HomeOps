@@ -20,7 +20,7 @@ variable "identity" {
   type = string
 }
 variable "dns" {
-  type = string
+  type = list(string)
 }
 variable "local_tld" {
   type = string
@@ -32,9 +32,6 @@ variable "dhcp_servers" {
   type = map(map(string))
 }
 variable "hex" {
-  type = map(string)
-}
-variable "capsman" {
   type = map(string)
 }
 variable "caps" {

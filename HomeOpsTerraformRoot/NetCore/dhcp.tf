@@ -27,22 +27,6 @@ resource "routeros_ip_dns_record" "hex" {
   type    = "A"
 }
 
-resource "routeros_ip_dhcp_server_lease" "capsman" {
-  address     = var.capsman.addr
-  mac_address = var.capsman.ether1mac
-  comment = jsonencode({
-    "hostname" : "net-${var.capsman.identity}",
-    "device" : var.capsman.device,
-    "serial" : var.capsman.serial,
-    "roles" : ["CAPsMAN", "CAP"]
-  })
-}
-resource "routeros_ip_dns_record" "capsman" {
-  name    = "capsman.${var.local_tld}"
-  address = var.capsman.addr
-  type    = "A"
-}
-
 resource "routeros_ip_dhcp_server_lease" "cap" {
   for_each    = var.caps
   address     = each.value.addr

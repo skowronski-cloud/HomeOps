@@ -11,22 +11,9 @@ variable "ros_hex" {
     "ether1mac" = "00:00:DE:AD:BE:EF"
   }
 }
-variable "ros_capsman" {
-  type        = map(string)
-  description = "RouterOS AP device acting as CAPsMAN"
-  default = {
-    "addr"      = "192.168.88.2"
-    "user"      = "admin"
-    "pass"      = ""
-    "identity"  = "hAP-CAPSMAN"
-    "device"    = "-----------"
-    "serial"    = "-----------"
-    "ether1mac" = "00:00:DE:AD:BE:EF"
-  }
-}
 variable "ros_caps" {
   type        = map(map(string))
-  description = "map of RouterOS AP devices, except one acting as CAPsMAN; key is device identity"
+  description = "map of RouterOS AP devices; key is device identity"
   default = {
     "hAP-1" = {
       "addr"      = "192.168.88.3"
@@ -76,9 +63,9 @@ variable "lan_mask" {
 }
 
 variable "dns" {
-  type        = string
+  type        = list(string)
   description = "upstream/public DNS servers"
-  default     = "1.1.1.1,1.0.0.1"
+  default     = ["1.1.1.1", "1.0.0.1"]
 }
 variable "local_tld" {
   type        = string
@@ -108,4 +95,12 @@ variable "dhcp_servers" {
       "comment"   = "..."
     }
   }
+}
+
+variable "country" {
+  type    = string
+  default = "Poland"
+}
+variable "wireless_config" {
+  // FIXME - schema
 }

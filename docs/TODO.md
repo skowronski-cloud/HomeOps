@@ -2,8 +2,8 @@
 
 ## Mikrotik
 
-- [ ] basic ethernet setup: make LAN and WAN work (ISP connection, DHCP etc.)
-- [ ] basic wireless setup: CAPsMAN for one home network across differenr wireless srandards
+- [x] basic ethernet setup: make LAN and WAN work (ISP connection, DHCP etc.)
+- [x] basic wireless setup: CAPsMAN for one home network across differenr wireless srandards
 - [ ] CA configuration, enable TLS
 - [ ] keep all CAPs in configuration - Terragrunt envs (TF can't use dynamic providers)
 - [ ] add guest and IoT wireless configuration with firewall

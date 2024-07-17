@@ -15,7 +15,6 @@ module "core" {
   dhcp_pools   = var.dhcp_pools
   dhcp_servers = var.dhcp_servers
 
-  hex     = var.ros_hex
-  capsman = var.ros_capsman
-  caps    = var.ros_caps
+  hex  = var.ros_hex
+  caps = var.ros_caps
 }
