@@ -104,3 +104,6 @@ variable "country" {
 variable "wireless_config" {
   // FIXME - schema
 }
+variable "repo_root" {
+  type = string
+}

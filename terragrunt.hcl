@@ -17,13 +17,19 @@ terraform {
       "${get_original_terragrunt_dir()}/../HomeOpsData/wifi.tfvars",
     ]
   }
+
+}
+
+
+inputs = {
+  repo_root = get_terragrunt_dir()
 }
 
 remote_state {
   backend = "local"
   config = {
-    path = "${get_original_terragrunt_dir()}/../HomeOpsData/terraform.tfstate" 
-  }  
+    path = "${get_original_terragrunt_dir()}/../HomeOpsData/terraform.tfstate"
+  }
   generate = {
     path      = "backend.tf"
     if_exists = "overwrite"
