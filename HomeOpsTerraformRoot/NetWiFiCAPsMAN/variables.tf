@@ -24,6 +24,7 @@ variable "wireless_config" {
       }
       "chains"    = [0, 1]
       "isolation" = false
+      "ft"        = true
       "2ghz" = {
         "band"  = "2ghz-ax"
         "width" = "20/40mhz"
@@ -58,6 +59,7 @@ variable "wireless_config" {
       }
       "chains"    = [1]
       "isolation" = true
+      "ft"        = false
       "2ghz" = {
         "band"  = "2ghz-ax"
         "width" = "20/40mhz"

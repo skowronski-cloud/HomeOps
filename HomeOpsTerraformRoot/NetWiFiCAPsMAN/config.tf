@@ -28,9 +28,9 @@ resource "routeros_wifi_configuration" "cfg2" {
   }
   security = {
     authentication_types = each.value.auth.types
-    ft                   = true
-    ft_preserve_vlanid   = true
-    ft_over_ds           = true
+    ft                   = each.value.ft
+    ft_preserve_vlanid   = each.value.ft
+    ft_over_ds           = each.value.ft
     connect_priority     = 0
     passphrase           = each.value.auth.pass
   }
@@ -52,9 +52,9 @@ resource "routeros_wifi_configuration" "cfg5" {
   }
   security = {
     authentication_types = each.value.auth.types
-    ft                   = true
-    ft_preserve_vlanid   = true
-    ft_over_ds           = true
+    ft                   = each.value.ft
+    ft_preserve_vlanid   = each.value.ft
+    ft_over_ds           = each.value.ft
     connect_priority     = 0
     passphrase           = each.value.auth.pass
   }
