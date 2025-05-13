@@ -12,9 +12,11 @@ module "core" {
   identity     = var.ros_hex.identity
   dns          = var.dns
   local_tld    = var.local_tld
-  dhcp_pools   = var.dhcp_pools
   dhcp_servers = var.dhcp_servers
 
-  hex  = var.ros_hex
-  caps = var.ros_caps
+  hex               = var.ros_hex
+  caps              = var.ros_caps
+  net_segments      = csvdecode(file("${var.repo_root}/../HomeOpsData/net_segments.csv"))
+  tool_email        = var.tool_email
+  dhcp_notify_match = var.dhcp_notify_match
 }

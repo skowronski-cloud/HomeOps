@@ -25,9 +25,6 @@ variable "dns" {
 variable "local_tld" {
   type = string
 }
-variable "dhcp_pools" {
-  type = map(map(string))
-}
 variable "dhcp_servers" {
   type = map(map(string))
 }
@@ -36,4 +33,31 @@ variable "hex" {
 }
 variable "caps" {
   type = map(map(string))
+}
+variable "net_segments" {
+  type = list(map(string))
+  default = [{
+    "id"      = "a"
+    "third"   = "100"
+    "name"    = "dns-friendly-name"
+    "start"   = "192.168.1.10"
+    "end"     = "192.168.1.11"
+    "comment" = "optional"
+  }]
+}
+variable "tool_email" {
+  type = map(string)
+  default = {
+    "from"     = ""
+    "password" = ""
+    "port"     = ""
+    "server"   = ""
+    "tls"      = ""
+    "user"     = ""
+    "to"       = ""
+  }
+}
+variable "dhcp_notify_match" {
+  type    = string
+  default = "192.168..*"
 }

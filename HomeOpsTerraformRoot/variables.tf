@@ -72,19 +72,6 @@ variable "local_tld" {
   description = "local domain to be used with local DNS server"
   default     = "local"
 }
-
-variable "dhcp_pools" {
-  type        = map(map(string))
-  description = "map of DHCP pools"
-  default = {
-    "dhcp_pool" = {
-      "first"     = "192.168.88.100"
-      "last"      = "192.168.88.199"
-      "comment"   = "..."
-      "next_pool" = null
-    }
-  }
-}
 variable "dhcp_servers" {
   type        = map(map(string))
   description = "map of DHCP servers"
@@ -106,4 +93,23 @@ variable "wireless_config" {
 }
 variable "repo_root" {
   type = string
+  # MANAGED FROM TERRAGRUNT
+}
+
+variable "tool_email" {
+  type = map(string)
+  default = {
+    "from"     = ""
+    "password" = ""
+    "port"     = ""
+    "server"   = ""
+    "tls"      = ""
+    "user"     = ""
+    "to"       = ""
+  }
+
+}
+variable "dhcp_notify_match" {
+  type    = string
+  default = "192.168..*"
 }

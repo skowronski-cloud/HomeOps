@@ -1,14 +1,9 @@
 locals {
   leases = {
-    for entry in var.dhcp :
-    entry.name => entry
+    for name, entry in var.net_dhcp :
+    upper(entry.mac) => entry
     if entry.ip != ""
     && entry.mac != ""
     && entry.name != ""
-  }
-  extra_addresses = {
-    for name, entry in local.leases :
-    entry.extra_alias => entry
-    if entry.extra_alias != ""
   }
 }
