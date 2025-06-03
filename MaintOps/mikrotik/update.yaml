@@ -1,0 +1,12 @@
+---
+- name: RouterOS Upgrade
+  hosts: mikrotik
+  gather_facts: false
+  tasks:
+    - name: Check updtate availability
+      community.routeros.command:
+        commands: /system/package/update/check-for-updates
+      register: update_check
+    - name: Perform update
+      import_tasks: lib/perform_update.yaml
+      when: "'New version is available' in update_check.stdout | join(' ')"

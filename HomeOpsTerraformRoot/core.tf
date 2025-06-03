@@ -19,4 +19,6 @@ module "core" {
   net_segments      = csvdecode(file("${var.repo_root}/../HomeOpsData/net_segments.csv"))
   tool_email        = var.tool_email
   dhcp_notify_match = var.dhcp_notify_match
+
+  admin_ssh_key = var.admin_ssh_key
 }

@@ -113,3 +113,7 @@ variable "dhcp_notify_match" {
   type    = string
   default = "192.168..*"
 }
+variable "admin_ssh_key" {
+  type        = string
+  description = "SSH public key for admin user"
+}

@@ -15,6 +15,7 @@ terraform {
       "${get_original_terragrunt_dir()}/../HomeOpsData/wan.tfvars",
       "${get_original_terragrunt_dir()}/../HomeOpsData/lan.tfvars",
       "${get_original_terragrunt_dir()}/../HomeOpsData/wifi.tfvars",
+      "${get_original_terragrunt_dir()}/../HomeOpsData/yig.tfvars",
     ]
   }
 

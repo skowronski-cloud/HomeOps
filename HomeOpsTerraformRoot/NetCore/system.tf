@@ -15,3 +15,11 @@ resource "routeros_tool_email" "email" {
   tls      = var.tool_email.tls
   user     = var.tool_email.user
 }
+
+resource "routeros_system_user_sshkeys" "admin" {
+  user    = "admin"
+  key     = var.admin_ssh_key
+  comment = "admin"
+}
+
+# TODO: https://registry.terraform.io/providers/terraform-routeros/routeros/latest/docs/resources/system_certificate

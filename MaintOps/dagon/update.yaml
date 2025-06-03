@@ -1,0 +1,11 @@
+- hosts: dagon
+  become: true
+  tasks:
+    - name: Upgrade all pipx packages
+      community.general.pipx:
+        state: upgrade_all
+    - name: Update and upgrade apt packages
+      ansible.builtin.apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400

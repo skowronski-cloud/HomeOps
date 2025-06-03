@@ -2,7 +2,12 @@ resource "routeros_ip_pool" "pool" {
   for_each = local.net_segments
   name     = "pool${each.value.third}"
   ranges   = ["${each.value.start}-${each.value.end}"]
-  comment  = "[${each.value.id}/${each.value.third}] ${each.value.name}"
+  comment = jsonencode({
+    "net"     = each.value.id,
+    "third"   = each.value.third,
+    "name"    = each.value.name,
+    "comment" = each.value.comment,
+  })
 }
 resource "routeros_ip_dhcp_server" "server" {
   for_each     = var.dhcp_servers
