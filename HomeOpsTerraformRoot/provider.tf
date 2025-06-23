@@ -5,3 +5,14 @@ provider "routeros" {
   password = var.ros_hex.pass
   insecure = true
 }
+provider "kubernetes" {
+  config_path    = "~/.kube/config"
+  config_context = "yig"
+}
+provider "helm" {
+  kubernetes {
+    config_path    = "~/.kube/config"
+    config_context = "yig"
+  }
+  burst_limit = 10000
+}
