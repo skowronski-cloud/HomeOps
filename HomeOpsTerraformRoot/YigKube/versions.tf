@@ -4,6 +4,11 @@ variable "ver_helm_traefik" {
   default = "34.4.1"
   type    = string
 }
+variable "ver_helm_authelia" {
+  # https://artifacthub.io/packages/helm/authelia/authelia
+  default = "0.10.21"
+  type    = string
+}
 variable "ver_helm_k8sr" {
   # https://artifacthub.io/packages/helm/deliveryhero/k8s-resources
   default = "0.8.1"

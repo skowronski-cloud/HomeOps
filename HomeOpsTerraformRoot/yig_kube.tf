@@ -14,6 +14,11 @@ module "yig_kube" {
   yig_ca_crt                = var.yig_ca_crt
   yig_ca_key                = var.yig_ca_key
   host_interface_for_matter = var.yig_host_interface_for_matter
+  ldap_basedn               = var.yig_ldap_basedn
+  ldap_filter               = var.yig_ldap_filter
+  ldap_url                  = var.yig_ldap_url
+  ldap_user                 = var.yig_ldap_user
+  ldap_pass                 = var.yig_ldap_pass
 }
 
 variable "yig_address_ingress_main" {
@@ -57,4 +62,29 @@ variable "yig_ca_key" {
 variable "yig_host_interface_for_matter" {
   type        = string
   description = "interface on host OS to be passed into Matter controller, to be read from secrets"
+}
+variable "yig_ldap_url" {
+  type        = string
+  description = "url for ldap connection for authelia, to be read from secrets"
+  default     = "ldap://..."
+}
+variable "yig_ldap_basedn" {
+  type        = string
+  description = "base DN  for authelia, to be read from secrets"
+  default     = "DC=example,DC=com"
+}
+variable "yig_ldap_filter" {
+  type        = string
+  description = "filter for users for authelia, to be read from secrets"
+  default     = "(&({username_attribute}={input})(objectClass=person)(memberOf=CN=yig-ingress-users,CN=Users,DC=example,DC=com))"
+
+}
+
+variable "yig_ldap_user" {
+  type        = string
+  description = "service account in LDAP for authelia, to be read from secrets"
+}
+variable "yig_ldap_pass" {
+  type        = string
+  description = "service account password in LDAP for authelia, to be read from secrets"
 }

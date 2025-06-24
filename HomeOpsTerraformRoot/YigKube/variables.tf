@@ -43,3 +43,20 @@ variable "host_interface_for_matter" {
   type    = string
   default = "eth0"
 }
+
+variable "ldap_url" {
+  type = string
+}
+variable "ldap_basedn" {
+  type = string
+}
+variable "ldap_filter" {
+  type = string
+}
+
+variable "ldap_user" {
+  type = string
+}
+variable "ldap_pass" {
+  type = string
+}
