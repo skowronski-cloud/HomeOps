@@ -27,5 +27,9 @@ terraform {
       source  = "danielskowronski/k0s"
       version = "0.2.2-rc1"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "4.1.0"
+    }
   }
 }

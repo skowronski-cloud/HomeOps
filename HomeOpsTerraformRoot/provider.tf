@@ -14,5 +14,8 @@ provider "helm" {
     config_path    = "~/.kube/config"
     config_context = "yig"
   }
-  burst_limit = 10000
+  burst_limit = 100000
+  experiments {
+    manifest = false
+  }
 }

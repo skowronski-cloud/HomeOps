@@ -3,6 +3,7 @@ module "yig_kube" {
   providers = {
     helm       = helm
     kubernetes = kubernetes
+    tls        = tls
     # TODO: Cloudflare for DNS?
   }
   address_ingress_main      = var.yig_address_ingress_main
@@ -19,6 +20,9 @@ module "yig_kube" {
   ldap_url                  = var.yig_ldap_url
   ldap_user                 = var.yig_ldap_user
   ldap_pass                 = var.yig_ldap_pass
+
+  ingress_base_group  = var.yig_ingress_base_group
+  ingress_admin_group = var.yig_ingress_admin_group
 }
 
 variable "yig_address_ingress_main" {
@@ -87,4 +91,15 @@ variable "yig_ldap_user" {
 variable "yig_ldap_pass" {
   type        = string
   description = "service account password in LDAP for authelia, to be read from secrets"
+}
+
+variable "yig_ingress_base_group" {
+  type        = string
+  description = "base group for users in authelia, to be read from secrets"
+  default     = "yig-ingress-users"
+}
+variable "yig_ingress_admin_group" {
+  type        = string
+  description = "admin group for users in authelia, to be read from secrets"
+  default     = "yig-ingress-adminusers"
 }

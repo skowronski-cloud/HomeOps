@@ -1,3 +1,20 @@
+resource "kubernetes_secret" "ca_crt" {
+  for_each = {
+    "traefik-system" : {},
+    "monitoring-system" : {}
+  }
+  metadata {
+    name      = "ca-crt"
+    namespace = each.key
+  }
+  type = "Opaque"
+
+  binary_data = {
+    "ca.crt" = var.yig_ca_crt # it's already base64
+  }
+
+  depends_on = [kubernetes_namespace.ns]
+}
 resource "helm_release" "traefik" {
   # https://artifacthub.io/packages/helm/traefik/traefik
   repository = "https://traefik.github.io/charts/"
@@ -19,9 +36,36 @@ resource "helm_release" "traefik" {
     value = true
   }
   set_list {
-    name  = "additionalArguments"
-    value = ["--entryPoints.websecure.http.middlewares=traefik-system-forwardauth-authelia@kubernetescrd"]
+    name = "additionalArguments"
+    value = [
+      "--entryPoints.websecure.http.middlewares=traefik-system-forwardauth-authelia@kubernetescrd",
+      #"--entryPoints.websecure.forwardedHeaders.trustedIPs=10.244.0.0/16",
+      "--serversTransport.rootCAs=/etc/pki/tls/certs/ca.crt"
+    ]
   }
+
+  set {
+    name  = "experimental.plugins.traefikoidc.moduleName"
+    value = "github.com/lukaszraczylo/traefikoidc"
+  }
+  set {
+    name  = "experimental.plugins.traefikoidc.version"
+    value = "v0.6.2-beta10" # FIXME - version variable
+  }
+  set {
+    name  = "volumes[0].name"
+    value = "ca-crt"
+  }
+  set {
+    name  = "volumes[0].mountPath"
+    value = "/etc/pki/tls/certs" # https://go.dev/src/crypto/x509/root_linux.go - purposefully other dir than OS-default
+  }
+  set {
+    name  = "volumes[0].type"
+    value = "secret"
+  }
+
+
 
   depends_on = [kubernetes_namespace.ns]
 }
@@ -46,6 +90,40 @@ resource "random_password" "authelia_storage_enc_key" {
   length  = 128
   special = false
 }
+resource "random_password" "oidc_session_enc_key" {
+  length  = 128
+  special = false
+}
+resource "random_password" "oidc_grafana_client_secret" {
+  # TODO: this should be generated on runtime and not managed from here
+  length  = 32
+  special = false
+}
+resource "random_password" "oidc_grafana_client_id" {
+  length  = 32
+  special = false
+}
+resource "kubernetes_secret" "oidc_grafana_client" {
+  for_each = { # TODO: this is clear sign that some Secret Operator is required!
+    "traefik-system" : {},
+    "monitoring-system" : {}
+  }
+  metadata {
+    namespace = each.key
+    name      = "oidc-grafana-client"
+  }
+  data = {
+    "client-id"     = random_password.oidc_grafana_client_id.result
+    "client-secret" = random_password.oidc_grafana_client_secret.result
+    "cookie-secret" = random_password.oidc_session_enc_key.result
+  }
+  type       = "Opaque"
+  depends_on = [kubernetes_namespace.ns]
+}
+resource "tls_private_key" "authelia_idp" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
 resource "helm_release" "authelia" {
   # https://artifacthub.io/packages/helm/authelia/authelia
   repository = "https://charts.authelia.com"
@@ -64,6 +142,16 @@ resource "helm_release" "authelia" {
       ldap_filter     = var.ldap_filter
       ldap_user       = var.ldap_user
       ldap_pass       = var.ldap_pass
+
+      oidc_grafana_client_id     = random_password.oidc_grafana_client_id.result
+      oidc_grafana_client_secret = random_password.oidc_grafana_client_secret.bcrypt_hash
+      oidc_session_enc_key       = random_password.oidc_session_enc_key.result
+
+      oidc_public_key  = tls_private_key.authelia_idp.public_key_pem
+      oidc_private_key = tls_private_key.authelia_idp.private_key_pem
+
+      ingress_base_group  = var.ingress_base_group
+      ingress_admin_group = var.ingress_admin_group
     })
   ]
 
@@ -110,42 +198,6 @@ resource "helm_release" "echo" {
     value = [
       "echo.${var.ingress_domain}",
       "echo.${var.top_domain}"
-    ]
-  }
-
-  depends_on = [helm_release.metallb]
-}
-resource "helm_release" "echo_protected" {
-  # https://artifacthub.io/packages/helm/ealenn/echo-server
-  repository = "https://ealenn.github.io/charts"
-  chart      = "echo-server"
-  name       = "echo-server-protected"
-  namespace  = "default"
-
-  set {
-    name  = "ingress.enabled"
-    value = true
-  }
-  set {
-    name  = "ingress.hosts[0].host"
-    value = "protected-echo.${var.ingress_domain}"
-  }
-  set_list {
-    name  = "ingress.hosts[0].paths"
-    value = ["/"]
-  }
-  set {
-    name  = "ingress.annotations.cert-manager\\.io/cluster-issuer"
-    value = "yig-ca-issuer"
-  }
-  set {
-    name  = "ingress.tls[0].secretName"
-    value = "protected-echo-server-tls"
-  }
-  set_list {
-    name = "ingress.tls[0].hosts"
-    value = [
-      "protected-echo.${var.ingress_domain}",
     ]
   }
 

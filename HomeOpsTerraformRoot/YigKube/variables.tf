@@ -60,3 +60,10 @@ variable "ldap_user" {
 variable "ldap_pass" {
   type = string
 }
+
+variable "ingress_base_group" {
+  type = string
+}
+variable "ingress_admin_group" {
+  type = string
+}

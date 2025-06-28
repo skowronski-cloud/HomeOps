@@ -69,3 +69,8 @@ variable "ver_helm_infrahub" {
   default = "4.3.6"
   type    = string
 }
+variable "ver_helm_promstack" {
+  # https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack
+  default = "75.6.0"
+  type    = string
+}

@@ -9,6 +9,7 @@ resource "kubernetes_namespace" "ns" {
     "cert-manager",
     "traefik-system",
     "infrahub",
+    "monitoring-system"
   ])
   metadata {
     name = each.key
