@@ -88,3 +88,10 @@ variable "duo_authelia" {
     secret_key      = string
   })
 }
+variable "bb_targets" {
+  type = map(object({
+    url      = string
+    interval = string
+    module   = string
+  }))
+}

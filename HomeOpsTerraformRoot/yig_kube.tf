@@ -26,6 +26,8 @@ module "yig_kube" {
 
   tool_email   = var.tool_email
   duo_authelia = var.yig_duo_authelia
+
+  bb_targets = var.yig_bb_targets
 }
 
 # FIXME: consolidate variables into logically connected objects
@@ -116,4 +118,13 @@ variable "yig_duo_authelia" {
     secret_key      = string
   })
   description = "values for Duo integration with Authelia, to be read from secrets"
+}
+
+variable "yig_bb_targets" {
+  type = map(object({
+    url      = string
+    interval = string
+    module   = string
+  }))
+  description = "targets for BlackBox exporter, to be read from secrets"
 }

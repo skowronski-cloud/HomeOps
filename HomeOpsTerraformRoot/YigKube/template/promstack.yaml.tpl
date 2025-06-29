@@ -87,6 +87,15 @@ prometheus:
     scrapeInterval: 30s
     evaluationInterval: 30s
     retention: "30d"
+    serviceMonitorSelector:
+      #matchLabels:
+      #  release: kube-prometheus-stack
+      matchExpressions:
+        - key: release
+          operator: In
+          values: 
+            - kube-prometheus-stack
+            - prometheus-blackbox-exporter
     storageSpec:
       volumeClaimTemplate:
         spec:

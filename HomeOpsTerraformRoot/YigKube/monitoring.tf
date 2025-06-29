@@ -21,3 +21,21 @@ resource "helm_release" "promstack" {
 
   depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
 }
+resource "helm_release" "blackbox" {
+  # https://artifacthub.io/packages/helm/prometheus-community/prometheus-blackbox-exporter
+  repository = "https://prometheus-community.github.io/helm-charts"
+  chart      = "prometheus-blackbox-exporter"
+  version    = var.ver_helm_blackbox
+
+  name      = "prometheus-blackbox-exporter"
+  namespace = "monitoring-system"
+
+  values = [templatefile("${path.module}/template/blackbox.yaml.tpl", {
+    grafana_admin_pass = random_password.promstack_grafana_pass.result
+    ingress_domain     = "${var.ingress_domain}"
+    bb_targets         = var.bb_targets
+  })]
+
+  depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
+}
+# TODO: add https://artifacthub.io/packages/helm/th-charts/ping-exporter?modal=values

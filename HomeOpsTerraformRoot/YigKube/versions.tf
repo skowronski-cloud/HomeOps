@@ -79,3 +79,9 @@ variable "ver_helm_redis" {
   default = "21.2.6"
   type    = string
 }
+
+variable "ver_helm_blackbox" {
+  # https://artifacthub.io/packages/helm/prometheus-community/prometheus-blackbox-exporter
+  default = "11.0.0"
+  type    = string
+}
