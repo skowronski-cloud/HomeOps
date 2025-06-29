@@ -76,22 +76,13 @@ alertmanager:
       - alertmanager.${ingress_domain}
 
 prometheus:
-  prometheusSpec:
-    ingress:
-      enabled: true
-      ingressClassName: "traefik"
-      annotations: []
-      hosts:
-        - prometheus.${ingress_domain}
-
-nodeExporter:
   enabled: true
-  hostNetwork: true
-  hostPID: true
-  service:
-    type: ClusterIP
-
-prometheus:
+  ingress:
+    enabled: true
+    ingressClassName: "traefik"
+    annotations: []
+    hosts:
+      - prometheus.${ingress_domain}
   prometheusSpec:
     scrapeInterval: 30s
     evaluationInterval: 30s
@@ -103,3 +94,18 @@ prometheus:
           resources:
             requests:
               storage: 50Gi
+    additionalScrapeConfigs:
+      - job_name: 'kubernetes-pods'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: "true"
+
+nodeExporter:
+  enabled: true
+  hostNetwork: true
+  hostPID: true
+  service:
+    type: ClusterIP
