@@ -74,3 +74,8 @@ variable "ver_helm_promstack" {
   default = "75.6.0"
   type    = string
 }
+variable "ver_helm_redis" {
+  # https://artifacthub.io/packages/helm/bitnami/redis
+  default = "21.2.6"
+  type    = string
+}

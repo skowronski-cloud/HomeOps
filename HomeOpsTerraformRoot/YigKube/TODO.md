@@ -1,11 +1,7 @@
-- [ ] improve authelia OIDC configuration, especially move to asymetric auth
-- [ ] Authelia - Redis
-- [ ] Authelia - Push
-- [ ] Authelia - SMTP
 - [ ] Grafana - auto provision dashboards
 - [ ] exports of cluster
 - [ ] monitor helm charts for updates on cluster itself
-- [ ] caching proxy
+- [ ] caching proxy (docker)
 - [ ] add landing page with cert to dowload
 - [ ] secret operator?
 - [ ] move secrets to k8s secrets

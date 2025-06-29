@@ -23,7 +23,12 @@ module "yig_kube" {
 
   ingress_base_group  = var.yig_ingress_base_group
   ingress_admin_group = var.yig_ingress_admin_group
+
+  tool_email   = var.tool_email
+  duo_authelia = var.yig_duo_authelia
 }
+
+# FIXME: consolidate variables into logically connected objects
 
 variable "yig_address_ingress_main" {
   type        = string
@@ -102,4 +107,13 @@ variable "yig_ingress_admin_group" {
   type        = string
   description = "admin group for users in authelia, to be read from secrets"
   default     = "yig-ingress-adminusers"
+}
+
+variable "yig_duo_authelia" {
+  type = object({
+    api_hostname    = string
+    integration_key = string
+    secret_key      = string
+  })
+  description = "values for Duo integration with Authelia, to be read from secrets"
 }

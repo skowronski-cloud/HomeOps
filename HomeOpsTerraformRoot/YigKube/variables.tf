@@ -67,3 +67,24 @@ variable "ingress_base_group" {
 variable "ingress_admin_group" {
   type = string
 }
+
+variable "tool_email" {
+  type = map(string)
+  default = {
+    "from"     = ""
+    "password" = ""
+    "port"     = ""
+    "server"   = ""
+    "tls"      = ""
+    "user"     = ""
+    "to"       = ""
+  }
+
+}
+variable "duo_authelia" {
+  type = object({
+    api_hostname    = string
+    integration_key = string
+    secret_key      = string
+  })
+}

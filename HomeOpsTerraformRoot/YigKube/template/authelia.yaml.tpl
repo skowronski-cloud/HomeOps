@@ -1,5 +1,6 @@
 ---
 # https://www.authelia.com/configuration/
+# https://artifacthub.io/packages/helm/authelia/authelia?modal=values
 replicaCount: 1
 
 ingress:
@@ -16,6 +17,11 @@ ingress:
     tls:
       certResolver: yig-ca-issuer
 
+secret:
+  additionalSecrets:
+    authelia-secrets: {}
+    oidc-grafana-client: {}
+
 configMap:
   log:
     level: info
@@ -24,10 +30,20 @@ configMap:
     disable: false
     enable_passkey_login: true
     display_name: "Yig"
+  duo_api:
+    enabled: true
+    hostname: ${duo_api_hostname}
+    integration_key: ${duo_integration_key}
+    secret:
+      secret_name: authelia-secrets
+    enable_self_enrollment: true
   session:
-    # FIXME: REDIS
-    #encryption_key:
-    #  value: ${oidc_session_enc_key}
+    encryption_key:
+      secret_name: authelia-secrets
+    redis:
+      enabled: true
+      deploy: true
+      host: authelia-redis-master.traefik-system.svc.cluster.local
     cookies: # this is what controls ingress domains!
       - domain: '${ingress_domain}'
         subdomain: 'authelia'
@@ -39,10 +55,6 @@ configMap:
         remember_me: '7d'
   access_control:
     rules:
-      - domain: "magic.${ingress_domain}"
-        subjects:
-          - group: "${ingress_base_group}"
-        policy: two_factor # entry only exists to force Authelia into allowing 2FA management
       - domain: "echo.${ingress_domain}"
         policy: bypass
       - domain: "ha.${ingress_domain}"
@@ -60,7 +72,7 @@ configMap:
       base_dn: ${ldap_basedn}
       user: ${ldap_user}
       password: 
-        value: ${ldap_pass}
+        secret_name: authelia-secrets
       users_filter: ${ldap_filter}
       tls:
         skip_verify: true
@@ -74,13 +86,20 @@ configMap:
       disable: true
   storage:
     encryption_key: 
-      value: ${storage_enc_key}
+      secret_name: authelia-secrets
     local:
       enabled: true
   notifier:
-    # TODO: enable smtp
     filesystem:
+      enabled: false
+    smtp:
       enabled: true
+      address: submission://${smtp_host}:${smtp_port}
+      sender: "Authelia <${smtp_user}>"
+      subject: '[Authelia] {title}'
+      username: ${smtp_user}
+      password: 
+        secret_name: authelia-secrets
   identity_providers:
     oidc:
       enabled: true
@@ -89,17 +108,15 @@ configMap:
           algorithm: RS256
           use: sig
           key: 
-            value: |
-              ${indent(14, oidc_private_key)}
+            path: /secrets/authelia-secrets/oidc-jwk.RS256.pem
       claims_policies:
-        oidccp_profile_in_id_token: # Authelia by default behaves like Keycloak and not may claims are available in id_token
+        oidccp_profile_in_id_token: # https://www.authelia.com/integration/openid-connect/grafana/
           id_token:
             - email
             - name
             - groups
             - preferred_username
       clients:
-        # TODO: this should be templatable and not part of main configMap
         - client_id: ${oidc_grafana_client_id}
           client_name: "Yig Grafana"
           public: false
@@ -112,7 +129,7 @@ configMap:
           userinfo_signed_response_alg: 'none'
           token_endpoint_auth_method: 'client_secret_basic'
           client_secret:
-            value: ${oidc_grafana_client_secret} # FIXME: use secrets
+            path: /secrets/oidc-grafana-client/client-secret
           scopes:
             - openid
             - profile
@@ -124,6 +141,3 @@ configMap:
 
 persistence:
   enabled: true
-
-
-# TODO: Duo

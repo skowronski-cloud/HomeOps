@@ -120,6 +120,25 @@ resource "kubernetes_secret" "oidc_grafana_client" {
   type       = "Opaque"
   depends_on = [kubernetes_namespace.ns]
 }
+
+
+resource "kubernetes_secret" "authelia_secrets" {
+  metadata {
+    namespace = "traefik-system"
+    name      = "authelia-secrets"
+  }
+  data = {
+    "storage.encryption.key"           = random_password.authelia_storage_enc_key.result
+    "session.encryption.key"           = random_password.oidc_session_enc_key.result
+    "authentication.ldap.password.txt" = var.ldap_pass
+    "oidc-jwk.RS256.pem"               = tls_private_key.authelia_idp.private_key_pem
+    "notifier.smtp.password.txt"       = var.tool_email.password
+    "duo.key"                          = var.duo_authelia.secret_key
+  }
+  type       = "Opaque"
+  depends_on = [kubernetes_namespace.ns]
+}
+
 resource "tls_private_key" "authelia_idp" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -135,28 +154,30 @@ resource "helm_release" "authelia" {
 
   values = [
     templatefile("${path.module}/template/authelia.yaml.tpl", {
-      ingress_domain  = var.ingress_domain
-      storage_enc_key = random_password.authelia_storage_enc_key.result
-      ldap_url        = var.ldap_url
-      ldap_basedn     = var.ldap_basedn
-      ldap_filter     = var.ldap_filter
-      ldap_user       = var.ldap_user
-      ldap_pass       = var.ldap_pass
+      ingress_domain = var.ingress_domain
+      ldap_url       = var.ldap_url
+      ldap_basedn    = var.ldap_basedn
+      ldap_filter    = var.ldap_filter
+      ldap_user      = var.ldap_user
 
-      oidc_grafana_client_id     = random_password.oidc_grafana_client_id.result
-      oidc_grafana_client_secret = random_password.oidc_grafana_client_secret.bcrypt_hash
-      oidc_session_enc_key       = random_password.oidc_session_enc_key.result
+      oidc_grafana_client_id = random_password.oidc_grafana_client_id.result
 
-      oidc_public_key  = tls_private_key.authelia_idp.public_key_pem
-      oidc_private_key = tls_private_key.authelia_idp.private_key_pem
+      oidc_public_key = tls_private_key.authelia_idp.public_key_pem
 
       ingress_base_group  = var.ingress_base_group
       ingress_admin_group = var.ingress_admin_group
+
+      smtp_host = var.tool_email.server
+      smtp_port = var.tool_email.port
+      smtp_user = var.tool_email.user
+
+      duo_api_hostname    = var.duo_authelia.api_hostname
+      duo_integration_key = var.duo_authelia.integration_key
     })
   ]
 
 
-  depends_on = [kubernetes_namespace.ns]
+  depends_on = [kubernetes_namespace.ns, kubernetes_secret.authelia_secrets]
 }
 resource "helm_release" "echo" {
   # https://artifacthub.io/packages/helm/ealenn/echo-server
