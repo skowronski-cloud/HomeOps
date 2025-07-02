@@ -1,5 +1,5 @@
 terraform {
-  required_version = "1.8.5"
+  required_version = "1.12.2"
   required_providers {
     routeros = {
       # https://registry.terraform.io/providers/terraform-routeros/routeros/latest
@@ -10,7 +10,7 @@ terraform {
     helm = {
       # https://registry.terraform.io/providers/hashicorp/helm/latest
       source  = "hashicorp/helm"
-      version = "2.17.0" # FIXME: bump to 3.0.1
+      version = "3.0.2"
     }
     kubernetes = {
       # https://registry.terraform.io/providers/hashicorp/kubernetes/latest

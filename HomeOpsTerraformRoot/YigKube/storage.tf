@@ -8,14 +8,16 @@ resource "helm_release" "longhorn" {
   name      = "longhorn"
   namespace = "longhorn-system"
 
-  set {
-    name  = "persistence.defaultClassReplicaCount"
-    value = 1
-  }
-  set {
-    name  = "defaultSettings.defaultDataPath"
-    value = "/data/longhorn"
-  }
+  set = [
+    {
+      name  = "persistence.defaultClassReplicaCount"
+      value = 1
+    },
+    {
+      name  = "defaultSettings.defaultDataPath"
+      value = "/data/longhorn"
+    }
+  ]
 
   depends_on = [kubernetes_namespace.ns]
 }

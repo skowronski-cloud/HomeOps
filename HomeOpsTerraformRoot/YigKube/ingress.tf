@@ -23,34 +23,42 @@ resource "helm_release" "traefik" {
 
   name      = "traefik"
   namespace = "traefik-system"
-  set {
-    name  = "logs.general.level"
-    value = "DEBUG"
-  }
-  set {
-    name  = "providers.kubernetesCRD.allowExternalNameServices"
-    value = true
-  }
-  set {
-    name  = "providers.kubernetesIngress.allowExternalNameServices"
-    value = true
-  }
-  set_list {
-    name = "additionalArguments"
-    value = [
-      "--entryPoints.websecure.http.middlewares=traefik-system-forwardauth-authelia@kubernetescrd",
-      "--serversTransport.rootCAs=/etc/pki/tls/certs/ca.crt"
-    ]
-  }
+  set = [
+    {
+      name  = "logs.general.level"
+      value = "DEBUG"
+    },
+    {
+      name  = "providers.kubernetesCRD.allowExternalNameServices"
+      value = true
+    },
+    {
+      name  = "providers.kubernetesIngress.allowExternalNameServices"
+      value = true
+    },
+    {
+      name  = "volumes[0].mountPath"
+      value = "/etc/pki/tls/certs" # https://go.dev/src/crypto/x509/root_linux.go - purposefully other dir than OS-default
+    },
+    {
+      name  = "volumes[0].type"
+      value = "secret"
+    },
+    {
+      name  = "volumes[0].name"
+      value = "ca-crt"
+    }
+  ]
+  set_list = [
+    {
+      name = "additionalArguments"
+      value = [
+        "--entryPoints.websecure.http.middlewares=traefik-system-forwardauth-authelia@kubernetescrd",
+        "--serversTransport.rootCAs=/etc/pki/tls/certs/ca.crt"
+      ]
+    }
+  ]
 
-  set {
-    name  = "volumes[0].mountPath"
-    value = "/etc/pki/tls/certs" # https://go.dev/src/crypto/x509/root_linux.go - purposefully other dir than OS-default
-  }
-  set {
-    name  = "volumes[0].type"
-    value = "secret"
-  }
   depends_on = [kubernetes_namespace.ns]
 }
 resource "helm_release" "traefik_resources" {
@@ -77,41 +85,48 @@ resource "helm_release" "echo" {
   name       = "echo-server"
   namespace  = "default"
 
-  set {
-    name  = "ingress.enabled"
-    value = true
-  }
-  set {
-    name  = "ingress.hosts[0].host"
-    value = "echo.${var.ingress_domain}"
-  }
-  set_list {
+
+
+
+
+  set = [
+    {
+      name  = "ingress.enabled"
+      value = true
+    },
+    {
+      name  = "ingress.hosts[0].host"
+      value = "echo.${var.ingress_domain}"
+    },
+    {
+      name  = "ingress.annotations.cert-manager\\.io/cluster-issuer"
+      value = "yig-ca-issuer"
+    },
+    {
+      name  = "ingress.tls[0].secretName"
+      value = "echo-server-tls"
+    },
+    {
+      name  = "ingress.hosts[1].host"
+      value = "echo.${var.top_domain}"
+    }
+  ]
+  set_list = [{
     name  = "ingress.hosts[0].paths"
     value = ["/"]
-  }
-  set {
-    name  = "ingress.hosts[1].host"
-    value = "echo.${var.top_domain}"
-  }
-  set_list {
-    name  = "ingress.hosts[1].paths"
-    value = ["/"]
-  }
-  set {
-    name  = "ingress.annotations.cert-manager\\.io/cluster-issuer"
-    value = "yig-ca-issuer"
-  }
-  set {
-    name  = "ingress.tls[0].secretName"
-    value = "echo-server-tls"
-  }
-  set_list {
-    name = "ingress.tls[0].hosts"
-    value = [
-      "echo.${var.ingress_domain}",
-      "echo.${var.top_domain}"
-    ]
-  }
+    }
+    , {
+      name  = "ingress.hosts[1].paths"
+      value = ["/"]
+    }
+    , {
+      name = "ingress.tls[0].hosts"
+      value = [
+        "echo.${var.ingress_domain}",
+        "echo.${var.top_domain}"
+      ]
+    }
+  ]
 
   depends_on = [helm_release.metallb]
 }

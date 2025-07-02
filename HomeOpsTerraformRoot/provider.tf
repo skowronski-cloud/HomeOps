@@ -10,12 +10,12 @@ provider "kubernetes" {
   config_context = "yig"
 }
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     config_path    = "~/.kube/config"
     config_context = "yig"
   }
   burst_limit = 100000
-  experiments {
-    manifest = false
+  experiments = {
+    manifest = true
   }
 }

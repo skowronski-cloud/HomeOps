@@ -1,12 +1,16 @@
 # TODO: some automation to pull latest versions of var_helm
 variable "ver_helm_traefik" {
   # https://artifacthub.io/packages/helm/traefik/traefik
-  default = "34.4.1"
+  default = "36.3.0"
   type    = string
 }
 variable "ver_helm_authelia" {
+  # TODO: once https://github.com/hashicorp/terraform-provider-helm/issues/1609 is merged and released, 
+  #       bump ver_helm_authelia to >= and inlcude skip_schema_validation in helm_release.authelia
+  #       it's caused by authelia's schema conflicting with depenedencies and is acknowledged
+  #       in https://github.com/authelia/chartrepo/issues/337#issuecomment-3017046873 with proposed workaround
   # https://artifacthub.io/packages/helm/authelia/authelia
-  default = "0.10.21"
+  default = "0.10.25" # WARN: 0.10.26 .. 0.10.34 are incompatible!
   type    = string
 }
 variable "ver_helm_k8sr" {
@@ -16,12 +20,12 @@ variable "ver_helm_k8sr" {
 }
 variable "ver_helm_metallb" {
   # https://artifacthub.io/packages/helm/metallb/metallb
-  default = "0.14.9"
+  default = "0.15.2"
   type    = string
 }
 variable "ver_helm_longhorn" {
   # https://artifacthub.io/packages/helm/longhorn/longhorn
-  default = "1.8.1"
+  default = "1.9.0"
   type    = string
 }
 variable "ver_helm_mosquitto" {
@@ -36,17 +40,17 @@ variable "ver_helm_matter" {
 }
 variable "ver_helm_ha" {
   # https://artifacthub.io/packages/helm/helm-hass/home-assistant
-  default = "0.2.111"
+  default = "0.3.8"
   type    = string
 }
 variable "ver_app_ha" {
   # https://github.com/home-assistant/core/releases
-  default = "2025.6.1"
+  default = "2025.6.3"
   type    = string
 }
 variable "ver_helm_postgres" {
   # https://artifacthub.io/packages/helm/bitnami/postgresql
-  default = "16.4.16"
+  default = "16.7.15"
   type    = string
 }
 variable "ver_helm_spoolman" {
@@ -56,22 +60,22 @@ variable "ver_helm_spoolman" {
 }
 variable "ver_helm_certmanager" {
   # https://artifacthub.io/packages/helm/cert-manager/cert-manager
-  default = "v1.17.1"
+  default = "v1.18.1"
   type    = string
 }
 variable "ver_helm_certmanagercrds" {
   # https://artifacthub.io/packages/helm/wiremind/cert-manager-crds?modal=install
-  default = "1.16.1"
+  default = "1.18.1"
   type    = string
 }
 variable "ver_helm_infrahub" {
   # https://artifacthub.io/packages/helm/infrahub/infrahub
-  default = "4.3.6"
+  default = "4.5.2"
   type    = string
 }
 variable "ver_helm_promstack" {
   # https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack
-  default = "75.6.0"
+  default = "75.7.0"
   type    = string
 }
 variable "ver_helm_redis" {

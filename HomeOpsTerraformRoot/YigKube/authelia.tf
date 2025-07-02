@@ -7,6 +7,18 @@ resource "random_password" "oidc_session_enc_key" {
   length  = 128
   special = false
 }
+resource "random_password" "authelia_session_redis_pass" {
+  length  = 128
+  special = false
+}
+resource "random_password" "authelia_oidc_hmac_secret" {
+  length  = 128
+  special = false
+}
+resource "random_password" "authelia_idv_resetpass_jwt_hmac_key" {
+  length  = 128
+  special = false
+}
 resource "random_password" "oidc_grafana_client_secret" {
   # TODO: this should be generated on runtime and not managed from here
   length  = 32
@@ -40,13 +52,17 @@ resource "kubernetes_secret" "authelia_secrets" {
     namespace = "traefik-system"
     name      = "authelia-secrets"
   }
+  # TF Helm provider 3.x seems to regenrate manifest everytime, so we can't let chart use rand strings as they would rotate every time
   data = {
-    "storage.encryption.key"           = random_password.authelia_storage_enc_key.result
-    "session.encryption.key"           = random_password.oidc_session_enc_key.result
-    "authentication.ldap.password.txt" = var.ldap_pass
-    "oidc-jwk.RS256.pem"               = tls_private_key.authelia_idp.private_key_pem
-    "notifier.smtp.password.txt"       = var.tool_email.password
-    "duo.key"                          = var.duo_authelia.secret_key
+    "storage.encryption.key"                          = random_password.authelia_storage_enc_key.result
+    "session.encryption.key"                          = random_password.oidc_session_enc_key.result
+    "authentication.ldap.password.txt"                = var.ldap_pass
+    "oidc-jwk.RS256.pem"                              = tls_private_key.authelia_idp.private_key_pem
+    "notifier.smtp.password.txt"                      = var.tool_email.password
+    "duo.key"                                         = var.duo_authelia.secret_key
+    "session.redis.password.txt"                      = random_password.authelia_session_redis_pass.result
+    "identity_providers.oidc.hmac.key"                = random_password.authelia_oidc_hmac_secret.result
+    "identity_validation.reset_password.jwt.hmac.key" = random_password.authelia_idv_resetpass_jwt_hmac_key.result
   }
   type       = "Opaque"
   depends_on = [kubernetes_namespace.ns]

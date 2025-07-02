@@ -6,13 +6,15 @@ resource "helm_release" "matter" {
 
   name      = "home-assistant-matter-server"
   namespace = "home-assistant"
-  set {
-    name  = "service.type"
-    value = "LoadBalancer"
-  }
-  set {
-    name  = "networkInterface"
-    value = var.host_interface_for_matter
-  }
+  set = [
+    {
+      name  = "service.type"
+      value = "LoadBalancer"
+    },
+    {
+      name  = "networkInterface"
+      value = var.host_interface_for_matter
+    }
+  ]
   depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
 }

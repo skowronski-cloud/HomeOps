@@ -6,10 +6,12 @@ grafana:
     ingressClassName: "traefik"
     hosts:
       - grafana.${ingress_domain}
+  useStatefulSet: true
   persistence:
     enabled: true
     accessModes: ["ReadWriteOnce"]
     size: 10Gi
+    lookupVolumeName: false # this breaks tfstate!
   service:
     type: ClusterIP
   grafana.ini:

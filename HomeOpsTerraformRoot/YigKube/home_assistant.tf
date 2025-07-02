@@ -7,14 +7,16 @@ resource "helm_release" "home_assistant" {
   name      = "home-assistant"
   namespace = "home-assistant"
 
-  set {
-    name  = "image.tag"
-    value = var.ver_app_ha
-  }
-  set {
-    name  = "persistence.enabled"
-    value = true
-  }
+  set = [
+    {
+      name  = "image.tag"
+      value = var.ver_app_ha
+    },
+    {
+      name  = "persistence.enabled"
+      value = true
+    }
+  ]
   values = [
     templatefile("${path.module}/template/home_assistant.yaml.tpl", {
       fqdn = "ha.${var.ingress_domain}"
@@ -35,7 +37,7 @@ resource "kubernetes_secret" "home_assistant_secrets_yaml" {
 }
 resource "random_password" "postgres_ha_pass" {
   length  = 100
-  special = false
+  special = true
 }
 resource "random_password" "postgres_ha_adminpass" {
   length  = 100
@@ -47,6 +49,7 @@ resource "kubernetes_secret" "postgres_ha_credentials" {
     name      = "${var.ha_postgres_instance_name}-postgresql"
   }
   data = {
+    "username" : "ha",
     "password" : random_password.postgres_ha_pass.result,
     "postgres-password" : random_password.postgres_ha_pass.result,
   }
@@ -60,21 +63,19 @@ resource "helm_release" "postgres_ha" {
   name      = var.ha_postgres_instance_name
   namespace = "home-assistant"
 
-  set {
-    name  = "postgresql.auth.database"
-    value = "ha"
-  }
-  set {
-    name  = "postgresql.auth.username"
-    value = "ha"
-  }
-  set {
-    name  = "postgresql.auth.password"
-    value = random_password.postgres_ha_pass.result
-  }
-  set {
-    name  = "postgresql.auth.postgresPassword"
-    value = random_password.postgres_ha_adminpass.result
-  }
+  set = [
+    {
+      name  = "postgresql.auth.database"
+      value = "ha"
+    },
+    {
+      name  = "postgresql.auth.username"
+      value = "ha"
+    },
+    {
+      name  = "auth.existingSecret"
+      value = "${var.ha_postgres_instance_name}-postgresql"
+    }
+  ]
   depends_on = [kubernetes_namespace.ns, kubernetes_secret.postgres_ha_credentials]
 }

@@ -54,46 +54,48 @@ resource "helm_release" "infrahub" {
   name      = "infrahub"
   namespace = "infrahub"
 
-  set {
-    name  = "infrahubServer.ingress.enabled"
-    value = true
-  }
-  set {
-    name  = "infrahubServer.ingress.hostname"
-    value = "infrahub.${var.ingress_domain}"
-  }
-  set {
-    name  = "infrahubServer.persistence.enabled"
-    value = true
-  }
-  set {
-    name  = "infrahubServer.type"
-    value = "LoadBalancer"
-  }
-  set {
-    name  = "neo4j.neo4j.password"
-    value = random_password.infrahub_neo4j_pass.result
-  }
-  set {
-    name  = "rabbitmq.auth.password"
-    value = random_password.infrahub_rabbitmq_pass.result
-  }
-  set {
-    name  = "redis.auth.enabled"
-    value = true
-  }
-  set {
-    name  = "redis.auth.password"
-    value = random_password.infrahub_redis_pass.result
-  }
-  set {
-    name  = "infrahubServer.infrahubServer.envFromExistingSecret"
-    value = "infrahub-env"
-  }
-  set {
-    name  = "infrahubServer.infrahubServer.env.INFRAHUB_LOG_LEVEL"
-    value = "DEBUG"
-  }
+  set = [
+    {
+      name  = "infrahubServer.ingress.enabled"
+      value = true
+    },
+    {
+      name  = "infrahubServer.ingress.hostname"
+      value = "infrahub.${var.ingress_domain}"
+    },
+    {
+      name  = "infrahubServer.persistence.enabled"
+      value = true
+    },
+    {
+      name  = "infrahubServer.type"
+      value = "LoadBalancer"
+    },
+    {
+      name  = "neo4j.neo4j.password"
+      value = random_password.infrahub_neo4j_pass.result
+    },
+    {
+      name  = "rabbitmq.auth.password"
+      value = random_password.infrahub_rabbitmq_pass.result
+    },
+    {
+      name  = "redis.auth.enabled"
+      value = true
+    },
+    {
+      name  = "redis.auth.password"
+      value = random_password.infrahub_redis_pass.result
+    },
+    {
+      name  = "infrahubServer.infrahubServer.envFromExistingSecret"
+      value = "infrahub-env"
+    },
+    {
+      name  = "infrahubServer.infrahubServer.env.INFRAHUB_LOG_LEVEL"
+      value = "DEBUG"
+    }
+  ]
 
   depends_on = [helm_release.longhorn, kubernetes_namespace.ns, helm_release.infrahub_secrets]
 }

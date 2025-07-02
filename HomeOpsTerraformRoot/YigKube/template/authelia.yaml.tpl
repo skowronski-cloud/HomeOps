@@ -1,15 +1,13 @@
 ---
 # https://www.authelia.com/configuration/
 # https://artifacthub.io/packages/helm/authelia/authelia?modal=values
-replicaCount: 1
+pod:
+  replicas: 1
 
 ingress:
   enabled: true
   certManager: true
   className: treaefik
-  hosts:
-    - host: authelia.${ingress_domain}
-      paths: ["/"]
   traefikCRD:
     enabled: true
     entryPoints:
@@ -44,6 +42,8 @@ configMap:
       enabled: true
       deploy: true
       host: authelia-redis-master.traefik-system.svc.cluster.local
+      password:
+        secret_name: authelia-secrets
     cookies: # this is what controls ingress domains!
       - domain: '${ingress_domain}'
         subdomain: 'authelia'
@@ -100,9 +100,15 @@ configMap:
       username: ${smtp_user}
       password: 
         secret_name: authelia-secrets
+  identity_validation:
+    reset_password:
+      secret:
+        secret_name: authelia-secrets
   identity_providers:
     oidc:
       enabled: true
+      hmac_secret: 
+        secret_name: authelia-secrets
       jwks:
         - key_id: authelia-idp-key-1
           algorithm: RS256
