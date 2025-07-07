@@ -89,3 +89,13 @@ variable "ver_helm_blackbox" {
   default = "11.0.0"
   type    = string
 }
+variable "ver_helm_fluxoperator" {
+  # https://artifacthub.io/packages/helm/flux-operator/flux-operator
+  default = "0.23.0"
+  type    = string
+}
+variable "ver_helm_fluxinstance" {
+  # https://artifacthub.io/packages/helm/flux-instance/flux-instance
+  default = "0.23.0"
+  type    = string
+}

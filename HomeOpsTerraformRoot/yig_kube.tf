@@ -27,7 +27,9 @@ module "yig_kube" {
   tool_email   = var.tool_email
   duo_authelia = var.yig_duo_authelia
 
-  bb_targets = var.yig_bb_targets
+  bb_targets    = var.yig_bb_targets
+  flux_sops_gpg = var.flux_sops_gpg
+  flux_git_ssh  = var.flux_git_ssh
 }
 
 # FIXME: consolidate variables into logically connected objects
@@ -127,4 +129,18 @@ variable "yig_bb_targets" {
     module   = string
   }))
   description = "targets for BlackBox exporter, to be read from secrets"
+}
+variable "flux_sops_gpg" {
+  type = object({
+    public  = string
+    private = string
+  })
+  description = "base64-encoded GPG keys for Flux SOPS integration, to be read from secrets"
+}
+
+variable "flux_git_ssh" {
+  type = object({
+    key = string
+  })
+  description = "base64-encoded SSH keys for Flux SOPS integration, to be read from secrets"
 }

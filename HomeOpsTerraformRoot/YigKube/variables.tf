@@ -95,3 +95,14 @@ variable "bb_targets" {
     module   = string
   }))
 }
+variable "flux_sops_gpg" {
+  type = object({
+    public  = string
+    private = string
+  })
+}
+variable "flux_git_ssh" {
+  type = object({
+    key = string
+  })
+}

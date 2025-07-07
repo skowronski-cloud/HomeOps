@@ -4,5 +4,8 @@
 - [ ] caching proxy (docker)
 - [ ] add landing page with cert to dowload
 - [ ] secret operator?
-- [ ] move secrets to k8s secrets
-- [ ] migrate to helm provider v3
+- [ ] YNCE chart
+- [ ] Fridge
+- [ ] MNV
+- [ ] velero
+- [ ] flux
