@@ -17,6 +17,8 @@ resource "helm_release" "promstack" {
 
     ingress_base_group  = var.ingress_base_group
     ingress_admin_group = var.ingress_admin_group
+
+    replicas = var.replicas
   })]
 
   depends_on = [helm_release.longhorn, kubernetes_namespace.ns]

@@ -19,6 +19,7 @@ additionalMounts:
     subPath: secrets.yaml
 configuration:
   enabled: true
+  forceInit: true
   trusted_proxies:
     - 10.0.0.0/8
   templateConfig: |-
@@ -39,20 +40,20 @@ configuration:
 
     recorder: 
       db_url: !secret psql_string
-        #auto_purge: false
-        db_retry_wait: 15 # Wait 15 seconds before retrying
-        purge_keep_days: 365 # full year of history
-        exclude:
-          domains:
-            - automation
-            - updater
-          entity_globs: []
-          entities:
-            - sun.sun
-            - sensor.last_boot
-            - sensor.date
-          event_types:
-            - call_service # Don't record service calls
+      #auto_purge: false
+      db_retry_wait: 15 # Wait 15 seconds before retrying
+      purge_keep_days: 3650 # 10y
+      exclude:
+        domains:
+          - automation
+          - updater
+        entity_globs: []
+        entities:
+          - sun.sun
+          - sensor.last_boot
+          - sensor.date
+        event_types:
+          - call_service # Don't record service calls
 
     automation: !include automations.yaml
     script: !include scripts.yaml

@@ -106,3 +106,10 @@ variable "flux_git_ssh" {
     key = string
   })
 }
+
+
+variable "replicas" {
+  type        = number
+  description = "number of replicas for some services"
+  default     = 2
+}

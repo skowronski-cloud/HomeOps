@@ -2,7 +2,7 @@
 # https://www.authelia.com/configuration/
 # https://artifacthub.io/packages/helm/authelia/authelia?modal=values
 pod:
-  replicas: 1
+  replicas: ${replicas}
 
 ingress:
   enabled: true
@@ -41,9 +41,16 @@ configMap:
     redis:
       enabled: true
       deploy: true
-      host: authelia-redis-master.traefik-system.svc.cluster.local
+      #host: authelia-redis-master.traefik-system.svc.cluster.local
+      host: authelia-redis
+      port: 26379
       password:
         secret_name: authelia-secrets
+      high_availability:
+        enabled: true
+        password:
+          secret_name: authelia-secrets
+        sentinel_name: mymaster
     cookies: # this is what controls ingress domains!
       - domain: '${ingress_domain}'
         subdomain: 'authelia'
@@ -60,6 +67,10 @@ configMap:
       - domain: "ha.${ingress_domain}"
         policy: bypass
       - domain: "authelia.${ingress_domain}"
+        policy: bypass
+      - domain: "hfm.${ingress_domain}"
+        policy: bypass
+      - domain: "fridge.${ingress_domain}"
         policy: bypass
       - domain: "*.${ingress_domain}"
         subjects:
@@ -147,3 +158,14 @@ configMap:
 
 persistence:
   enabled: true
+  accessModes:
+    - ReadWriteMany
+
+redis:
+  enabled: true
+  architecture: replication
+  replica:
+    replicaCount: 2
+  sentinel:
+    enabled: true
+    masterSet: mymaster

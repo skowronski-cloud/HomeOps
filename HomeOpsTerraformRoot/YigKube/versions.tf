@@ -48,9 +48,9 @@ variable "ver_app_ha" {
   default = "2025.6.3"
   type    = string
 }
-variable "ver_helm_postgres" {
-  # https://artifacthub.io/packages/helm/bitnami/postgresql
-  default = "16.7.15"
+variable "ver_helm_postgresha" {
+  # https://artifacthub.io/packages/helm/bitnami/postgresql-ha
+  default = "16.0.22"
   type    = string
 }
 variable "ver_helm_spoolman" {

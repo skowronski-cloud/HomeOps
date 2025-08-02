@@ -61,6 +61,7 @@ resource "kubernetes_secret" "authelia_secrets" {
     "notifier.smtp.password.txt"                      = var.tool_email.password
     "duo.key"                                         = var.duo_authelia.secret_key
     "session.redis.password.txt"                      = random_password.authelia_session_redis_pass.result
+    "session.redis.sentinel.password.txt"             = random_password.authelia_session_redis_pass.result
     "identity_providers.oidc.hmac.key"                = random_password.authelia_oidc_hmac_secret.result
     "identity_validation.reset_password.jwt.hmac.key" = random_password.authelia_idv_resetpass_jwt_hmac_key.result
   }
@@ -102,6 +103,8 @@ resource "helm_release" "authelia" {
 
       duo_api_hostname    = var.duo_authelia.api_hostname
       duo_integration_key = var.duo_authelia.integration_key
+
+      replicas = var.replicas
     })
   ]
 

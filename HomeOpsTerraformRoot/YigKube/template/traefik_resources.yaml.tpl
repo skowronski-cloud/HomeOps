@@ -5,6 +5,8 @@ CustomResources:
     apiVersion: cert-manager.io/v1
     kind: Certificate
     spec:
+      duration: 2160h # 90d
+      renewBefore: 72h
       secretName: yig-subdomain-wildcard
       commonName: '*.${ingress_domain}'
       dnsNames:
@@ -12,7 +14,7 @@ CustomResources:
         - '${ingress_domain}'
       issuerRef:
         name: yig-ca-issuer
-        kind: Issuer
+        kind: ClusterIssuer
   - name: traefik-default-tlsstore
     fullnameOverride: default
     apiVersion: traefik.io/v1alpha1

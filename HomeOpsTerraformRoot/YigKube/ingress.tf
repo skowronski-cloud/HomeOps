@@ -26,7 +26,7 @@ resource "helm_release" "traefik" {
   set = [
     {
       name  = "logs.general.level"
-      value = "DEBUG"
+      value = "INFO"
     },
     {
       name  = "providers.kubernetesCRD.allowExternalNameServices"
@@ -47,6 +47,10 @@ resource "helm_release" "traefik" {
     {
       name  = "volumes[0].name"
       value = "ca-crt"
+    },
+    {
+      name = "deployment.replicas"
+      value = var.replicas
     }
   ]
   set_list = [

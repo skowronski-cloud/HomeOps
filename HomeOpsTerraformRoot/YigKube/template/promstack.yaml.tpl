@@ -62,7 +62,7 @@ grafana:
 alertmanager:
   enabled: true
   alertmanagerSpec:
-    replicas: 1
+    replicas: 1 # ${replicas} # TODO: this is not a way to get HA
     storage:
       volumeClaimTemplate:
         spec:
@@ -88,7 +88,8 @@ prometheus:
   prometheusSpec:
     scrapeInterval: 30s
     evaluationInterval: 30s
-    retention: "30d"
+    retention: "90d"
+    replicas: 1 # TODO: this is not a way to get HA, probably need to use Thanos
     serviceMonitorSelector:
       #matchLabels:
       #  release: kube-prometheus-stack

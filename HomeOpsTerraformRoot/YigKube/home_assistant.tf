@@ -15,6 +15,10 @@ resource "helm_release" "home_assistant" {
     {
       name  = "persistence.enabled"
       value = true
+    },
+    {
+      name  = "replicaCount"
+      value = 1 # var.replicas
     }
   ]
   values = [
@@ -31,17 +35,43 @@ resource "kubernetes_secret" "home_assistant_secrets_yaml" {
   }
   data = {
     "secrets-yaml" = yamlencode({
-      "psql_string" : "postgresql://ha:${random_password.postgres_ha_pass.result}@ha-recorder-postgresql.home-assistant.svc.cluster.local:5432/ha"
+      "psql_string" : "postgresql://ha:${random_password.postgres_ha_user_pass.result}@ha-recorder-postgresql-ha-pgpool:5432/ha"
     })
   }
 }
-resource "random_password" "postgres_ha_pass" {
-  length  = 100
-  special = true
+locals {
+  postgres_ha_secret_length = 50     # WARN: this chart seems to be broken - see https://github.com/bitnami/charts/issues/17367
+  postgres_ha_secret_special = false # WARN: this chart seems to be broken - see https://github.com/bitnami/charts/issues/17367
 }
-resource "random_password" "postgres_ha_adminpass" {
-  length  = 100
-  special = true
+resource "random_password" "postgres_ha_user_pass" {
+  # The password for the user that Home Assistant will use to connect to PostgreSQL
+  length  = local.postgres_ha_secret_length
+  special = local.postgres_ha_secret_special
+}
+resource "random_password" "postgres_ha_postgres_pass" {
+  # The superuser (“postgres”) password
+  length  = local.postgres_ha_secret_length
+  special = local.postgres_ha_secret_special
+}
+resource "random_password" "postgres_ha_pgpool_admin_pass" {
+  # The Pgpool-II admin console password
+  length  = local.postgres_ha_secret_length
+  special = local.postgres_ha_secret_special
+}
+resource "random_password" "postgres_ha_repmgr_pass" {
+  # The RepMgr failover user's password used by Pgpool-II (in PostgreSQL, this is the "repmgr" user)
+  length  = local.postgres_ha_secret_length
+  special = local.postgres_ha_secret_special
+}
+resource "random_password" "postgres_ha_sr_check_pass" {
+  # The streaming replication health checks user's password used by Pgpool-II (in PostgreSQL, this is the "sr_check_user" user)
+  length  = local.postgres_ha_secret_length
+  special = local.postgres_ha_secret_special
+}
+resource "random_password" "postgres_ha_pool_key" {
+  # The AES key for decrypting the pool_passwd SCRAM entries in Pgpool-II
+  length  = local.postgres_ha_secret_length
+  special = local.postgres_ha_secret_special
 }
 resource "kubernetes_secret" "postgres_ha_credentials" {
   metadata {
@@ -49,32 +79,51 @@ resource "kubernetes_secret" "postgres_ha_credentials" {
     name      = "${var.ha_postgres_instance_name}-postgresql"
   }
   data = {
-    "username" : "ha",
-    "password" : random_password.postgres_ha_pass.result,
-    "postgres-password" : random_password.postgres_ha_pass.result,
+    "password" : random_password.postgres_ha_user_pass.result,
+    "postgres-password" : random_password.postgres_ha_postgres_pass.result,
+    "admin-password" : random_password.postgres_ha_pgpool_admin_pass.result,
+    "repmgr-password" : random_password.postgres_ha_repmgr_pass.result,
+    "sr-check-password" : random_password.postgres_ha_sr_check_pass.result#,
+    #"pool-key" : random_password.postgres_ha_pool_key.result
   }
 }
 resource "helm_release" "postgres_ha" {
-  # https://artifacthub.io/packages/helm/bitnami/postgresql
+  # https://artifacthub.io/packages/helm/bitnami/postgresql-ha
   repository = "oci://registry-1.docker.io/bitnamicharts/"
-  chart      = "postgresql"
-  version    = var.ver_helm_postgres
+  chart      = "postgresql-ha"
+  version    = var.ver_helm_postgresha
 
   name      = var.ha_postgres_instance_name
   namespace = "home-assistant"
 
   set = [
     {
-      name  = "postgresql.auth.database"
+      name  = "global.postgresql.database"
       value = "ha"
     },
     {
-      name  = "postgresql.auth.username"
+      name  = "global.postgresql.username"
       value = "ha"
     },
     {
-      name  = "auth.existingSecret"
+      name  = "global.postgresql.existingSecret"
       value = "${var.ha_postgres_instance_name}-postgresql"
+    },
+    {
+      name  = "global.pgpool.existingSecret"
+      value = "${var.ha_postgres_instance_name}-postgresql"
+    },
+    {
+      name = "pgpool.replicaCount"
+      value = var.replicas
+    },
+    {
+      name = "postgresql.replicaCount"
+      value = var.replicas
+    },
+    {
+      name = "persistence.size"
+      value = "100Gi"
     }
   ]
   depends_on = [kubernetes_namespace.ns, kubernetes_secret.postgres_ha_credentials]
