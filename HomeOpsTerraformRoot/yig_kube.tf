@@ -30,6 +30,9 @@ module "yig_kube" {
   bb_targets    = var.yig_bb_targets
   flux_sops_gpg = var.flux_sops_gpg
   flux_git_ssh  = var.flux_git_ssh
+
+  synology_stor_acct = var.yig_synology_stor_acct
+  synology_velero_minio = var.yig_synology_velero_minio
 }
 
 # FIXME: consolidate variables into logically connected objects
@@ -143,4 +146,23 @@ variable "flux_git_ssh" {
     key = string
   })
   description = "base64-encoded SSH keys for Flux SOPS integration, to be read from secrets"
+}
+
+variable "yig_synology_stor_acct" {
+  type = object({
+    user = string
+    pass = string
+    host = string
+    path = string
+  })
+  description = "CIFS credentials for Synology NAS backup storage - used by Longhorn for backups"
+}
+variable "yig_synology_velero_minio" {
+  type = object({
+    host = string
+    user = string
+    pass = string
+    port = number
+  })
+  description = "Synology MinIO for Velero backups"
 }

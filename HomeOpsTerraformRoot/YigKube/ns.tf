@@ -11,6 +11,7 @@ resource "kubernetes_namespace" "ns" {
     "infrahub",
     "monitoring-system",
     "flux-system",
+    "velero"
   ])
   metadata {
     name = each.key
@@ -19,5 +20,10 @@ resource "kubernetes_namespace" "ns" {
   lifecycle {
     create_before_destroy = true
     prevent_destroy       = true
+    ignore_changes = [ 
+      metadata[0].annotations,
+      metadata[0].labels
+    ]
   }
+  
 }

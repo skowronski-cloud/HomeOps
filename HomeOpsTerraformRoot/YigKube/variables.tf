@@ -113,3 +113,22 @@ variable "replicas" {
   description = "number of replicas for some services"
   default     = 2
 }
+
+variable "synology_stor_acct" {
+  type = object({
+    user = string
+    pass = string
+    host = string
+    path = string
+  })
+  description = "CIFS credentials for Synology NAS backup storage - used by Longhorn for backups"
+}
+variable "synology_velero_minio" {
+  type = object({
+    host = string
+    user = string
+    pass = string
+    port = number
+  })
+  description = "Synology MinIO for Velero backups"
+}

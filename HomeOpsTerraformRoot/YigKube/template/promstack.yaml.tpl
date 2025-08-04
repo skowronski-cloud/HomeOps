@@ -101,6 +101,8 @@ prometheus:
             - prometheus-blackbox-exporter
     storageSpec:
       volumeClaimTemplate:
+        labels:
+          skipQuickBackup: "true"
         spec:
           accessModes: ["ReadWriteOnce"]
           resources:

@@ -99,3 +99,18 @@ variable "ver_helm_fluxinstance" {
   default = "0.23.0"
   type    = string
 }
+variable "ver_helm_velero" {
+  # https://artifacthub.io/packages/helm/vmware-tanzu/velero
+  default = "10.0.11"
+  type    = string
+}
+variable "ver_docker_velero_aws" {
+  # https://github.com/vmware-tanzu/velero-plugin-for-aws/releases
+  default = "v1.12.2"
+  type    = string
+}
+variable "ver_helm_snapshot_controller" {
+  # https://github.com/piraeusdatastore/helm-charts/tree/main/charts/snapshot-controller
+  default = "4.1.0"
+  type    = string
+}
