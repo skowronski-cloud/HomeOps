@@ -19,3 +19,12 @@ provider "helm" {
     manifest = true
   }
 }
+provider "synology" {
+  host       = "https://${var.yig_synology_tf_acct.host}:${var.yig_synology_tf_acct.port}"
+  user       = var.yig_synology_tf_acct.user
+  password   = var.yig_synology_tf_acct.pass
+  otp_secret = var.yig_synology_tf_acct.otp
+}
+provider "pagerduty" {
+  token = var.pagerduty.admin_token
+}

@@ -104,6 +104,50 @@ provider "registry.terraform.io/hashicorp/tls" {
   ]
 }
 
+provider "registry.terraform.io/pagerduty/pagerduty" {
+  version     = "3.28.1"
+  constraints = "3.28.1"
+  hashes = [
+    "h1:3gCWp99ObGYlc2l8vU1LX8LcBAMNkxOsNbXhV0F2CVM=",
+    "zh:293701d21b73db612dcc46a7cd8947ed2fd05a2f3239f730c36c51d60cc63135",
+    "zh:349f0b4230e01f52a068e2cf16394cb0152d82771c57324784d25782fdd77c8b",
+    "zh:568ab23a3f9b337ca3d4dc028b4d4510b2c6d1a90313df9084f0ca52e4c5fea5",
+    "zh:637e70e8aeb4d6be9546d46520e9143a6834f9307b11473e149fd5938f411a7c",
+    "zh:67afc2aae71227441d3911a1b0429f1a50343a276a4d499cfccb2778f0a2a6cd",
+    "zh:689db3887db6f2ffa81ea0f3ef3e1ce6515e77649c37d9fdbe066debe46acd48",
+    "zh:70cfce51f51da0db6f800086a8e18425865c69d88aac848078d8eaf5d96744bf",
+    "zh:7e53bfb32b8d7fc3fbe8d56adc990545938032e62e936fe14adb01f82265a032",
+    "zh:a597011d5b48388af3e4ce2f3a0548e1c2cc0364f09bc9bcbaff090f03b8dafe",
+    "zh:ccc857c37f77cea18af5e1bfa5938bd994285a7230709a0499f30c44c5ce9abe",
+    "zh:d439eb0db6becaae5b0b9182ce6678e97d6febe925e3119d0957ddae332cff95",
+    "zh:f3af44ca97b569672be989a381161918af01ce21a5676cdc21ebd34247a3d56f",
+    "zh:ff32909db2627a816e8a313644897bb2ab09432d0952a31719eddb756a721504",
+  ]
+}
+
+provider "registry.terraform.io/synology-community/synology" {
+  version     = "0.5.1"
+  constraints = "0.5.1"
+  hashes = [
+    "h1:eEQUWY1afp7xeudyy6rnS0imcLUwgvm+okd044+3n50=",
+    "zh:03f8ca2244ef22af8d94879f51f2b0554c065598066171260256e75af42f938a",
+    "zh:3e8629f7f41afef72382ca8f0fa792bc28b2a9f9952991cb9d30c1d5401f503a",
+    "zh:5e8b3f745e8974879a2fd7ac4723c8088cba58821be1b442d6ccb4b5453f7905",
+    "zh:745dc0a1e93c4dd455fcfeb63cec6f8b17e7bce19abfbf47a82cfb0b45f5a643",
+    "zh:7883eae5140d148d1b15a945e647ffa59eee8757b6d77a41835e2c9bbb188121",
+    "zh:8188d26b0684355fb140fec46b561d1e2b6899690d6032a02f1de955c97b1192",
+    "zh:890df766e9b839623b1f0437355032a3c006226a6c200cd911e15ee1a9014e9f",
+    "zh:8cb8d62e2aae8235341c78bb9929c642f5ce5cbccd9b0fe4980b391f8f68f6cb",
+    "zh:8eb5f6315f4ad557499f70393e6b9efddc4367daf9f5e2e32eac98c63529a0d8",
+    "zh:92f01c7275584b0a2c4f569bc77e3e6b7501a80d47174e45be02425027ac3ff3",
+    "zh:98ef8a6c4c2aa38d8ed4246a57811577a06ae9c9456a4812ac07d888bef9f3f3",
+    "zh:a98571146ec874bee922e1ac6c526342966187a811645e12ca8aeee1e835a6a0",
+    "zh:d2fdc76014fbbb32f70b5480185b0300b5eecd1e4887f0f9f2b9f67ee8f155d7",
+    "zh:f60bd24db25e02860045090eae59e8e579cc3bfe002b3b1c80e9809ba79c1d81",
+    "zh:ff276532c11ad2c183941291a976980d31b147492ae7d340021495591ff6a6fd",
+  ]
+}
+
 provider "registry.terraform.io/terraform-routeros/routeros" {
   version     = "1.85.3"
   constraints = "1.85.3"

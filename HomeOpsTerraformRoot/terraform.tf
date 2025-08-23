@@ -1,5 +1,5 @@
 terraform {
-  required_version = "1.12.2"
+  required_version = "1.13.0"
   required_providers {
     routeros = {
       # https://registry.terraform.io/providers/terraform-routeros/routeros/latest
@@ -26,6 +26,16 @@ terraform {
       # https://registry.terraform.io/providers/danielskowronski/k0s/latest
       source  = "danielskowronski/k0s"
       version = "0.2.2-rc1"
+    }
+    synology = {
+      # https://registry.terraform.io/providers/synology-community/synology/latest
+      source  = "synology-community/synology"
+      version = "0.5.1"
+    }
+    pagerduty = {
+      # https://registry.terraform.io/providers/pagerduty/pagerduty/latest
+      source  = "pagerduty/pagerduty"
+      version = "3.28.1"
     }
     tls = {
       source  = "hashicorp/tls"

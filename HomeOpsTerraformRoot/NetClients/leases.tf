@@ -9,3 +9,9 @@ resource "routeros_ip_dhcp_server_lease" "lease" {
     "comment" = each.value.comment,
   })
 }
+resource "routeros_ip_dns_record" "lease" {
+  for_each = local.leases
+  address  = replace(each.value.ip, "/\\.(0+)([0-9]+)/", ".$2")
+  type     = "A"
+  name     = "${trim(replace(lower(each.value.name), "[^a-z0-9-]", "-"), "-")}.${each.value.net}.${var.local_tld}"
+}

@@ -60,8 +60,13 @@ configMap:
         inactivity: '1h'
         expiration: '1d'
         remember_me: '7d'
+  # FIXME: access_control section should be in separate config map, not managed by main helm chart
   access_control:
     rules:
+      - domain: "prometheus.${ingress_domain}"
+        resources:
+          - '/-/healthy'
+        policy: bypass
       - domain: "echo.${ingress_domain}"
         policy: bypass
       - domain: "ha.${ingress_domain}"

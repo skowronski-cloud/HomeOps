@@ -45,7 +45,7 @@ variable "ver_helm_ha" {
 }
 variable "ver_app_ha" {
   # https://github.com/home-assistant/core/releases
-  default = "2025.6.3"
+  default = "2025.8.2"
   type    = string
 }
 variable "ver_helm_postgresha" {
@@ -75,7 +75,7 @@ variable "ver_helm_infrahub" {
 }
 variable "ver_helm_promstack" {
   # https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack
-  default = "75.7.0"
+  default = "76.2.0" # "75.7.0"
   type    = string
 }
 variable "ver_helm_redis" {
