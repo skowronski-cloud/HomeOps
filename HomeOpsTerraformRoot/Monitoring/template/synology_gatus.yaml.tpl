@@ -4,6 +4,8 @@ storage:
   type: sqlite
   path: /data/gatus.db
   caching: true
+  maximum-number-of-results: 100000
+  maximum-number-of-events: 1000
 web:
   port: ${ gatus_port }
 ui:
