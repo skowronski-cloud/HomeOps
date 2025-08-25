@@ -1,0 +1,18 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  labels:
+  {{- with .Values.promLabels }}
+    {{ toYaml . }}
+  {{- end }}
+  name: {{ .Values.ha.name }}-exporters
+  namespace: {{ .Values.namespace }}
+spec:
+  staticConfigs:
+    - labels:
+        job: homeassistant-exporter
+        monitor_svc: {{ .Values.ha.monitorSvc }}
+        __metrics_path__: /api/prometheus
+      targets:
+        - home-assistant.home-assistant.svc.cluster.local:8080

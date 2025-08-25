@@ -1,0 +1,18 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  labels:
+  {{- with .Values.promLabels }}
+    {{ toYaml . }}
+  {{- end }}
+  name: {{ .Values.synology.name }}-node-exporter
+  namespace: {{ .Values.namespace }}
+spec:
+  staticConfigs:
+    - labels:
+        instance: {{ .Values.synology.name }}
+        job: node-exporter
+        monitor_svc: {{ .Values.synology.monitorSvc }}
+      targets:
+        - {{ .Values.synology.addr }}:9100

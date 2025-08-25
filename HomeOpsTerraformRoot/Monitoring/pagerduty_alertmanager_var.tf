@@ -35,7 +35,7 @@ variable "monitoring_services" {
       pd_name        = "[k8s] SmartHome"
       pd_description = "Home Assistant, MQTT, Matter"
       prom_svc_label = "smarthome"
-      # TODO: monitor service availability of HA, HA-Recorder, MQTT, Matter etc.
+      # TODO: monitor service availability of HA-Recorder, MQTT, Matter etc.
       # TODO: monitor resource usage of those components including disk usage
       # TODO: monitor condition of recorder DB
       # TODO: monitor availability of important integrations (e.g. MQTT, Tuya, HomeKit, Matter)
@@ -122,16 +122,11 @@ variable "monitoring_services" {
           value = "dagon|yig.*"
         }
       ]
-      # TODO: monitor node-exporter for yig nodes
-      # TODO: monitor node-network for yig nodes
-      # TODO: add alerts for node up/down for physical machines
     },
     "thermal" = {
       pd_name        = "[metal] Thermal Monitoring"
       pd_description = "YNCE and on-board thermal sensors"
       prom_svc_label = "thermal"
-      # TODO: alerts for high temperatures on YNCE sensors
-      # TODO: alerts for high temperatures on on-board sensors
     },
     "net_local" = {
       pd_name        = "[net] Local Network monitoring"
@@ -152,12 +147,10 @@ variable "monitoring_services" {
       pd_description = "macOS and Windows workstations"
       prom_svc_label = "ext_workstations"
       # TODO: define specific alerts for workstations from node exporter data
-      # TODO: define alerts for Nya iSMC data
     },
     "ext_nya" = {
       pd_name        = "[ext] Nyarlathotep"
       prom_svc_label = "ext_nya"
-      # TODO: define alerts for Nya iSMC data
       # TODO: define alerts for Nya node exporter data
     },
     "ext_synology" = {

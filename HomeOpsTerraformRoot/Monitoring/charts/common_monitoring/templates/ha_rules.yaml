@@ -1,0 +1,24 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: common-monitoring-{{ .Values.ha.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- with .Values.promLabels }}
+    {{ toYaml . }}
+    {{- end }}
+spec:
+  groups:
+    - name: HomeAssistant
+      rules:
+        - alert: HomeAssistantNoEntitiesAvailable
+          expr: absent(homeassistant_entity_available{})
+          for: {{ .Values.ha.noEntitiesFor }}
+          labels:
+            severity: error
+            monitor_svc: {{ $.Values.ha.monitorSvc }}
+          annotations:
+            summary: "No entities available in Home Assistant"
+            description: "No entities available in Home Assistant for {{ .Values.ha.noEntitiesFor }}"
+

@@ -1,0 +1,24 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  labels:
+  {{- with .Values.promLabels }}
+    {{ toYaml . }}
+  {{- end }}
+  name: {{ .Values.nyarlathotep.name }}-exporters
+  namespace: {{ .Values.namespace }}
+spec:
+  staticConfigs:
+    - labels:
+        instance: {{ .Values.nyarlathotep.name }}
+        job: ismc-exporter
+        monitor_svc: {{ .Values.nyarlathotep.monitorSvc }}
+      targets:
+        - {{ .Values.nyarlathotep.addr }}:65002
+    - labels:
+        instance: {{ .Values.nyarlathotep.name }}
+        job: node-exporter
+        monitor_svc: {{ .Values.nyarlathotep.monitorSvc }}
+      targets:
+        - {{ .Values.nyarlathotep.addr }}:9100

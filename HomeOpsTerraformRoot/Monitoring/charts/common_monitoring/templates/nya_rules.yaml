@@ -1,0 +1,26 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: common-monitoring-{{ .Values.nyarlathotep.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- with .Values.promLabels }}
+    {{ toYaml . }}
+    {{- end }}
+spec:
+  groups:
+    - name: Nyarlathotep
+      rules:
+        {{- range $zoneName,$zoneVal := .Values.nyarlathotep.driveTemp.zones }}{{- range $rule := list "critical" }}
+        - alert: Nya{{ $zoneVal.title }}Temp{{ $rule | title }}
+          expr: node_hwmon_temp_celsius{chip="{{ $zoneVal.chip }}"}>{{ index $zoneVal $rule }}
+          for: {{ $.Values.nyarlathotep.driveTemp.for }}
+          labels:
+            severity: {{ $rule }}
+            monitor_svc: {{ $.Values.nyarlathotep.monitorSvc }}
+          annotations:
+            summary: "Nya {{ $zoneVal.title }} Disk {{`{{ $labels.serial }}`}} Temperature {{ $rule | title }}"
+            description: "Nya {{ $zoneVal.title }} Disk {{`{{ $labels.serial }}`}} Temperature {{ $rule | title }} (current value: {{`{{ $value }}`}}°C)"
+        {{- end }}{{- end }}
+

@@ -15,7 +15,7 @@ additionalVolumes:
           path: secrets.yaml
 additionalMounts:
   - name: secrets-yaml
-    mountPath:  /config/secrets.yaml
+    mountPath: /config/secrets.yaml
     subPath: secrets.yaml
 configuration:
   enabled: true
@@ -27,7 +27,7 @@ configuration:
     default_config:
 
     logger:
-      default: debug
+      default: verbose
 
     http:
       use_x_forwarded_for: true
@@ -58,3 +58,11 @@ configuration:
     automation: !include automations.yaml
     script: !include scripts.yaml
     scene: !include scenes.yaml
+
+    prometheus:
+      filter:
+        include_entity_globs:
+            - event.backup_automatic_backup
+            - sensor.backup_*
+            - sensor.ups_*
+      requires_auth: false

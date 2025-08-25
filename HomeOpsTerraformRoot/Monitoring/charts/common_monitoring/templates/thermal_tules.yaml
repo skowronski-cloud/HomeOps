@@ -1,0 +1,26 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: common-monitoring-thermal
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- with .Values.promLabels }}
+    {{ toYaml . }}
+    {{- end }}
+spec:
+  groups:
+    - name: Thermal
+      rules:
+        {{- range $zoneName,$zoneVal := .Values.thermalAlerts.zones }}{{- range $rule := list "critical" "warning" }}
+        - alert: Yig{{ $zoneVal.title }}Temp{{ $rule | title }}
+          expr: node_hwmon_temp_celsius{chip="{{ $zoneVal.chip }}"}>{{ index $zoneVal $rule }}
+          for: {{ $.Values.thermalAlerts.for }}
+          labels:
+            severity: {{ $rule }}
+            monitor_svc: {{ $.Values.thermalAlerts.monitorSvc }}
+          annotations:
+            summary: "{{`{{ $labels.node }}`}} {{ $zoneVal.title }} Temperature {{ $rule | title }}"
+            description: "{{ $zoneVal.title }} Temperature {{ $rule | title }}: {{`{{ $labels.instance }}`}} (current value: {{`{{ $value }}`}}°C)"
+        {{- end }}{{- end }}
+

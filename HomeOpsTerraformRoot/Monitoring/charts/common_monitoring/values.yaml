@@ -1,0 +1,43 @@
+---
+namespace: monitoring-system
+promLabels:
+  release: kube-prometheus-stack
+
+synology:
+  name: ds920
+  addr: 127.0.0.1
+  monitorSvc: ext_synology
+nyarlathotep:
+  name: nyarlathotep
+  addr: 127.0.0.1
+  monitorSvc: ext_nya
+  driveTemp:
+    for: 10m
+    zones:
+      backup:
+        title: Backup
+        model: "WD Red SN700 4000GB"
+        critical: 65
+      fdd:
+        title: FDD
+        model: "Samsung SSD 970 EVO Plus 2TB"
+        critical: 65
+ha:
+  name: homeassistant
+  monitorSvc: smarthome
+  noEntitiesFor: 30m
+
+thermalAlerts:
+  monitorSvc: thermal
+  for: 5m
+  zones:
+    nvme:
+      title: NVMe
+      chip: nvme_nvme0
+      critical: 78
+      warning: 73
+    core:
+      title: Core
+      chip: thermal_thermal_zone0
+      critical: 85
+      warning: 80

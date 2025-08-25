@@ -12,6 +12,7 @@ module "monitoring" {
   ingress_domain         = var.yig_ingress_domain
   gatus_final_local_icmp = var.gatus_final_local_icmp
   gatus_final_local_tcp  = var.gatus_final_local_tcp
+  static_hosts           = var.static_hosts
 }
 
 variable "pagerduty" {
@@ -42,4 +43,12 @@ variable "gatus_final_local_tcp" {
     host        = string
     port        = number
   }))
+}
+
+variable "static_hosts" {
+  description = "Map of static hostnames to IP addresses for monitoring purposes"
+  type        = map(string)
+  default = {
+    "myhost" = "127.0.0.1"
+  }
 }
