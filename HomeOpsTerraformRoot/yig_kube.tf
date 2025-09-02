@@ -24,15 +24,18 @@ module "yig_kube" {
   ingress_base_group  = var.yig_ingress_base_group
   ingress_admin_group = var.yig_ingress_admin_group
 
-  tool_email   = var.tool_email
+  common_smtp  = var.common_smtp
   duo_authelia = var.yig_duo_authelia
 
   bb_targets    = var.yig_bb_targets
   flux_sops_gpg = var.flux_sops_gpg
   flux_git_ssh  = var.flux_git_ssh
 
-  synology_stor_acct = var.yig_synology_stor_acct
+  synology_stor_acct    = var.yig_synology_stor_acct
   synology_velero_minio = var.yig_synology_velero_minio
+
+  mikrotik_monitoring_account   = module.core.monitoring_prometheus_auth
+  mikrotik_monitoring_router_ip = var.ros_hex.addr
 }
 
 # FIXME: consolidate variables into logically connected objects

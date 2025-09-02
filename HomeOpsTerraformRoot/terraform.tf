@@ -4,7 +4,7 @@ terraform {
     routeros = {
       # https://registry.terraform.io/providers/terraform-routeros/routeros/latest
       source  = "terraform-routeros/routeros"
-      version = "1.85.3"
+      version = "1.86.3"
     }
 
     helm = {

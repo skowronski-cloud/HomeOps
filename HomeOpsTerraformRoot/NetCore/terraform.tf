@@ -3,5 +3,8 @@ terraform {
     routeros = {
       source = "terraform-routeros/routeros"
     }
+    random = {
+      source = "hashicorp/random"
+    }
   }
 }

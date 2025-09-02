@@ -96,18 +96,16 @@ variable "repo_root" {
   # MANAGED FROM TERRAGRUNT
 }
 
-variable "tool_email" {
-  type = map(string)
-  default = {
-    "from"     = ""
-    "password" = ""
-    "port"     = ""
-    "server"   = ""
-    "tls"      = ""
-    "user"     = ""
-    "to"       = ""
-  }
-
+variable "common_smtp" {
+  type = object({
+    from     = optional(string)
+    password = string
+    port     = string
+    server   = string
+    tls      = string
+    user     = string
+    to       = string
+  })
 }
 variable "dhcp_notify_match" {
   type    = string

@@ -36,12 +36,3 @@ variable "gatus_port" {
   type    = number
   default = 30001
 }
-
-variable "static_hosts" {
-  description = "Map of static hostnames to IP addresses for monitoring purposes"
-  type        = map(string)
-  default = {
-    "ds920" = "127.0.0.1"
-    "nya"   = "127.0.0.1"
-  }
-}

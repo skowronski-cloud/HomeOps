@@ -1,0 +1,2 @@
+/k0s/containerd/io.containerd.snapshotter.v1.overlayfs/
+/k0s/kubelet/plugins/kubernetes.io/csi/driver.longhorn.io

@@ -72,12 +72,19 @@ alertmanager:
   config:
     route:
       group_by: []
+    global:
+      smtp_from: ${ common_smtp.from }
+      smtp_smarthost: "${ common_smtp.server }:${ common_smtp.port }"
+      smtp_auth_username: ${ common_smtp.user }
+      smtp_auth_password: ${ common_smtp.password }
+      smtp_require_tls: true
+    
   alertmanagerSpec:
     alertmanagerConfigNamespaceSelector: {}
     alertmanagerConfigSelector: {}
     alertmanagerConfigMatcherStrategy:
       type: None
-    replicas: 1 # ${replicas} # TODO: this is not a way to get HA
+    replicas: 1
     storage:
       volumeClaimTemplate:
         spec:
@@ -101,11 +108,16 @@ prometheus:
     hosts:
       - prometheus.${ingress_domain}
   prometheusSpec:
+    resources:
+      requests:
+        memory: 1.5Gi
+        cpu: 500m
+      limits: {}
     enableAdminAPI: true
     scrapeInterval: 30s
     evaluationInterval: 30s
     retention: "90d"
-    replicas: 1 # TODO: this is not a way to get HA, probably need to use Thanos
+    replicas: 1
     serviceMonitorSelector:
       #matchLabels:
       #  release: kube-prometheus-stack
@@ -115,6 +127,8 @@ prometheus:
           values: 
             - kube-prometheus-stack
             - prometheus-blackbox-exporter
+            - mtkxp
+            - common-monitoring
     storageSpec:
       volumeClaimTemplate:
         labels:

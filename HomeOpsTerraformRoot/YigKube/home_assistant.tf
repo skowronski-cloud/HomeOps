@@ -18,7 +18,7 @@ resource "helm_release" "home_assistant" {
     },
     {
       name  = "replicaCount"
-      value = 1 # var.replicas
+      value = 1
     }
   ]
   values = [
@@ -40,7 +40,7 @@ resource "kubernetes_secret" "home_assistant_secrets_yaml" {
   }
 }
 locals {
-  postgres_ha_secret_length = 50     # WARN: this chart seems to be broken - see https://github.com/bitnami/charts/issues/17367
+  postgres_ha_secret_length  = 50    # WARN: this chart seems to be broken - see https://github.com/bitnami/charts/issues/17367
   postgres_ha_secret_special = false # WARN: this chart seems to be broken - see https://github.com/bitnami/charts/issues/17367
 }
 resource "random_password" "postgres_ha_user_pass" {
@@ -83,7 +83,7 @@ resource "kubernetes_secret" "postgres_ha_credentials" {
     "postgres-password" : random_password.postgres_ha_postgres_pass.result,
     "admin-password" : random_password.postgres_ha_pgpool_admin_pass.result,
     "repmgr-password" : random_password.postgres_ha_repmgr_pass.result,
-    "sr-check-password" : random_password.postgres_ha_sr_check_pass.result#,
+    "sr-check-password" : random_password.postgres_ha_sr_check_pass.result #,
     #"pool-key" : random_password.postgres_ha_pool_key.result
   }
 }
@@ -96,35 +96,12 @@ resource "helm_release" "postgres_ha" {
   name      = var.ha_postgres_instance_name
   namespace = "home-assistant"
 
-  set = [
-    {
-      name  = "global.postgresql.database"
-      value = "ha"
-    },
-    {
-      name  = "global.postgresql.username"
-      value = "ha"
-    },
-    {
-      name  = "global.postgresql.existingSecret"
-      value = "${var.ha_postgres_instance_name}-postgresql"
-    },
-    {
-      name  = "global.pgpool.existingSecret"
-      value = "${var.ha_postgres_instance_name}-postgresql"
-    },
-    {
-      name = "pgpool.replicaCount"
-      value = var.replicas
-    },
-    {
-      name = "postgresql.replicaCount"
-      value = var.replicas
-    },
-    {
-      name = "persistence.size"
-      value = "100Gi"
-    }
+  values = [
+    templatefile("${path.module}/template/home_assistant_postgres.yaml.tpl", {
+      instance_name                = var.ha_postgres_instance_name
+      highlyAvailableServiceConfig = local.highlyAvailableServiceConfig
+      volume_size                  = "100Gi"
+    })
   ]
   depends_on = [kubernetes_namespace.ns, kubernetes_secret.postgres_ha_credentials]
 }

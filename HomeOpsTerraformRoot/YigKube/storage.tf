@@ -10,43 +10,12 @@ resource "helm_release" "longhorn" {
 
   # TODO: default backup store - https://artifacthub.io/packages/helm/longhorn/longhorn#other-settings
 
-  set = [
-    {
-      name  = "persistence.defaultClassReplicaCount"
-      value = var.replicas
-    },
-    {
-      name  = "defaultSettings.defaultDataPath"
-      value = "/data/longhorn"
-    },
-
-    {
-      name  = "ingress.enabled"
-      value = true
-    },
-    {
-      name  = "ingress.host"
-      value = "longhorn.${var.ingress_domain}"
-    },
-    {
-      name = "csi.attacherReplicaCount"
-      value = var.replicas
-    },
-    {
-      name = "csi.provisionerReplicaCount"
-      value = var.replicas
-    },
-    {
-      name = "csi.resizerReplicaCount"
-      value = var.replicas
-    },
-
-    {
-      name = "csi.snapshotterReplicaCount"
-      value = var.replicas
-    }
-
-  ]
+  values = [templatefile("${path.module}/template/longhorn.yaml.tpl", {
+    ingress_domain               = var.ingress_domain,
+    workers_count                = var.workers_count,
+    highlyAvailableServiceConfig = local.highlyAvailableServiceConfig
+    metrics_label_release        = "kube-prometheus-stack" # fixed to avoid circular dependency with prometheus stack
+  })]
 
   depends_on = [kubernetes_namespace.ns]
 }

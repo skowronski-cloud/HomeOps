@@ -1,0 +1,10 @@
+#!/bin/bash
+
+/usr/bin/kopia snapshot create /boot
+/usr/bin/kopia snapshot create /etc
+/usr/bin/kopia snapshot create /home
+/usr/bin/kopia snapshot create /root
+/usr/bin/kopia snapshot create /srv
+/usr/bin/kopia snapshot create /usr/local
+/usr/bin/kopia snapshot create /var/lib
+/usr/bin/kopia snapshot create /var/spool

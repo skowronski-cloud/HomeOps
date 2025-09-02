@@ -45,22 +45,42 @@ variable "net_segments" {
     "comment" = "optional"
   }]
 }
-variable "tool_email" {
-  type = map(string)
-  default = {
-    "from"     = ""
-    "password" = ""
-    "port"     = ""
-    "server"   = ""
-    "tls"      = ""
-    "user"     = ""
-    "to"       = ""
-  }
+variable "tool_email_from" {
+  type = string
+}
+variable "common_smtp" {
+  type = object({
+    from     = optional(string)
+    password = string
+    port     = string
+    server   = string
+    tls      = string
+    user     = string
+    to       = string
+  })
 }
 variable "dhcp_notify_match" {
   type    = string
   default = "192.168..*"
 }
 variable "admin_ssh_key" {
-  type = string 
+  type = string
+}
+variable "netwatch_probes" {
+  type = map(object({
+    host              = string
+    disabled          = optional(bool, false)
+    interval          = optional(string, "00:01:00")
+    tcp_port          = optional(number, null)
+    ping_ttl          = optional(number, 16)
+    ping_packet_count = optional(number, 3)
+    ping_thr_avg      = optional(string, null)
+    ping_thr_max      = optional(string, null)
+    ping_thr_stddev   = optional(string, null)
+    ping_thr_jitter   = optional(string, null)
+    ping_thr_loss     = optional(number, 50) # %
+    timeout           = optional(string, "00:00:15")
+    type              = optional(string, "icmp") # icmp or tcp-conn or http-get
+    comment           = optional(string)
+  }))
 }

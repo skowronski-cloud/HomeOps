@@ -8,12 +8,12 @@ resource "routeros_dns" "dns" {
 }
 
 resource "routeros_tool_email" "email" {
-  from     = var.tool_email.from
-  password = var.tool_email.password
-  port     = var.tool_email.port
-  server   = var.tool_email.server
-  tls      = var.tool_email.tls
-  user     = var.tool_email.user
+  from     = var.tool_email_from
+  password = var.common_smtp.password
+  port     = var.common_smtp.port
+  server   = var.common_smtp.server
+  tls      = var.common_smtp.tls
+  user     = var.common_smtp.user
 }
 
 resource "routeros_system_user_sshkeys" "admin" {

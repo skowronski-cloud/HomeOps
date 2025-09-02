@@ -18,7 +18,8 @@ resource "helm_release" "velero" {
 
   values = [
     templatefile("${path.module}/template/velero_values.yaml.tpl", {
-      ver_plugin_aws = var.ver_docker_velero_aws
+      ver_plugin_aws        = var.ver_docker_velero_aws
+      metrics_label_release = helm_release.promstack.name
     })
   ]
 

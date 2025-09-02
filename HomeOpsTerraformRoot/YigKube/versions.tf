@@ -25,7 +25,7 @@ variable "ver_helm_metallb" {
 }
 variable "ver_helm_longhorn" {
   # https://artifacthub.io/packages/helm/longhorn/longhorn
-  default = "1.9.0"
+  default = "1.9.1"
   type    = string
 }
 variable "ver_helm_mosquitto" {
@@ -101,7 +101,7 @@ variable "ver_helm_fluxinstance" {
 }
 variable "ver_helm_velero" {
   # https://artifacthub.io/packages/helm/vmware-tanzu/velero
-  default = "10.0.11"
+  default = "10.1.0"
   type    = string
 }
 variable "ver_docker_velero_aws" {
@@ -112,5 +112,40 @@ variable "ver_docker_velero_aws" {
 variable "ver_helm_snapshot_controller" {
   # https://github.com/piraeusdatastore/helm-charts/tree/main/charts/snapshot-controller
   default = "4.1.0"
+  type    = string
+}
+variable "ver_helm_mktxp" {
+  # https://artifacthub.io/packages/helm/obeone/mktxp
+  default = "1.1.7"
+  type    = string
+}
+variable "ver_docker_mktxp" {
+  # https://github.com/akpw/mktxp/releases
+  default = "1.2.12"
+  type    = string
+}
+variable "ver_helm_cadvisor" {
+  # https://artifacthub.io/packages/helm/bitnami/cadvisor
+  default = "0.1.13"
+  type    = string
+}
+variable "ver_helm_kepler" {
+  # https://artifacthub.io/packages/helm/kepler/kepler
+  default = "0.6.1"
+  type    = string
+}
+variable "ver_helm_helmexporter" {
+  # https://artifacthub.io/packages/helm/sstarcher/helm-exporter
+  default = "1.2.16+77ad21d"
+  type    = string
+}
+variable "ver_helm_multus" {
+  # https://artifacthub.io/packages/helm/bitnami/multus-cni
+  default = "2.2.21"
+  type    = string
+}
+variable "ver_helm_whereabouts" {
+  # https://artifacthub.io/packages/helm/bitnami/whereabouts
+  default = "1.2.19"
   type    = string
 }

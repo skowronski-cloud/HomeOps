@@ -58,7 +58,7 @@ resource "kubernetes_secret" "authelia_secrets" {
     "session.encryption.key"                          = random_password.oidc_session_enc_key.result
     "authentication.ldap.password.txt"                = var.ldap_pass
     "oidc-jwk.RS256.pem"                              = tls_private_key.authelia_idp.private_key_pem
-    "notifier.smtp.password.txt"                      = var.tool_email.password
+    "notifier.smtp.password.txt"                      = var.common_smtp.password
     "duo.key"                                         = var.duo_authelia.secret_key
     "session.redis.password.txt"                      = random_password.authelia_session_redis_pass.result
     "session.redis.sentinel.password.txt"             = random_password.authelia_session_redis_pass.result
@@ -97,14 +97,15 @@ resource "helm_release" "authelia" {
       ingress_base_group  = var.ingress_base_group
       ingress_admin_group = var.ingress_admin_group
 
-      smtp_host = var.tool_email.server
-      smtp_port = var.tool_email.port
-      smtp_user = var.tool_email.user
+      smtp_host = var.common_smtp.server
+      smtp_port = var.common_smtp.port
+      smtp_user = var.common_smtp.user
 
       duo_api_hostname    = var.duo_authelia.api_hostname
       duo_integration_key = var.duo_authelia.integration_key
 
-      replicas = var.replicas
+      highlyAvailableServiceConfig = local.highlyAvailableServiceConfig
+      metrics_label_release        = helm_release.promstack.name
     })
   ]
 

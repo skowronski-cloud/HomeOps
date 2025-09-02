@@ -12,3 +12,7 @@ variable "net_dhcp" {
     "comment" = "optional"
   }]
 }
+variable "dns_alias" {
+  type    = map(string)
+  default = {}
+}

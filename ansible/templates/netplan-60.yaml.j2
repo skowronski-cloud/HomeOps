@@ -1,0 +1,14 @@
+---
+network:
+  version: 2
+  ethernets:
+    eth1:
+      mtu: 9000
+      dhcp4: no
+      dhcp6: no
+  bridges:
+    br-longhorn:
+      interfaces: [eth1]
+      mtu: 9000
+      dhcp4: no
+      dhcp6: no

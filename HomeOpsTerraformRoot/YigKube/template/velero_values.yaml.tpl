@@ -17,3 +17,14 @@ deployNodeAgent: true # this is needed for data mover... https://github.com/vmwa
 nodeAgent:
   podVolumePath: /var/lib/k0s/kubelet/pods
   pluginVolumePath: /var/lib/k0s/kubelet/plugins
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    additionalLabels:
+      release: ${metrics_label_release}
+  prometheusRule:
+    enabled: false
+    additionalLabels:
+      release: ${metrics_label_release}

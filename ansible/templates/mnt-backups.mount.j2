@@ -1,0 +1,14 @@
+[Unit]
+Description=backups mount
+After=network-online.target
+Wants=network-online.target
+
+[Mount]
+What={{ hostvars[inventory_hostname].cifs_path }}/{{ inventory_hostname}}/backups
+Where=/mnt/backups
+Type=cifs
+Options=rw,vers=3,noauto,x-systemd.automount,_netdev,file_mode=0600,dir_mode=0700,dom={{ hostvars[inventory_hostname].cifs_domain }},username={{ hostvars[inventory_hostname].cifs_user }},password={{ hostvars[inventory_hostname].cifs_password }}
+DirectoryMode=0700
+
+[Install]
+WantedBy=multi-user.target

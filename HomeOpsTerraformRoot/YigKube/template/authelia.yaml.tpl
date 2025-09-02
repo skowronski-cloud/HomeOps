@@ -2,7 +2,21 @@
 # https://www.authelia.com/configuration/
 # https://artifacthub.io/packages/helm/authelia/authelia?modal=values
 pod:
-  replicas: ${replicas}
+  replicas: ${highlyAvailableServiceConfig.replicaCount}
+  strategy:
+    type: ${highlyAvailableServiceConfig.updateStrategy.type}
+    rollingUpdate:
+      maxUnavailable: ${highlyAvailableServiceConfig.updateStrategy.rollingUpdate.maxUnavailable}
+      maxSurge: ${highlyAvailableServiceConfig.updateStrategy.rollingUpdate.maxSurge}
+  selectors:
+    affinity:
+      podAntiAffinity:
+        %{if highlyAvailableServiceConfig.affinityPreset=="hard"}required%{else}preferred%{endif}DuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/instance: authelia
+                app.kubernetes.io/name: authelia
+            topologyKey: kubernetes.io/hostname
 
 ingress:
   enabled: true
@@ -14,6 +28,8 @@ ingress:
       - websecure
     tls:
       certResolver: yig-ca-issuer
+    sticky: true
+    strategy: wrr
 
 secret:
   additionalSecrets:
@@ -21,6 +37,14 @@ secret:
     oidc-grafana-client: {}
 
 configMap:
+  telemetry:
+    metrics:
+      enabled: true
+      port: 9959
+      serviceMonitor:
+        enabled: true
+        labels:
+          release: ${metrics_label_release}
   log:
     level: info
   theme: dark
@@ -166,11 +190,35 @@ persistence:
   accessModes:
     - ReadWriteMany
 
+# https://artifacthub.io/packages/helm/bitnami/redis?modal=values
 redis:
   enabled: true
   architecture: replication
   replica:
-    replicaCount: 2
+    replicaCount: ${highlyAvailableServiceConfig.replicaCount}
+    podAntiAffinityPreset: ${highlyAvailableServiceConfig.affinityPreset}
+    terminationGracePeriodSeconds: 0
+    tolerations:
+      - key: node.kubernetes.io/not-ready
+        operator: Exists
+        effect: NoExecute
+        tolerationSeconds: 15
+      - key: node.kubernetes.io/unreachable
+        operator: Exists
+        effect: NoExecute
+        tolerationSeconds: 15
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 100m
+    updateStrategy:
+      type: ${highlyAvailableServiceConfig.updateStrategy.type}
+      rollingUpdate:
+        maxSurge: ${highlyAvailableServiceConfig.updateStrategy.rollingUpdate.maxSurge}
+        maxUnavailable: ${highlyAvailableServiceConfig.updateStrategy.rollingUpdate.maxUnavailable}
   sentinel:
     enabled: true
     masterSet: mymaster
+    downAfterMilliseconds: 15000 # 15s
+    failoverTimeout: 60000 # 1m
+    terminationGracePeriodSeconds: 30

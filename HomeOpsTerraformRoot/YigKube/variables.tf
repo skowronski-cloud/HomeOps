@@ -68,18 +68,16 @@ variable "ingress_admin_group" {
   type = string
 }
 
-variable "tool_email" {
-  type = map(string)
-  default = {
-    "from"     = ""
-    "password" = ""
-    "port"     = ""
-    "server"   = ""
-    "tls"      = ""
-    "user"     = ""
-    "to"       = ""
-  }
-
+variable "common_smtp" {
+  type = object({
+    from     = optional(string)
+    password = string
+    port     = string
+    server   = string
+    tls      = string
+    user     = string
+    to       = string
+  })
 }
 variable "duo_authelia" {
   type = object({
@@ -108,11 +106,7 @@ variable "flux_git_ssh" {
 }
 
 
-variable "replicas" {
-  type        = number
-  description = "number of replicas for some services"
-  default     = 2
-}
+
 
 variable "synology_stor_acct" {
   type = object({
@@ -131,4 +125,13 @@ variable "synology_velero_minio" {
     port = number
   })
   description = "Synology MinIO for Velero backups"
+}
+variable "mikrotik_monitoring_account" {
+  type = object({
+    user     = string
+    password = string
+  })
+}
+variable "mikrotik_monitoring_router_ip" {
+  type = string
 }

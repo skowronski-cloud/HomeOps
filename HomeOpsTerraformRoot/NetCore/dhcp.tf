@@ -17,7 +17,7 @@ resource "routeros_ip_dhcp_server" "server" {
   address_pool = each.value.address_pool
   lease_script = templatefile("${path.module}/lease_script.tpl", {
     dhcp_notify_match = var.dhcp_notify_match,
-    tool_email_to     = var.tool_email.to,
+    tool_email_to     = var.common_smtp.to,
   })
 }
 resource "routeros_ip_dns_record" "hex" {

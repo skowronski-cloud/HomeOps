@@ -15,10 +15,10 @@ spec:
         job: ismc-exporter
         monitor_svc: {{ .Values.nyarlathotep.monitorSvc }}
       targets:
-        - {{ .Values.nyarlathotep.addr }}:65002
+        - nya.{{ .Values.homeTLD }}:65002
     - labels:
         instance: {{ .Values.nyarlathotep.name }}
         job: node-exporter
         monitor_svc: {{ .Values.nyarlathotep.monitorSvc }}
       targets:
-        - {{ .Values.nyarlathotep.addr }}:9100
+        - nya.{{ .Values.homeTLD }}:9100

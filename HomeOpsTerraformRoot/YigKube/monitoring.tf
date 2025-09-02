@@ -18,7 +18,7 @@ resource "helm_release" "promstack" {
     ingress_base_group  = var.ingress_base_group
     ingress_admin_group = var.ingress_admin_group
 
-    replicas = var.replicas
+    common_smtp = var.common_smtp
   })]
 
   depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
@@ -40,4 +40,90 @@ resource "helm_release" "blackbox" {
 
   depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
 }
-# TODO: add https://artifacthub.io/packages/helm/th-charts/ping-exporter?modal=values
+resource "helm_release" "mktxp" {
+  # https://artifacthub.io/packages/helm/obeone/mktxp?modal=values
+  repository = "https://charts.obeone.cloud"
+  chart      = "mktxp"
+  version    = var.ver_helm_mktxp
+
+  name      = "mktxp"
+  namespace = "monitoring-system"
+
+  values = [templatefile("${path.module}/template/mktxp.yaml.tpl", {
+    ingress_domain                = var.ingress_domain
+    image_version                 = var.ver_docker_mktxp
+    mikrotik_monitoring_router_ip = var.mikrotik_monitoring_router_ip
+    mikrotik_monitoring_account   = var.mikrotik_monitoring_account
+    metrics_label_release         = helm_release.promstack.name
+  })]
+
+  depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
+}
+resource "helm_release" "cadvisor" {
+  # https://artifacthub.io/packages/helm/bitnami/cadvisor
+  repository = "oci://registry-1.docker.io/bitnamicharts/"
+  chart      = "cadvisor"
+  version    = var.ver_helm_cadvisor
+
+  name      = "cadvisor"
+  namespace = "monitoring-system"
+
+  set = [
+    {
+      name  = "metrics.enabled"
+      value = true
+    },
+    {
+      name  = "metrics.serviceMonitor.enabled"
+      value = true
+    },
+    {
+      name  = "metrics.serviceMonitor.labels.release"
+      value = helm_release.promstack.name
+    }
+  ]
+
+
+  depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
+}
+resource "helm_release" "kepler" {
+  # https://artifacthub.io/packages/helm/kepler/kepler
+  repository = "https://sustainable-computing-io.github.io/kepler-helm-chart"
+  chart      = "kepler"
+  version    = var.ver_helm_kepler
+
+  name      = "kepler"
+  namespace = "monitoring-system"
+
+  set = [
+    {
+      name  = "serviceMonitor.enabled"
+      value = true
+    },
+    {
+      name  = "serviceMonitor.labels.release"
+      value = helm_release.promstack.name
+    }
+  ]
+
+
+  depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
+}
+resource "helm_release" "helm_exporter" {
+  # https://artifacthub.io/packages/helm/sstarcher/helm-exporter
+  repository = "https://shanestarcher.com/helm-charts/"
+  chart      = "helm-exporter"
+  version    = var.ver_helm_helmexporter
+
+  name      = "helm-exporter"
+  namespace = "monitoring-system"
+
+  values = [templatefile("${path.module}/template/helmexporter.yaml.tpl", {
+    metrics_label_release = helm_release.promstack.name
+    ingress_domain        = var.ingress_domain
+    common_smtp           = var.common_smtp
+  })]
+
+
+  depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
+}

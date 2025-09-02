@@ -15,4 +15,4 @@ spec:
         job: node-exporter
         monitor_svc: {{ .Values.synology.monitorSvc }}
       targets:
-        - {{ .Values.synology.addr }}:9100
+        - ds920.{{ .Values.homeTLD }}:9100

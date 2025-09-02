@@ -7,6 +7,16 @@ podSecurityContext:
      - name: net.ipv4.ping_group_range
        value: "0 2147483647"
 
+ingress:
+  enabled: true
+  ingressClassName: "traefik"
+  annotations: []
+  hosts:
+    - host: blackbox.${ingress_domain}
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
 config:
   modules:
     http_2xx:
@@ -34,4 +44,4 @@ serviceMonitor:
       interval: ${params.interval}
       module: ${params.module}
 %{endfor ~}
-# TODO: integrate automated targets with IPAM/DCIM
+# TODO: integrate automated targets with IPAM/DCIM # FIXME: move to module.Monitoring

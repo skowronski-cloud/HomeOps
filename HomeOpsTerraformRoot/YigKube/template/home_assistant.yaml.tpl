@@ -1,4 +1,5 @@
 ---
+# https://artifacthub.io/packages/helm/k8s-home-lab-repo/home-assistant?modal=values
 ingress:
   enabled: true
   hosts:
@@ -66,3 +67,8 @@ configuration:
             - sensor.backup_*
             - sensor.ups_*
       requires_auth: false
+resources:
+  requests:
+    memory: 1Gi
+    cpu: 250m
+  limits: {}

@@ -3,13 +3,13 @@ namespace: monitoring-system
 promLabels:
   release: kube-prometheus-stack
 
+homeTLD: home.ds
+
 synology:
   name: ds920
-  addr: 127.0.0.1
   monitorSvc: ext_synology
 nyarlathotep:
   name: nyarlathotep
-  addr: 127.0.0.1
   monitorSvc: ext_nya
   driveTemp:
     for: 10m
@@ -41,3 +41,17 @@ thermalAlerts:
       chip: thermal_thermal_zone0
       critical: 85
       warning: 80
+
+mikrotik:
+  monitorSvc: network
+  latencyWarningAnycast:
+    for: 15m
+    threshold: 50  # ms
+    severity: warning
+  lossWarningAnycast:
+    for: 15m
+    threshold: 20  # %
+    severity: warning
+  localDeviceDown:
+    for: 30m
+    severity: warning

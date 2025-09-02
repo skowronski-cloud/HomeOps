@@ -11,12 +11,13 @@ variable "monitoring_services" {
     group_by = optional(list(string), [])
   }))
   default = {
+    # TODO: new category for resource tracing (kepler, cADvisor)
+    # TODO: import manual grafana dashboards here
     "flux" = {
       pd_name        = "[k8s] FluxCD and GitOps"
       pd_description = ""
       prom_svc_label = "flux"
       # TODO: monitor stuck syncs and other FluxCD issues
-      # TODO: check FluxCD exporters and define alerts
     },
     "fridge" = {
       pd_name        = "[k8s] Fridge dashboard"
@@ -75,24 +76,16 @@ variable "monitoring_services" {
       pd_name        = "[k8s] Storage"
       pd_description = "Longhorn, Velero"
       prom_svc_label = "kube_storage"
-      # TODO: get standard Longhorn alerts working (including space on drives)
-      # TODO: get standard Velero alerts working
-      # TODO: monitor some important PVCs
-      # TODO: monitor backups
-      # TODO: check Longhorn exporters and define alerts
-      # TODO: check Velero exporters and define alerts
+      # TODO: check Longhorn exporters and define alerts      # longhorn_volume_state,longhorn_volume_write_latency,longhorn_volume_read_latency,longhorn_node_status,longhorn_disk_status
+      # TODO: check Velero exporters and define alerts        # velero_*
     },
     "ingress" = {
       pd_name        = "[k8s] Ingress and Auth"
       pd_description = "Traefik, cert-manager, MetalLB, Authelia"
       prom_svc_label = "ingress"
       # TODO: monitor neraly expired certs
-      # TODO: monitor Authelaia availability
       # TODO: monitor Authelia's Redis
-      # TODO: monitor Traefik status
       # TODO: monitor MetalLB status
-      # TODO: check Traefik exporters and define alerts
-      # TODO: check Authelia exporters and define alerts
       # TODO: check MetalLB exporters and define alerts
     },
     "monitoring_vendor" = {
@@ -128,19 +121,10 @@ variable "monitoring_services" {
       pd_description = "YNCE and on-board thermal sensors"
       prom_svc_label = "thermal"
     },
-    "net_local" = {
-      pd_name        = "[net] Local Network monitoring"
-      pd_description = "Hosts and devices on the local network"
-      prom_svc_label = "net_local"
-      # TODO: match blackbox metrics for local devices
-      # TODO: check exporters for MikroTik routers and APs
-    },
-    "net_internet" = {
-      pd_name        = "[net] Internet connectivity"
-      pd_description = ""
-      prom_svc_label = "net_internet"
-      # TODO: match blackbox metrics for endpoints on the internet
-      # TODO: check speedtest exporters (safe ones) and define alerts
+    "network" = {
+      pd_name        = "[net] LAN and WAN montitoring"
+      pd_description = "Hosts and devices on the local network and WAN connectivity"
+      prom_svc_label = "network"
     },
     "ext_workstations" = {
       pd_name        = "[ext] Workstations"
@@ -151,7 +135,6 @@ variable "monitoring_services" {
     "ext_nya" = {
       pd_name        = "[ext] Nyarlathotep"
       prom_svc_label = "ext_nya"
-      # TODO: define alerts for Nya node exporter data
     },
     "ext_synology" = {
       pd_name        = "[ext] Synology NAS"

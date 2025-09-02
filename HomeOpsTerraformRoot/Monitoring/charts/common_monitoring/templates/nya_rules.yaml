@@ -24,3 +24,4 @@ spec:
             description: "Nya {{ $zoneVal.title }} Disk {{`{{ $labels.serial }}`}} Temperature {{ $rule | title }} (current value: {{`{{ $value }}`}}°C)"
         {{- end }}{{- end }}
 
+# BUG: incorrect queries

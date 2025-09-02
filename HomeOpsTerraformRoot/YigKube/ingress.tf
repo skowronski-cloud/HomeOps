@@ -23,45 +23,14 @@ resource "helm_release" "traefik" {
 
   name      = "traefik"
   namespace = "traefik-system"
-  set = [
-    {
-      name  = "logs.general.level"
-      value = "INFO"
-    },
-    {
-      name  = "providers.kubernetesCRD.allowExternalNameServices"
-      value = true
-    },
-    {
-      name  = "providers.kubernetesIngress.allowExternalNameServices"
-      value = true
-    },
-    {
-      name  = "volumes[0].mountPath"
-      value = "/etc/pki/tls/certs" # https://go.dev/src/crypto/x509/root_linux.go - purposefully other dir than OS-default
-    },
-    {
-      name  = "volumes[0].type"
-      value = "secret"
-    },
-    {
-      name  = "volumes[0].name"
-      value = "ca-crt"
-    },
-    {
-      name = "deployment.replicas"
-      value = var.replicas
-    }
-  ]
-  set_list = [
-    {
-      name = "additionalArguments"
-      value = [
-        "--entryPoints.websecure.http.middlewares=traefik-system-forwardauth-authelia@kubernetescrd",
-        "--serversTransport.rootCAs=/etc/pki/tls/certs/ca.crt"
-      ]
-    }
-  ]
+
+  values = [templatefile("${path.module}/template/traefik.yaml.tpl", {
+    ca_crt_secret                = kubernetes_secret.ca_crt["traefik-system"].metadata[0].name,
+    highlyAvailableServiceConfig = local.highlyAvailableServiceConfig
+    metrics_label_release        = helm_release.promstack.name
+  })]
+
+
 
   depends_on = [kubernetes_namespace.ns]
 }

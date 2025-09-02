@@ -11,6 +11,7 @@ terraform {
       "destroy"
     ]
     required_var_files = [
+      "${get_original_terragrunt_dir()}/../HomeOpsData/common.tfvars",
       "${get_original_terragrunt_dir()}/../HomeOpsData/ros.tfvars",
       "${get_original_terragrunt_dir()}/../HomeOpsData/wan.tfvars",
       "${get_original_terragrunt_dir()}/../HomeOpsData/lan.tfvars",

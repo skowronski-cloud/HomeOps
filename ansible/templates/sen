@@ -1,0 +1,26 @@
+#!/bin/bash
+F=`mktemp`
+sensors -j > $F
+
+{% if hostvars[inventory_hostname].model == "opi5p" and hostvars[inventory_hostname].kernel == "upstream"  %}
+echo -n "NVMe=`jq -r '.["nvme-pci-0100"].Composite.temp1_input | round' $F`°C "
+echo -n "Center=`jq -r '.["center_thermal-virtual-0"].temp1.temp1_input | round' $F`°C "
+echo -n "Package=`jq -r '.["package_thermal-virtual-0"].temp1.temp1_input | round' $F`°C "
+echo -n "GPU=`jq -r '.["gpu_thermal-virtual-0"].temp1.temp1_input | round' $F`°C "
+echo -n "CoreAvg=`jq '. | with_entries(select(.key | test("core|npu"))) | [.[].temp1.temp1_input] | add / length | round' $F`°C "
+echo -n "LittleCore=`jq -r '.["littlecore_thermal-virtual-0"].temp1.temp1_input | round' $F`°C "
+echo -n "BigCore0=`jq -r '.["bigcore0_thermal-virtual-0"].temp1.temp1_input | round' $F`°C "
+echo -n "BigCore2=`jq -r '.["bigcore2_thermal-virtual-0"].temp1.temp1_input | round' $F`°C "
+echo -n "NPU=`jq -r '.["npu_thermal-virtual-0"].temp1.temp1_input | round' $F`°C "
+{% elif hostvars[inventory_hostname].model == "rpi5" %}
+echo -n "CPU=`jq -r '.["cpu_thermal-virtual-0"].temp1.temp1_input | round' $F`°C "
+echo -n "ISA=`jq -r '.["rp1_adc-isa-0000].temp1.temp1_input | round' $F`°C "
+{% endif %}
+
+cat /proc/loadavg > $F
+l1=`cat $F | awk '{print $1}'`
+l5=`cat $F | awk '{print $2}'`
+l15=`cat $F | awk '{print $3}'`
+echo -n "Load1=$l1 Load5=$l5 Load15=$l15"
+rm $F
+echo

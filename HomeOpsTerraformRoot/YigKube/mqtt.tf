@@ -26,10 +26,6 @@ resource "helm_release" "mosquitto" {
     {
       name  = "mosquitto.persistence.path"
       value = "/mosquitto/data/"
-    },
-    {
-      name  = "replicaCount"
-      value = 1 # var.replicas # TODO: test this, maybe use other chart
     }
   ]
   set_list = [

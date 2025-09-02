@@ -1,0 +1,50 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: common-monitoring-mikrotik
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- with .Values.promLabels }}
+    {{ toYaml . }}
+    {{- end }}
+spec:
+  groups:
+    - name: Mikrotik
+      rules:
+        - alert: MikrotikLatencyToAnycastHigh
+          expr: mktxp_netwatch_icmp_rtt_avg_ms{name=~".*1\\.1\\.1\\.1.*"} > {{ .Values.mikrotik.latencyWarningAnycast.threshold }}
+          for: {{ .Values.mikrotik.latencyWarningAnycast.for }}
+          labels:
+            severity: {{ .Values.mikrotik.latencyWarningAnycast.severity }}
+            monitor_svc: {{ $.Values.mikrotik.monitorSvc }}
+          annotations:
+            summary: "Latency to Anycast DNS is very high on Mikrotik"
+        - alert: MikrotikLossToAnycastHigh
+          expr: mktxp_netwatch_icmp_loss_percent{name=~".*1\\.1\\.1\\.1.*"} > {{ .Values.mikrotik.lossWarningAnycast.threshold }}
+          for: {{ .Values.mikrotik.lossWarningAnycast.for }}
+          labels:
+            severity: {{ .Values.mikrotik.lossWarningAnycast.severity }}
+            monitor_svc: {{ $.Values.mikrotik.monitorSvc }}
+          annotations:
+            summary: "Loss to Anycast DNS is very high on Mikrotik"
+        - alert: MikrotikUpdatesAvailable
+          expr: mktxp_system_update_available>0
+          labels:
+            severity: info
+            monitor_svc: {{ $.Values.mikrotik.monitorSvc }}
+          annotations:
+            summary: "New RouterOS version is available - {{`{{ $labels.newest_version }}`}} for {{`{{ $labels.routerboard_address }}`}}"
+            runbook: "https://mikrotik.com/download/changelogs"
+        - alert: MikrotikLocalDeviceDown
+          expr: avg_over_time(mktxp_netwatch_status{name=~"(192\\.168\\.|lan-).*"}[{{ .Values.mikrotik.localDeviceDown.for }}])==0
+          for: {{ .Values.mikrotik.localDeviceDown.for }}
+          labels:
+            severity: {{ .Values.mikrotik.localDeviceDown.severity }}
+            monitor_svc: {{ $.Values.mikrotik.monitorSvc }}
+          annotations:
+            summary: "Local device is down - {{`{{ $labels.name }}`}}"
+
+# TODO: mktxp_interface_tx_drop_total/mktxp_interface_rx_drop_total/mktxp_interface_tx_error_total/mktxp_interface_rx_error_total
+
+

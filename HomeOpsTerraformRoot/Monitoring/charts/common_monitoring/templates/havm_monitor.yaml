@@ -1,0 +1,48 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  labels:
+  {{- with .Values.promLabels }}
+    {{ toYaml . }}
+  {{- end }}
+  name: havm-manifest
+  namespace: {{ .Values.namespace }}
+spec:
+  jobName: havm-monitor
+  interval: 60s
+  scrapeTimeout: 15s
+  prober:
+    url: prometheus-blackbox-exporter:9115
+  module: http_2xx
+  targets:
+    staticConfig:
+      static:
+        - http://havm.{{ .Values.homeTLD }}:8123/manifest.json
+      labels:
+        monitor_svc: {{ $.Values.ha.monitorSvc }}
+        target: havm_manifest
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  labels:
+  {{- with .Values.promLabels }}
+    {{ toYaml . }}
+  {{- end }}
+  name: havm-auth
+  namespace: {{ .Values.namespace }}
+spec:
+  jobName: havm-auth
+  interval: 60s
+  scrapeTimeout: 15s
+  prober:
+    url: prometheus-blackbox-exporter:9115
+  module: http_2xx
+  targets:
+    staticConfig:
+      static:
+        - http://havm.{{ .Values.homeTLD }}:8123/auth/providers
+      labels:
+        monitor_svc: {{ $.Values.ha.monitorSvc }}
+        target: havm_auth
