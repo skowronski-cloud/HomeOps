@@ -149,3 +149,13 @@ variable "ver_helm_whereabouts" {
   default = "1.2.19"
   type    = string
 }
+variable "ver_helm_vernemq" {
+  # https://github.com/vernemq/docker-vernemq
+  default = "2.1.1"
+  type    = string
+}
+variable "ver_docker_vernemq" {
+  # https://hub.docker.com/r/11notes/vernemq/tags
+  default = "2.1.1"
+  type    = string
+}
