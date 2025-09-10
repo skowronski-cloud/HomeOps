@@ -14,10 +14,19 @@ additionalVolumes:
       items:
         - key: secrets-yaml
           path: secrets.yaml
+  - name: mqtt-yaml
+    secret:
+      secretName: mqtt-yaml
+      items:
+        - key: mqtt-yaml
+          path: mqtt.yaml
 additionalMounts:
   - name: secrets-yaml
     mountPath: /config/secrets.yaml
     subPath: secrets.yaml
+  - name: mqtt-yaml
+    mountPath: /config/info_mqtt.yaml
+    subPath: mqtt.yaml
 configuration:
   enabled: true
   forceInit: true
@@ -28,7 +37,7 @@ configuration:
     default_config:
 
     logger:
-      default: verbose
+      default: DEBUG
 
     http:
       use_x_forwarded_for: true
@@ -59,6 +68,8 @@ configuration:
     automation: !include automations.yaml
     script: !include scripts.yaml
     scene: !include scenes.yaml
+
+    # mqtt: !include mqtt.yaml # HA doesn't like YAML for MQTT broker anymore ;______;
 
     prometheus:
       filter:

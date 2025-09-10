@@ -23,10 +23,10 @@ resource "helm_release" "metallb_resources" {
 
 
   values = [templatefile("${path.module}/template/metallb_resources.yaml.tpl", {
-    address_ingress_mqtt   = var.address_ingress_mqtt
-    address_ingress_matter = var.address_ingress_matter
-    address_ingress_main   = var.address_ingress_main
+    metallb_ipam           = var.metallb_ipam
   })]
 
   depends_on = [helm_release.metallb]
 }
+
+# TODO: consider Cillium and some IPAM

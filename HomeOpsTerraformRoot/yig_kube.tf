@@ -6,9 +6,6 @@ module "yig_kube" {
     tls        = tls
     # TODO: Cloudflare for DNS?
   }
-  address_ingress_main      = var.yig_address_ingress_main
-  address_ingress_matter    = var.yig_address_ingress_matter
-  address_ingress_mqtt      = var.yig_address_ingress_mqtt
   top_domain                = var.yig_top_domain
   ingress_domain            = var.yig_ingress_domain
   mqtt_accounts             = var.yig_mqtt_accounts
@@ -36,22 +33,27 @@ module "yig_kube" {
 
   mikrotik_monitoring_account   = module.core.monitoring_prometheus_auth
   mikrotik_monitoring_router_ip = var.ros_hex.addr
+
+  metallb_ipam = var.metallb_ipam
 }
 
 # FIXME: consolidate variables into logically connected objects
 
-variable "yig_address_ingress_main" {
-  type        = string
-  description = "CIDR for main ingress, to be read from secrets"
+
+variable "metallb_ipam" {
+  type = map(object({
+    name = string
+    addresses = list(string)
+    # TODO: add creation of DNS records in Cloudflare or ROS
+    namespaces = optional(list(string))
+    svcSelectors = optional(list(object({
+      key   = string
+      operator = string
+      values = list(string)
+    })))
+  }))
 }
-variable "yig_address_ingress_mqtt" {
-  type        = string
-  description = "CIDR for MQTT LB, to be read from secrets"
-}
-variable "yig_address_ingress_matter" {
-  type        = string
-  description = "CIDR for Matter LB, to be read from secrets"
-}
+
 variable "yig_top_domain" {
   type        = string
   description = "FQDN of parent domain, to be read from secrets"

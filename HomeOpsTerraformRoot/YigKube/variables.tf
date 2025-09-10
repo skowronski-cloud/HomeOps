@@ -1,14 +1,14 @@
-variable "address_ingress_main" {
-  type    = string
-  default = "127.0.1.1/32"
-}
-variable "address_ingress_matter" {
-  type    = string
-  default = "127.0.1.2/32"
-}
-variable "address_ingress_mqtt" {
-  type    = string
-  default = "127.0.1.3/32"
+variable "metallb_ipam" {
+  type = map(object({
+    name = string
+    addresses = list(string)
+    namespaces = optional(list(string), [])
+    svcSelectors = optional(list(object({
+      key   = string
+      operator = string
+      values = list(string)
+    })), [])
+  }))
 }
 
 variable "top_domain" {

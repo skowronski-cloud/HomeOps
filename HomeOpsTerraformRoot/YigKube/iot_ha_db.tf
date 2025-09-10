@@ -1,44 +1,4 @@
-resource "helm_release" "home_assistant" {
-  # https://artifacthub.io/packages/helm/helm-hass/home-assistant
-  repository = "http://pajikos.github.io/home-assistant-helm-chart/"
-  chart      = "home-assistant"
-  version    = var.ver_helm_ha
 
-  name      = "home-assistant"
-  namespace = "home-assistant"
-
-  set = [
-    {
-      name  = "image.tag"
-      value = var.ver_app_ha
-    },
-    {
-      name  = "persistence.enabled"
-      value = true
-    },
-    {
-      name  = "replicaCount"
-      value = 1
-    }
-  ]
-  values = [
-    templatefile("${path.module}/template/home_assistant.yaml.tpl", {
-      fqdn = "ha.${var.ingress_domain}"
-    })
-  ]
-  depends_on = [kubernetes_namespace.ns, kubernetes_secret.home_assistant_secrets_yaml]
-}
-resource "kubernetes_secret" "home_assistant_secrets_yaml" {
-  metadata {
-    namespace = "home-assistant"
-    name      = "secrets-yaml"
-  }
-  data = {
-    "secrets-yaml" = yamlencode({
-      "psql_string" : "postgresql://ha:${random_password.postgres_ha_user_pass.result}@ha-recorder-postgresql-ha-pgpool:5432/ha"
-    })
-  }
-}
 locals {
   postgres_ha_secret_length  = 50    # WARN: this chart seems to be broken - see https://github.com/bitnami/charts/issues/17367
   postgres_ha_secret_special = false # WARN: this chart seems to be broken - see https://github.com/bitnami/charts/issues/17367
@@ -97,7 +57,7 @@ resource "helm_release" "postgres_ha" {
   namespace = "home-assistant"
 
   values = [
-    templatefile("${path.module}/template/home_assistant_postgres.yaml.tpl", {
+    templatefile("${path.module}/template/iot/home_assistant_postgres.yaml.tpl", {
       instance_name                = var.ha_postgres_instance_name
       highlyAvailableServiceConfig = local.highlyAvailableServiceConfig
       volume_size                  = "100Gi"

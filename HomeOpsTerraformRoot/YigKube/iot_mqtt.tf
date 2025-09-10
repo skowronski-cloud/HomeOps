@@ -7,7 +7,7 @@ resource "helm_release" "mosquitto" {
   name      = "mosquitto"
   namespace = "mosquitto"
 
-  values = [templatefile("${path.module}/template/mosquitto.yaml.tpl", {
+  values = [templatefile("${path.module}/template/iot/mosquitto.yaml.tpl", {
     mqtt_accounts = var.mqtt_accounts
   })]
   set = [
