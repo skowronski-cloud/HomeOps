@@ -104,8 +104,8 @@ resource "helm_release" "authelia" {
       duo_api_hostname    = var.duo_authelia.api_hostname
       duo_integration_key = var.duo_authelia.integration_key
 
-      highlyAvailableServiceConfig = local.highlyAvailableServiceConfig
-      metrics_label_release        = helm_release.promstack.name
+      xasc                  = local.highlyAvailableServiceConfig
+      metrics_label_release = helm_release.promstack.name
     })
   ]
 

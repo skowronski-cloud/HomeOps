@@ -11,10 +11,10 @@ resource "helm_release" "longhorn" {
   # TODO: default backup store - https://artifacthub.io/packages/helm/longhorn/longhorn#other-settings
 
   values = [templatefile("${path.module}/template/longhorn.yaml.tpl", {
-    ingress_domain               = var.ingress_domain,
-    workers_count                = var.workers_count,
-    highlyAvailableServiceConfig = local.highlyAvailableServiceConfig
-    metrics_label_release        = "kube-prometheus-stack" # fixed to avoid circular dependency with prometheus stack
+    ingress_domain        = var.ingress_domain,
+    workers_count         = var.workers_count,
+    xasc                  = local.highlyAvailableServiceConfig
+    metrics_label_release = "kube-prometheus-stack" # fixed to avoid circular dependency with prometheus stack
   })]
 
   depends_on = [kubernetes_namespace.ns]

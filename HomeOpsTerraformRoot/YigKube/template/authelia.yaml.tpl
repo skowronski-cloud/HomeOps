@@ -2,16 +2,16 @@
 # https://www.authelia.com/configuration/
 # https://artifacthub.io/packages/helm/authelia/authelia?modal=values
 pod:
-  replicas: ${highlyAvailableServiceConfig.replicaCount}
+  replicas: ${xasc.replicaCount}
   strategy:
-    type: ${highlyAvailableServiceConfig.updateStrategy.type}
+    type: ${xasc.updateStrategy.type}
     rollingUpdate:
-      maxUnavailable: ${highlyAvailableServiceConfig.updateStrategy.rollingUpdate.maxUnavailable}
-      maxSurge: ${highlyAvailableServiceConfig.updateStrategy.rollingUpdate.maxSurge}
+      maxUnavailable: ${xasc.updateStrategy.rollingUpdate.maxUnavailable}
+      maxSurge: ${xasc.updateStrategy.rollingUpdate.maxSurge}
   selectors:
     affinity:
       podAntiAffinity:
-        %{if highlyAvailableServiceConfig.affinityPreset=="hard"}required%{else}preferred%{endif}DuringSchedulingIgnoredDuringExecution:
+        %{if xasc.affinityPreset=="hard"}required%{else}preferred%{endif}DuringSchedulingIgnoredDuringExecution:
           - labelSelector:
               matchLabels:
                 app.kubernetes.io/instance: authelia
@@ -195,8 +195,8 @@ redis:
   enabled: true
   architecture: replication
   replica:
-    replicaCount: ${highlyAvailableServiceConfig.replicaCount}
-    podAntiAffinityPreset: ${highlyAvailableServiceConfig.affinityPreset}
+    replicaCount: ${xasc.replicaCount}
+    podAntiAffinityPreset: ${xasc.affinityPreset}
     terminationGracePeriodSeconds: 0
     tolerations:
       - key: node.kubernetes.io/not-ready
@@ -212,10 +212,10 @@ redis:
         memory: 256Mi
         cpu: 100m
     updateStrategy:
-      type: ${highlyAvailableServiceConfig.updateStrategy.type}
+      type: ${xasc.updateStrategy.type}
       rollingUpdate:
-        maxSurge: ${highlyAvailableServiceConfig.updateStrategy.rollingUpdate.maxSurge}
-        maxUnavailable: ${highlyAvailableServiceConfig.updateStrategy.rollingUpdate.maxUnavailable}
+        maxSurge: ${xasc.updateStrategy.rollingUpdate.maxSurge}
+        maxUnavailable: ${xasc.updateStrategy.rollingUpdate.maxUnavailable}
   sentinel:
     enabled: true
     masterSet: mymaster

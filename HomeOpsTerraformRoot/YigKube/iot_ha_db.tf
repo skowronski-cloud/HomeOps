@@ -58,9 +58,9 @@ resource "helm_release" "postgres_ha" {
 
   values = [
     templatefile("${path.module}/template/iot/home_assistant_postgres.yaml.tpl", {
-      instance_name                = var.ha_postgres_instance_name
-      highlyAvailableServiceConfig = local.highlyAvailableServiceConfig
-      volume_size                  = "100Gi"
+      instance_name = var.ha_postgres_instance_name
+      xasc          = local.moderatelyAvailableServiceConfig
+      volume_size   = "100Gi"
     })
   ]
   depends_on = [kubernetes_namespace.ns, kubernetes_secret.postgres_ha_credentials]

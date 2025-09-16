@@ -13,7 +13,7 @@ volumes:
     mountPath: /etc/pki/tls/certs # https://go.dev/src/crypto/x509/root_linux.go - purposefully other dir than OS-default
     type: secret
 deployment:
-  replicas: ${highlyAvailableServiceConfig.replicaCount}
+  replicas: ${xasc.replicaCount}
   terminationGracePeriodSeconds: 0
   minReadySeconds: 30
 
@@ -34,7 +34,7 @@ tolerations:
 
 affinity:
   podAntiAffinity:
-    %{if highlyAvailableServiceConfig.affinityPreset=="hard"}required%{else}preferred%{endif}DuringSchedulingIgnoredDuringExecution:
+    %{if xasc.affinityPreset=="hard"}required%{else}preferred%{endif}DuringSchedulingIgnoredDuringExecution:
       - labelSelector:
           matchLabels:
             app.kubernetes.io/name: '{{ template "traefik.name" . }}'
@@ -42,10 +42,10 @@ affinity:
         topologyKey: kubernetes.io/hostname
 
 updateStrategy:
-  type: ${highlyAvailableServiceConfig.updateStrategy.type}
+  type: ${xasc.updateStrategy.type}
   rollingUpdate:
-    maxUnavailable: ${highlyAvailableServiceConfig.updateStrategy.rollingUpdate.maxUnavailable}
-    maxSurge: ${highlyAvailableServiceConfig.updateStrategy.rollingUpdate.maxSurge}
+    maxUnavailable: ${xasc.updateStrategy.rollingUpdate.maxUnavailable}
+    maxSurge: ${xasc.updateStrategy.rollingUpdate.maxSurge}
 
 resources:
   requests:

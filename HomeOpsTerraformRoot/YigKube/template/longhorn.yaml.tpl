@@ -10,10 +10,10 @@ ingress:
   host: longhorn.${ingress_domain}
 csi:
   # BUG: wait for https://github.com/longhorn/longhorn/issues/11617
-  attacherReplicaCount: 1 # ${highlyAvailableServiceConfig.replicaCount}
-  provisionerReplicaCount: 1 # ${highlyAvailableServiceConfig.replicaCount}
-  resizerReplicaCount: 1 # ${highlyAvailableServiceConfig.replicaCount}
-  snapshotterReplicaCount: 1 # ${highlyAvailableServiceConfig.replicaCount}
+  attacherReplicaCount: 1 # ${xasc.replicaCount}
+  provisionerReplicaCount: 1 # ${xasc.replicaCount}
+  resizerReplicaCount: 1 # ${xasc.replicaCount}
+  snapshotterReplicaCount: 1 # ${xasc.replicaCount}
 
 extraObjects:
   - apiVersion: k8s.cni.cncf.io/v1

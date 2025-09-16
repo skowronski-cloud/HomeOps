@@ -25,9 +25,9 @@ resource "helm_release" "traefik" {
   namespace = "traefik-system"
 
   values = [templatefile("${path.module}/template/traefik.yaml.tpl", {
-    ca_crt_secret                = kubernetes_secret.ca_crt["traefik-system"].metadata[0].name,
-    highlyAvailableServiceConfig = local.highlyAvailableServiceConfig
-    metrics_label_release        = helm_release.promstack.name
+    ca_crt_secret         = kubernetes_secret.ca_crt["traefik-system"].metadata[0].name,
+    xasc                  = local.highlyAvailableServiceConfig
+    metrics_label_release = helm_release.promstack.name
   })]
 
 

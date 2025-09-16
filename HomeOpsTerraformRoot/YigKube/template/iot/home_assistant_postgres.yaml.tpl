@@ -12,26 +12,26 @@ persistence:
   size: ${ volume_size }
 
 postgresql:
-  replicaCount: ${highlyAvailableServiceConfig.replicaCount}
-  podAntiAffinityPreset: ${highlyAvailableServiceConfig.affinityPreset}
+  replicaCount: ${xasc.replicaCount}
+  podAntiAffinityPreset: ${xasc.affinityPreset}
   updateStrategy:
-    type: ${highlyAvailableServiceConfig.updateStrategy.type}
+    type: ${xasc.updateStrategy.type}
     rollingUpdate:
-      maxSurge: ${highlyAvailableServiceConfig.updateStrategy.rollingUpdate.maxSurge}
-      maxUnavailable: ${highlyAvailableServiceConfig.updateStrategy.rollingUpdate.maxUnavailable}
+      maxSurge: ${xasc.updateStrategy.rollingUpdate.maxSurge}
+      maxUnavailable: ${xasc.updateStrategy.rollingUpdate.maxUnavailable}
   resources:
     requests:
       memory: 512Mi
       cpu: 200m
     limits: {}
 pgpool:
-  replicaCount: ${highlyAvailableServiceConfig.replicaCount}
-  podAntiAffinityPreset: ${highlyAvailableServiceConfig.affinityPreset}
+  replicaCount: ${xasc.replicaCount}
+  podAntiAffinityPreset: ${xasc.affinityPreset}
   updateStrategy:
-    type: ${highlyAvailableServiceConfig.updateStrategy.type}
+    type: ${xasc.updateStrategy.type}
     rollingUpdate:
-      maxSurge: ${highlyAvailableServiceConfig.updateStrategy.rollingUpdate.maxSurge}
-      maxUnavailable: ${highlyAvailableServiceConfig.updateStrategy.rollingUpdate.maxUnavailable}
+      maxSurge: ${xasc.updateStrategy.rollingUpdate.maxSurge}
+      maxUnavailable: ${xasc.updateStrategy.rollingUpdate.maxUnavailable}
   resources:
     requests:
       memory: 256Mi

@@ -17,5 +17,3 @@ terraform {
     #}
   }
 }
-
-# TODO: create sinlg local variable for all helm charts that would include highlyAvailableServiceConfig, metrics_label_release, etc.
