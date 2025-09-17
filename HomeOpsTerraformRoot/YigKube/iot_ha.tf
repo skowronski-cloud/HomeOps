@@ -47,10 +47,10 @@ resource "kubernetes_secret" "home_assistant_mqtt_yaml" {
   data = {
     "mqtt-yaml" = yamlencode({
       "mqtt" : {
-        "broker" : "${helm_release.mosquitto.name}.${helm_release.mosquitto.namespace}.svc",
-        "username"   : var.mqtt_accounts["ha"]["user"],
-        "password"   : var.mqtt_accounts["ha"]["pass"],
-        "discovery"  : true,
+        "broker" : "${helm_release.iot_emqx.name}.${helm_release.iot_emqx.namespace}.svc",
+        "username" : var.mqtt_accounts["ha"]["user"],
+        "password" : var.mqtt_accounts["ha"]["pass"],
+        "discovery" : true,
         "discovery_prefix" : "homeassistant"
       }
     })

@@ -67,15 +67,13 @@ variable "yig_mqtt_accounts" {
   type = map(object({
     user = string
     pass = string
-    hash = string       # generated manually using mosquitto_passwd # FIXME: to be deprecated 
-    acl  = list(string) # extra ALCs for mosquitto # FIXME: to be deprecated 
     emqx_acl = optional(list(object({
       action     = string
       permission = string
       topic      = string
       retain     = optional(string, "all")
       qos        = optional(list(number), [0, 1, 2])
-    })), []) # extra ACLs in EMQX format
+    })), [])
   }))
   description = "map of MQTT accounts for HA, to be read from secrets"
 }

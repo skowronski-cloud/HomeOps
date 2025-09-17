@@ -42,31 +42,11 @@ resource "helm_release" "iot_emqx" {
   wait_for_jobs = true
   wait          = true
 }
-resource "random_password" "iot_emqx_salt" {
-  length  = 32
-  special = false
-}
-locals {
-  emqx_users = [
-    for user, info in var.mqtt_accounts : {
-      user_id       = info.user
-      password_hash = sha256("${random_password.iot_emqx_salt.result}${info.pass}")
-      salt          = random_password.iot_emqx_salt.result
-      is_superuser  = false
-    }
-  ]
-}
+
 data "kubernetes_secret" "iot_emqx_token" {
   metadata {
     namespace = "home-assistant"
     name      = "emqx-basic-auth"
-  }
-}
-locals {
-  emqx_auth_headers = {
-    Authorization = "Basic ${base64encode("terraform:${random_password.iot_emqx_token_terraform.result}")}"
-    Content-Type  = "application/json"
-    Accept        = "application/json"
   }
 }
 provider "restapi" {
@@ -78,17 +58,19 @@ provider "restapi" {
     Content-Type  = "application/json"
     Accept        = "application/json"
   }
-  debug = true
 }
 
 data "http" "iot_emqx_ready" {
   url    = "https://emqx-dashboard.${var.ingress_domain}/api/v5/authentication"
   method = "GET"
 
-  request_headers = local.emqx_auth_headers
+  request_headers = {
+    Authorization = "Basic ${base64encode("terraform:${random_password.iot_emqx_token_terraform.result}")}"
+    Content-Type  = "application/json"
+    Accept        = "application/json"
+  }
 
-  request_body = jsonencode(local.emqx_users)
-  depends_on   = [helm_release.iot_emqx]
+  depends_on = [helm_release.iot_emqx]
 
   retry {
     attempts = 10

@@ -23,7 +23,6 @@ variable "mqtt_accounts" {
     "topic" = {
       "user"     = "username"
       "pass"     = "password"
-      "acl"      = []
       "emqx_acl" = []
     }
   }

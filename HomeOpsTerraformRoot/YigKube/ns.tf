@@ -4,7 +4,6 @@ resource "kubernetes_namespace" "ns" {
     "traefik",
     "longhorn-system",
     "home-assistant",
-    "mosquitto",
     "spoolman",
     "cert-manager",
     "traefik-system",
