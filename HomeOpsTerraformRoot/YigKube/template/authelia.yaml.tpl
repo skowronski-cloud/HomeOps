@@ -91,6 +91,10 @@ configMap:
         resources:
           - '/-/healthy'
         policy: bypass
+      - domain: "emqx-dashboard.${ingress_domain}"
+        resources:
+          - '/api/'
+        policy: bypass
       - domain: "echo.${ingress_domain}"
         policy: bypass
       - domain: "ha.${ingress_domain}"

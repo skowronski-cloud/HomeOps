@@ -15,5 +15,8 @@ terraform {
     #k0s = {
     #  source = "danielskowronski/k0s"
     #}
+    restapi = {
+      source = "Mastercard/restapi"
+    }
   }
 }

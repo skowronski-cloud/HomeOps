@@ -38,8 +38,14 @@ terraform {
       version = "3.28.1"
     }
     tls = {
+      # https://registry.terraform.io/providers/hashicorp/tls/latest
       source  = "hashicorp/tls"
       version = "4.1.0"
+    }
+    restapi = {
+      # https://registry.terraform.io/providers/Mastercard/restapi/latest
+      source  = "Mastercard/restapi"
+      version = "2.0.1"
     }
   }
 }

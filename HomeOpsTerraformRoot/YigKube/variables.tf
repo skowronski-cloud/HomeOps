@@ -1,12 +1,12 @@
 variable "metallb_ipam" {
   type = map(object({
-    name = string
-    addresses = list(string)
+    name       = string
+    addresses  = list(string)
     namespaces = optional(list(string), [])
     svcSelectors = optional(list(object({
-      key   = string
+      key      = string
       operator = string
-      values = list(string)
+      values   = list(string)
     })), [])
   }))
 }
@@ -21,9 +21,10 @@ variable "ingress_domain" {
 variable "mqtt_accounts" {
   default = {
     "topic" = {
-      "user" = "username"
-      "pass" = "password"
-      "acl"  = []
+      "user"     = "username"
+      "pass"     = "password"
+      "acl"      = []
+      "emqx_acl" = []
     }
   }
 }

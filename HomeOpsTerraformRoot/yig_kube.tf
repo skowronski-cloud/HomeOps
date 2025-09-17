@@ -4,6 +4,7 @@ module "yig_kube" {
     helm       = helm
     kubernetes = kubernetes
     tls        = tls
+    restapi    = restapi
     # TODO: Cloudflare for DNS?
   }
   top_domain                = var.yig_top_domain
@@ -42,14 +43,14 @@ module "yig_kube" {
 
 variable "metallb_ipam" {
   type = map(object({
-    name = string
+    name      = string
     addresses = list(string)
     # TODO: add creation of DNS records in Cloudflare or ROS
     namespaces = optional(list(string))
     svcSelectors = optional(list(object({
-      key   = string
+      key      = string
       operator = string
-      values = list(string)
+      values   = list(string)
     })))
   }))
 }
@@ -66,8 +67,15 @@ variable "yig_mqtt_accounts" {
   type = map(object({
     user = string
     pass = string
-    hash = string       # generated manually using mosquitto_passwd
-    acl  = list(string) # extra ALCs
+    hash = string       # generated manually using mosquitto_passwd # FIXME: to be deprecated 
+    acl  = list(string) # extra ALCs for mosquitto # FIXME: to be deprecated 
+    emqx_acl = optional(list(object({
+      action     = string
+      permission = string
+      topic      = string
+      retain     = optional(string, "all")
+      qos        = optional(list(number), [0, 1, 2])
+    })), []) # extra ACLs in EMQX format
   }))
   description = "map of MQTT accounts for HA, to be read from secrets"
 }

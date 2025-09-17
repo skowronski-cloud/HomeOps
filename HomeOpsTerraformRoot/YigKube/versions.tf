@@ -149,3 +149,8 @@ variable "ver_helm_whereabouts" {
   default = "1.2.19"
   type    = string
 }
+variable "ver_helm_emqx" {
+  # https://artifacthub.io/packages/helm/emqx-operator/emqx
+  default = "5.8.8"
+  type    = string
+}

@@ -78,3 +78,9 @@ ports:
   websecure:
     middlewares:
       - "traefik-system-forwardauth-authelia@kubernetescrd"
+  web:
+    redirections:
+      entryPoint:
+        to: websecure
+        scheme: https
+        permanent: true
