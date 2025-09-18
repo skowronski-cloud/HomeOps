@@ -14,19 +14,15 @@ additionalVolumes:
       items:
         - key: secrets-yaml
           path: secrets.yaml
-  - name: mqtt-yaml
+  - name: ha-cfg
     secret:
-      secretName: mqtt-yaml
-      items:
-        - key: mqtt-yaml
-          path: mqtt.yaml
+      secretName: ha-cfg
 additionalMounts:
   - name: secrets-yaml
     mountPath: /config/secrets.yaml
     subPath: secrets.yaml
-  - name: mqtt-yaml
-    mountPath: /config/info_mqtt.yaml
-    subPath: mqtt.yaml
+  - name: ha-cfg
+    mountPath: /config/cfg/
 configuration:
   enabled: true
   forceInit: true
@@ -36,8 +32,7 @@ configuration:
     # Loads default set of integrations. Do not remove.
     default_config:
 
-    logger:
-      default: DEBUG
+    logger: !include cfg/logger.yaml
 
     http:
       use_x_forwarded_for: true
@@ -48,36 +43,15 @@ configuration:
     frontend:
       themes: !include_dir_merge_named themes
 
-    recorder: 
-      db_url: !secret psql_string
-      #auto_purge: false
-      db_retry_wait: 15 # Wait 15 seconds before retrying
-      purge_keep_days: 3650 # 10y
-      exclude:
-        domains:
-          - automation
-          - updater
-        entity_globs: []
-        entities:
-          - sun.sun
-          - sensor.last_boot
-          - sensor.date
-        event_types:
-          - call_service # Don't record service calls
+    recorder: !include cfg/recorder.yaml
 
-    automation: !include automations.yaml
-    script: !include scripts.yaml
-    scene: !include scenes.yaml
+    automation: !include cfg/automations.yaml
+    script: !include cfg/scripts.yaml
+    scene: !include cfg/scenes.yaml
 
-    # mqtt: !include mqtt.yaml # HA doesn't like YAML for MQTT broker anymore ;______;
+    mqtt: !include cfg/mqtt.yaml
 
-    prometheus:
-      filter:
-        include_entity_globs:
-            - event.backup_automatic_backup
-            - sensor.backup_*
-            - sensor.ups_*
-      requires_auth: false
+    prometheus: !include cfg/prometheus.yaml
 resources:
   requests:
     memory: 1Gi

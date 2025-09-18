@@ -35,7 +35,8 @@ module "yig_kube" {
   mikrotik_monitoring_account   = module.core.monitoring_prometheus_auth
   mikrotik_monitoring_router_ip = var.ros_hex.addr
 
-  metallb_ipam = var.metallb_ipam
+  metallb_ipam     = var.metallb_ipam
+  qingping_devices = var.qingping_devices
 }
 
 # FIXME: consolidate variables into logically connected objects
@@ -177,3 +178,13 @@ variable "yig_synology_velero_minio" {
   })
   description = "Synology MinIO for Velero backups"
 }
+variable "qingping_devices" {
+  type = map(object({
+    mac        = string
+    alias      = string
+    model      = string
+    supportsPM = optional(bool, false)
+    binary     = optional(bool, false)
+  }))
+}
+# NOTE: remember to publish `4347320a0004020001000502001e00f200` to `qingping/MAC/up` on bootstrap
