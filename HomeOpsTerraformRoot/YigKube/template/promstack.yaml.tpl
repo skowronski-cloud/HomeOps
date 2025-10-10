@@ -117,6 +117,7 @@ prometheus:
     scrapeInterval: 30s
     evaluationInterval: 30s
     retention: "90d"
+    retentionSize: "70GiB"
     replicas: 1
     serviceMonitorSelector:
       #matchLabels:
@@ -124,7 +125,7 @@ prometheus:
       matchExpressions:
         - key: release
           operator: In
-          values: 
+          values:
             - kube-prometheus-stack
             - prometheus-blackbox-exporter
             - mtkxp
@@ -137,7 +138,7 @@ prometheus:
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: 50Gi
+              storage: 75Gi
     additionalScrapeConfigs:
       - job_name: 'kubernetes-pods'
         kubernetes_sd_configs:

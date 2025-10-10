@@ -37,6 +37,8 @@ module "yig_kube" {
 
   metallb_ipam     = var.metallb_ipam
   qingping_devices = var.qingping_devices
+  rtl433_devices   = var.rtl433_devices
+  pull_secrets = var.pull_secrets
 }
 
 # FIXME: consolidate variables into logically connected objects
@@ -187,4 +189,20 @@ variable "qingping_devices" {
     binary     = optional(bool, false)
   }))
 }
+variable "rtl433_devices" {
+  type = map(map(object({
+    topic_id = string
+    name     = string
+    alias    = string
+  })))
+}
+variable "pull_secrets" {
+  type = map(object({
+    server = string
+    username = string
+    password = string
+    email = string
+  }))
+}
+
 # NOTE: remember to publish `4347320a0004020001000502001e00f200` to `qingping/MAC/up` on bootstrap

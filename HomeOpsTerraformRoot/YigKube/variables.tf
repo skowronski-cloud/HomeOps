@@ -135,3 +135,12 @@ variable "mikrotik_monitoring_account" {
 variable "mikrotik_monitoring_router_ip" {
   type = string
 }
+
+variable "pull_secrets" {
+  type = map(object({
+    server = string
+    username = string
+    password = string
+    email = string
+  }))
+}

@@ -40,12 +40,12 @@ variable "ver_helm_matter" {
 }
 variable "ver_helm_ha" {
   # https://artifacthub.io/packages/helm/helm-hass/home-assistant
-  default = "0.3.8"
+  default = "0.3.24"
   type    = string
 }
 variable "ver_app_ha" {
   # https://github.com/home-assistant/core/releases
-  default = "2025.8.2"
+  default = "2025.10.1"
   type    = string
 }
 variable "ver_helm_postgresha" {
@@ -152,5 +152,20 @@ variable "ver_helm_whereabouts" {
 variable "ver_helm_emqx" {
   # https://artifacthub.io/packages/helm/emqx-operator/emqx
   default = "5.8.8"
+  type    = string
+}
+variable "ver_helm_kyverno" {
+  # https://artifacthub.io/packages/helm/kyverno/kyverno
+  default = "3.5.2"
+  type    = string
+}
+variable "ver_helm_kyverno_policy_reporter" {
+  # https://artifacthub.io/packages/helm/policy-reporter/policy-reporter
+  default = "3.5.0"
+  type    = string
+}
+variable "ver_helm_kyverno_policies" {
+  # https://artifacthub.io/packages/helm/kyverno/kyverno-policies
+  default = "3.5.2"
   type    = string
 }

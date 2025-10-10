@@ -11,7 +11,10 @@ resource "kubernetes_namespace" "ns" {
     "monitoring-system",
     "flux-system",
     "velero",
-    "multus-system"
+    "multus-system",
+    "kyverno-system",
+    "shared-system",
+    "testing"
   ])
   metadata {
     name = each.key

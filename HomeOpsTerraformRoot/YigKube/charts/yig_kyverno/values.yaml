@@ -1,0 +1,11 @@
+---
+global:
+  excludedNamespaces: ["kube-system", "kube-public", "kube-node-lease", "kyverno-system"]
+imagePullSecret:
+  sourceSecretName: docker-cfg-docker-io
+  sourceSecretNamespace: shared-system
+coreDns:
+  desiredReplicas: 3
+longhornCsi:
+  desiredReplicas: 3
+  targetDeployments: ["csi-attacher", "csi-provisioner", "csi-resizer", "csi-snapshotter"]

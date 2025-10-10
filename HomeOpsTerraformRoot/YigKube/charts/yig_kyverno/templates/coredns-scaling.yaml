@@ -1,0 +1,31 @@
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: coredns-enforce-replicas
+  annotations: {} # TBD
+spec:
+  background: true
+  rules:
+    - name: coredns-enforce-replicas
+      skipBackgroundRequests: false
+      match:
+        resources:
+          kinds: ["Deployment", "Deployment/scale"]
+          namespaces: ["kube-system"]
+          names: ["coredns"]
+      mutate:
+        mutateExistingOnPolicyUpdate: true
+        targets:
+          - apiVersion: apps/v1
+            kind: Deployment
+            name: coredns
+            namespace: kube-system
+        patchStrategicMerge:
+          spec:
+            replicas: {{ .Values.coreDns.desiredReplicas }}
+            strategy:
+              type: RollingUpdate
+              rollingUpdate:
+                maxUnavailable: 1
+                maxSurge: 1

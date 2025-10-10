@@ -1,0 +1,45 @@
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: longhorn-enforce-affinity
+  annotations: {} # TBD
+spec:
+  background: true
+  rules:
+{{- range .Values.longhornCsi.targetDeployments }}
+    - name: longhorn-enforce-affinity-{{ . }}
+      skipBackgroundRequests: false
+      match:
+        resources:
+          kinds: ["Deployment", "Deployment/scale"]
+          namespaces: ["longhorn-system"]
+          names: [ {{ . }} ]
+      mutate:
+        mutateExistingOnPolicyUpdate: true
+        targets:
+          - apiVersion: apps/v1
+            kind: Deployment
+            name: {{ . }}
+            namespace: longhorn-system
+        patchStrategicMerge:
+          spec:
+            replicas: {{ $.Values.longhornCsi.desiredReplicas }}
+            strategy:
+              type: RollingUpdate
+              rollingUpdate:
+                maxUnavailable: 1
+                maxSurge: 1
+            template:
+              spec:
+                affinity:
+                  podAntiAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      - labelSelector:
+                          matchExpressions:
+                            - key: app
+                              operator: In
+                              values:
+                                - {{ . }}
+                        topologyKey: kubernetes.io/hostname
+{{- end }}
