@@ -7,6 +7,149 @@
 #username: "${username}"
 
 sensor:
+# BUG: this code is shit
+%{ for device_id, device in rtl433_devices["tfa_marbella"] ~}
+  - name: "Temperature"
+    unique_id: "rtl433_tfa_303181_${device.topic_id}_${device.name}_temperature"
+    object_id: "rtl433_tfa_303181_${device.topic_id}_${device.name}_temperature"
+    state_topic: "rtl_433/devices/TFA-Marbella/${device.topic_id}/temperature_C"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    state_class: "measurement"
+    expire_after: 300
+    device:
+      identifiers: ["tfa_marbella_${device.topic_id}"]
+      manufacturer: "TFA"
+      model: "30.3239.02"
+      name: "TFA ${device.alias}"
+%{ endfor ~}
+%{ for device_id, device in rtl433_devices["tfa_303181"] ~}
+  - name: "Temperature"
+    unique_id: "rtl433_tfa_303181_${device.topic_id}_${device.name}_temperature"
+    object_id: "rtl433_tfa_303181_${device.topic_id}_${device.name}_temperature"
+    state_topic: "rtl_433/devices/Klimalogg-Pro/${device.topic_id}/temperature_C"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    state_class: "measurement"
+    expire_after: 300
+    device:
+      identifiers: ["tfa_klimalogg_pro_${device.topic_id}"]
+      manufacturer: "TFA"
+      model: "30.3181.IT"
+      name: "TFA ${device.alias}"
+%{ endfor ~}
+%{ for device_id, device in rtl433_devices["tfa_303180"] ~}
+  - name: "Temperature"
+    unique_id: "rtl433_tfa_303180_${device.topic_id}_${device.name}_temperature"
+    object_id: "rtl433_tfa_303180_${device.topic_id}_${device.name}_temperature"
+    state_topic: "rtl_433/devices/Klimalogg-Pro/${device.topic_id}/temperature_C"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    state_class: "measurement"
+    expire_after: 300
+    device:
+      identifiers: ["tfa_klimalogg_pro_${device.topic_id}"]
+      manufacturer: "TFA"
+      model: "30.3180.IT"
+      name: "TFA ${device.alias}"
+  - name: "Humidity"
+    unique_id: "rtl433_tfa_303180_${device.topic_id}_${device.name}_humidity"
+    object_id: "rtl433_tfa_303180_${device.topic_id}_${device.name}_humidity"
+    state_topic: "rtl_433/devices/Klimalogg-Pro/${device.topic_id}/humidity"
+    unit_of_measurement: "%"
+    device_class: "humidity"
+    state_class: "measurement"
+    expire_after: 300
+    device:
+      identifiers: ["tfa_klimalogg_pro_${device.topic_id}"]
+      manufacturer: "TFA"
+      model: "30.3180.IT"
+      name: "TFA ${device.alias}"
+%{ endfor ~}
+%{ for device_id, device in rtl433_devices["tfa_view_wind"] ~}
+  - name: "Temperature"
+    unique_id: "rtl433_tfa_view_${device.topic_id}_${device.name}_temperature"
+    object_id: "rtl433_tfa_view_${device.topic_id}_${device.name}_temperature"
+    state_topic: "rtl_433/devices/LaCrosse-BreezePro/${device.topic_id}/temperature_C"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    state_class: "measurement"
+    expire_after: 600
+    device:
+      identifiers: ["tfa_view_wind_${device.topic_id}"]
+      manufacturer: "TFA"
+      model: "30.3803.02"
+      name: "TFA View ${device.alias}"
+  - name: "Humidity"
+    unique_id: "rtl433_tfa_view_${device.topic_id}_${device.name}_humidity"
+    object_id: "rtl433_tfa_view_${device.topic_id}_${device.name}_humidity"
+    state_topic: "rtl_433/devices/LaCrosse-BreezePro/${device.topic_id}/humidity"
+    unit_of_measurement: "%"
+    device_class: "humidity"
+    state_class: "measurement"
+    expire_after: 600
+    device:
+      identifiers: ["tfa_view_wind_${device.topic_id}"]
+      manufacturer: "TFA"
+      model: "30.3803.02"
+      name: "TFA View ${device.alias}"
+  - name: "Wind Average Speed"
+    unique_id: "rtl433_tfa_view_${device.topic_id}_${device.name}_wind_avg_speed"
+    object_id: "rtl433_tfa_view_${device.topic_id}_${device.name}_wind_avg_speed"
+    state_topic: "rtl_433/devices/LaCrosse-BreezePro/${device.topic_id}/wind_avg_km_h"
+    unit_of_measurement: "km/h"
+    device_class: "wind_speed"
+    state_class: "measurement"
+    expire_after: 600
+    device:
+      identifiers: ["tfa_view_wind_${device.topic_id}"]
+      manufacturer: "TFA"
+      model: "30.3803.02"
+      name: "TFA View ${device.alias}"
+  - name: "Wind Direction"
+    unique_id: "rtl433_tfa_view_${device.topic_id}_${device.name}_wind_dir"
+    object_id: "rtl433_tfa_view_${device.topic_id}_${device.name}_wind_dir"
+    state_topic: "rtl_433/devices/LaCrosse-BreezePro/${device.topic_id}/wind_dir_deg"
+    unit_of_measurement: "°"
+    device_class: "wind_direction"
+    state_class: "measurement"
+    expire_after: 600
+    device:
+      identifiers: ["tfa_view_wind_${device.topic_id}"]
+      manufacturer: "TFA"
+      model: "30.3803.02"
+      name: "TFA View ${device.alias}"
+%{ endfor ~}
+%{ for device_id, device in rtl433_devices["tfa_view_rain"] ~}
+  - name: "Rain"
+    unique_id: "rtl433_tfa_view_${device.topic_id}_${device.name}_rain"
+    object_id: "rtl433_tfa_view_${device.topic_id}_${device.name}_rain"
+    state_topic: "rtl_433/devices/LaCrosse-R3/${device.topic_id}/rain_mm"
+    unit_of_measurement: "mm"
+    device_class: "precipitation"
+    state_class: "total"
+    expire_after: 600
+    device:
+      identifiers: ["tfa_view_rain_${device.topic_id}"]
+      manufacturer: "TFA"
+      model: "30.3802.02"
+      name: "TFA View ${device.alias}"
+  - name: "Rain2"
+    unique_id: "rtl433_tfa_view_${device.topic_id}_${device.name}_rain2"
+    object_id: "rtl433_tfa_view_${device.topic_id}_${device.name}_rain2"
+    state_topic: "rtl_433/devices/LaCrosse-R3/${device.topic_id}/rain2_mm"
+    unit_of_measurement: "mm"
+    device_class: "precipitation"
+    state_class: "total"
+    expire_after: 600
+    device:
+      identifiers: ["tfa_view_rain_${device.topic_id}"]
+      manufacturer: "TFA"
+      model: "30.3802.02"
+      name: "TFA View ${device.alias}"
+%{ endfor ~}
+
+
 %{ for device_id, device in qingping_devices ~}
 %{ for entity_id, entity in qingping_mqtt_payload_map ~}
 %{ if contains(["pm25","pm10"], entity_id) && !device.supportsPM ~}%{ else ~}

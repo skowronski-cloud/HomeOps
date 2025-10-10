@@ -51,6 +51,7 @@ resource "kubernetes_secret" "home_assistant_ha_cfg" {
       "password" : var.mqtt_accounts["ha"]["pass"],
       "qingping_devices" : var.qingping_devices,
       "qingping_mqtt_payload_map" : var.qingping_mqtt_payload_map
+      "rtl433_devices" : var.rtl433_devices
     })
     "logger.yaml" = templatefile("${path.module}/template/iot/ha/logger.yaml.tpl", {
     })
@@ -122,4 +123,11 @@ variable "qingping_devices" {
     binary     = optional(bool, false)
     supportsPM = optional(bool, false)
   }))
+}
+variable "rtl433_devices" {
+  type = map(map(object({
+    topic_id = string
+    name     = string
+    alias    = string
+  })))
 }

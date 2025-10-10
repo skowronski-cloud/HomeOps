@@ -26,6 +26,15 @@ ha:
   name: homeassistant
   monitorSvc: smarthome
   noEntitiesFor: 30m
+  qingping:
+    sensorCount: 4
+    CO2NotReportingFor: 2h
+    noEntitiesFor: 2h
+  ups:
+    batteryThreshold: 95
+  rtl_tfa:
+    sensorCount: 11  # 8x KlimaloggPro + 1x Marbella + 1x Wind/Temp + 1x Rain
+    noEntitiesFor: 6h
 
 thermalAlerts:
   monitorSvc: thermal

@@ -21,4 +21,40 @@ spec:
           annotations:
             summary: "No entities available in Home Assistant"
             description: "No entities available in Home Assistant for {{ .Values.ha.noEntitiesFor }}"
+        - alert: HomeAssistantNotAllQingpingEntitiesAvailable
+          expr: sum(homeassistant_entity_available{entity=~"sensor.qingping.*_co2"})!= {{ .Values.ha.qingping.sensorCount }}
+          for: {{ .Values.ha.qingping.noEntitiesFor }}
+          labels:
+            severity: error
+            monitor_svc: {{ $.Values.ha.monitorSvc }}
+          annotations:
+            summary: "Not all Qingping entities available in Home Assistant"
+            description: "Not all Qingping entities available in Home Assistant (seen {{`{{ $value }}`}}/{{ .Values.ha.qingping.sensorCount }}) for {{ .Values.ha.qingping.noEntitiesFor }}"
+        - alert: QingpingCO2StaleData
+          expr: (time()-homeassistant_last_updated_time_seconds{entity=~"sensor.qingping.*_co2"}) > {{ .Values.ha.qingping.CO2NotReportingFor }}
+          for: 5m
+          labels:
+            severity: warning
+            monitor_svc: {{ $.Values.ha.monitorSvc }}
+          annotations:
+            summary: "Qingping CO2 sensor {{`{{ $labels.entity }}`}} stale data"
+            description: "Qingping CO2 sensor {{`{{ $labels.entity }}`}} has stale data (no updates for more than {{ .Values.ha.qingping.CO2NotReportingFor }})"
+        - alert: UPSOnBattery
+          expr: homeassistant_sensor_battery_percent{entity="sensor.ups_battery_charge"} < {{ .Values.ha.ups.batteryThreshold }}
+          for: 3m
+          labels:
+            severity: error
+            monitor_svc: {{ $.Values.ha.monitorSvc }}
+          annotations:
+            summary: "UPS on battery"
+            description: "UPS battery charge is below {{ .Values.ha.ups.batteryThreshold }}% (current value: {{`{{ $value }}`}}%)"
+        - alert: RtlTFANotAllQingpingEntitiesAvailable
+          expr: sum(homeassistant_entity_available{entity=~".*tfa.*_(temperature|rain)"})!= {{ .Values.ha.rtl_tfa.sensorCount }}
+          for: {{ .Values.ha.rtl_tfa.noEntitiesFor }}
+          labels:
+            severity: error
+            monitor_svc: {{ $.Values.ha.monitorSvc }}
+          annotations:
+            summary: "Not all RTL_TFA entities available in Home Assistant"
+            description: "Not all RTL_TFA entities available in Home Assistant (seen {{`{{ $value }}`}}/{{ .Values.ha.rtl_tfa.sensorCount }}) for {{ .Values.ha.rtl_tfa.noEntitiesFor }}"
 

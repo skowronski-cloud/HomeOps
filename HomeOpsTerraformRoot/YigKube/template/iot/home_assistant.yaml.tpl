@@ -1,5 +1,5 @@
 ---
-# https://artifacthub.io/packages/helm/k8s-home-lab-repo/home-assistant?modal=values
+# https://artifacthub.io/packages/helm/helm-hass/home-assistant
 ingress:
   enabled: true
   hosts:
@@ -57,3 +57,7 @@ resources:
     memory: 1Gi
     cpu: 250m
   limits: {}
+dnsConfig:
+  options:
+    - name: ndots
+      value: "1"
