@@ -24,6 +24,7 @@ resource "helm_release" "home_assistant" {
   values = [
     templatefile("${path.module}/template/iot/home_assistant.yaml.tpl", {
       fqdn = "ha.${var.ingress_domain}"
+      code_fqdn = "code-ha.${var.ingress_domain}"
     })
   ]
   depends_on = [kubernetes_namespace.ns, kubernetes_secret.home_assistant_secrets_yaml]

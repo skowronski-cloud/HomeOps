@@ -1,6 +1,11 @@
 ---
 # https://www.authelia.com/configuration/
 # https://artifacthub.io/packages/helm/authelia/authelia?modal=values
+
+global:
+  security:
+    allowInsecureImages: true  # BUG: FUCK BROADCOM
+
 pod:
   replicas: ${xasc.replicaCount}
   strategy:
@@ -198,6 +203,8 @@ persistence:
 redis:
   enabled: true
   architecture: replication
+  image:
+    repository: bitnamilegacy/redis  # BUG: FUCK BROADCOM
   replica:
     replicaCount: ${xasc.replicaCount}
     podAntiAffinityPreset: ${xasc.affinityPreset}
@@ -222,6 +229,8 @@ redis:
         maxUnavailable: ${xasc.updateStrategy.rollingUpdate.maxUnavailable}
   sentinel:
     enabled: true
+    image:
+      repository: bitnamilegacy/redis  # BUG: FUCK BROADCOM
     masterSet: mymaster
     downAfterMilliseconds: 15000 # 15s
     failoverTimeout: 60000 # 1m

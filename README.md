@@ -2,6 +2,14 @@
 
 TF/TG stack for managing my home/lab network.
 
+# FUCK BROADCOM
+
+https://github.com/bitnami/charts/issues/36097
+
+```bash
+kubectl get pods -A -o json | jq -r '.items[] | (.spec.initContainers[]?.image, .spec.containers[]?.image)' | sort | uniq -c | sort -nr | grep bitnami
+```
+
 ## Project architecture
 
 - `../HomeOpsData` - external encrypted repository containing input variables, as well as offline tfstate

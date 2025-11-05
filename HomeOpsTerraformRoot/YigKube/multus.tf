@@ -9,6 +9,17 @@ resource "helm_release" "whereabouts" {
   name      = "whereabouts"
   namespace = "multus-system"
 
+  set = [ 
+    {
+      name = "image.repository"
+      value = "bitnamilegacy/whereabouts"  # BUG: FUCK BROADCOM
+    },
+    {
+      name = "global.security.allowInsecureImages"
+      value = "true"  # BUG: FUCK BROADCOM
+    }
+  ]
+
   depends_on = [kubernetes_namespace.ns]
 }
 
@@ -20,6 +31,17 @@ resource "helm_release" "multus" {
 
   name      = "multus-cni"
   namespace = "multus-system"
+
+  set = [ 
+    {
+      name = "image.repository"
+      value = "bitnamilegacy/multus-cni"  # BUG: FUCK BROADCOM
+    },
+    {
+      name = "global.security.allowInsecureImages"
+      value = "true"  # BUG: FUCK BROADCOM
+    }
+  ]
 
   depends_on = [kubernetes_namespace.ns, helm_release.whereabouts]
 }

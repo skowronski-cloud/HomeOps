@@ -20,5 +20,6 @@ filter:
       - binary_sensor.aqara_window_sensor_*
       - binary_sensor.sun_solar_*
       - cover.aqara_roller_shade_driver_*
+      - sensor.humidifierwaterrefillterminal_*
       - climate.aqara_radiator_thermostat_*
 requires_auth: false

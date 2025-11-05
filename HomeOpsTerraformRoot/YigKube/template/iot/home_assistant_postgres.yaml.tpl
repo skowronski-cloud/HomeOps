@@ -1,6 +1,8 @@
 ---
 # https://artifacthub.io/packages/helm/bitnami/postgresql-ha?modal=values
 global:
+  security:
+    allowInsecureImages: true  # BUG: FUCK BROADCOM
   postgresql:
     database: ha
     username: ha
@@ -12,6 +14,8 @@ persistence:
   size: ${ volume_size }
 
 postgresql:
+  image:
+    repository: bitnamilegacy/postgresql-repmgr  # BUG: FUCK BROADCOM
   replicaCount: ${xasc.replicaCount}
   podAntiAffinityPreset: ${xasc.affinityPreset}
   updateStrategy:
@@ -25,6 +29,8 @@ postgresql:
       cpu: 200m
     limits: {}
 pgpool:
+  image:
+    repository: bitnamilegacy/pgpool  # BUG: FUCK BROADCOM
   replicaCount: ${xasc.replicaCount}
   podAntiAffinityPreset: ${xasc.affinityPreset}
   updateStrategy:

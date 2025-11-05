@@ -28,9 +28,75 @@ configuration:
   forceInit: true
   trusted_proxies:
     - 10.0.0.0/8
+  initScript: |-
+    #!/bin/bash
+    set -e
+
+    # Check if the configuration file exists
+    if [ ! -f /config/configuration.yaml ]; then
+      echo "Configuration file not found, creating a new one"
+      cp /config-templates/configuration.yaml /config/configuration.yaml
+    fi
+
+    # Check if the force init is enabled
+    forceInit="{{ .Values.configuration.forceInit }}"
+    if [ "$forceInit" = "true" ]; then
+      echo "Force init is enabled, overwriting the configuration file"
+      current_time=$(date +%Y%m%d_%H%M%S)
+      echo "Backup the current configuration file to configuration.yaml.$current_time"
+      cp /config/configuration.yaml /config/configuration.yaml.$current_time
+      echo "Before cleanup - all backup files:"
+      ls -l /config/configuration.yaml.*
+      echo "Cleaning up - keeping only 10 most recent backups..."
+      ls -t /config/configuration.yaml.* 2>/dev/null | tail -n +11 | xargs -r rm
+      echo "After cleanup - remaining backup files:"
+      ls -l /config/configuration.yaml.*
+      echo "The current configuration file will be merged with the default configuration file with this content:"
+      cat /config-templates/configuration.yaml
+      if [[ ! -s /config/configuration.yaml ]]; then
+        # If /config/configuration.yaml is empty, use the content of /config-templates/configuration.yaml
+        cat /config-templates/configuration.yaml > /config/configuration.yaml
+      else
+        # Perform the merge operation if /config/configuration.yaml is not empty
+        yq eval-all --inplace 'select(fileIndex == 0) *d select(fileIndex == 1)' /config/configuration.yaml /config-templates/configuration.yaml
+      fi
+    fi
+
+    # Check if the automations file exists
+    if [ ! -f /config/automations.yaml ]; then
+      echo "Automations file not found, creating a new one"
+      touch /config/automations.yaml
+      echo "[]" >> /config/automations.yaml
+    fi
+
+    # Check if the scripts file exists
+    if [ ! -f /config/scripts.yaml ]; then
+      echo "Scripts file not found, creating a new one"
+      touch /config/scripts.yaml
+    fi
+
+    # Check if the scenes file exists
+    if [ ! -f /config/scenes.yaml ]; then
+      echo "Scenes file not found, creating a new one"
+      touch /config/scenes.yaml
+    fi
+    
+    sed -i 's/#default_config:.*//g' /config/configuration.yaml 
+
   templateConfig: |-
-    # Loads default set of integrations. Do not remove.
-    default_config:
+    ### https://www.home-assistant.io/integrations/default_config/
+    backup: 
+    cloud: 
+    config: 
+    energy: 
+    history: 
+    homeassistant_alerts: 
+    cloud: 
+    logbook: 
+    mobile_app: 
+    sun: 
+    webhooks: 
+    ###
 
     logger: !include cfg/logger.yaml
 
@@ -45,11 +111,15 @@ configuration:
 
     recorder: !include cfg/recorder.yaml
 
-    automation: !include cfg/automations.yaml
+    automation: !include automations.yaml # system!
+    automation manual: !include cfg/automations.yaml
+
     script: !include cfg/scripts.yaml
     scene: !include cfg/scenes.yaml
 
     mqtt: !include cfg/mqtt.yaml
+    mqtt_statestream: !include cfg/mqtt_statestream.yaml
+
 
     prometheus: !include cfg/prometheus.yaml
 resources:
@@ -59,5 +129,17 @@ resources:
   limits: {}
 dnsConfig:
   options:
-    - name: ndots
+    - name: timeout
       value: "1"
+    - name: attempts
+      value: "2"
+addons:
+  codeserver:
+    enabled: true
+    ingress:
+      enabled: true
+      hosts:
+        - host: ${ code_fqdn }
+          paths:
+            - path: /
+              pathType: ImplementationSpecific

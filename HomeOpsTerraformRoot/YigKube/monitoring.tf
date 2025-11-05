@@ -80,6 +80,14 @@ resource "helm_release" "cadvisor" {
     {
       name  = "metrics.serviceMonitor.labels.release"
       value = helm_release.promstack.name
+    },
+    {
+      name = "image.repository"
+      value = "bitnami/cadvisor"  # BUG: FUCK BROADCOM # BUG: this one is not on legacy...
+    },
+    {
+      name = "global.security.allowInsecureImages"
+      value = "true"  # BUG: FUCK BROADCOM
     }
   ]
 
