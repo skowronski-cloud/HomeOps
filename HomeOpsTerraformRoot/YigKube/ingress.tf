@@ -103,3 +103,41 @@ resource "helm_release" "echo" {
 
   depends_on = [helm_release.metallb]
 }
+resource "kubernetes_config_map" "homepage" {
+  metadata {
+    name      = "homepage-config"
+    namespace = "traefik-system"
+  }
+  data = {
+    "kubernetes.yaml" = templatefile("${path.module}/template/homepage/kubernetes.yaml.tpl", {})
+    "settings.yaml" = templatefile("${path.module}/template/homepage/settings.yaml.tpl", {})
+    "custom.css" = templatefile("${path.module}/template/homepage/custom.css.tpl", {})
+    "custom.js" = templatefile("${path.module}/template/homepage/custom.js.tpl", {})
+    "bookmarks.yaml" = templatefile("${path.module}/template/homepage/bookmarks.yaml.tpl", {})
+    "services.yaml" = templatefile("${path.module}/template/homepage/services.yaml.tpl", {
+      ingress_domain = var.ingress_domain
+      gatus_url = "http://${var.synology_velero_minio.host}:30001"
+    })
+    "widgets.yaml" = templatefile("${path.module}/template/homepage/widgets.yaml.tpl", {})
+    "docker.yaml" = ""
+    "proxmox.yaml" = ""
+  }
+  
+}
+resource "helm_release" "homepage" {
+  # https://artifacthub.io/packages/helm/m0nsterrr-homepage/homepage
+  repository = "oci://ghcr.io/m0nsterrr/helm-charts/"
+  chart      = "homepage"
+  version    = var.ver_helm_homepage
+
+  name      = "homepage"
+  namespace = "traefik-system"
+
+  values = [templatefile("${path.module}/template/homepage.yaml.tpl", {
+    ingress_domain = var.ingress_domain
+  })]
+
+
+
+  depends_on = [kubernetes_namespace.ns]
+}

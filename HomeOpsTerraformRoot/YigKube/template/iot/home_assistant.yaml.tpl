@@ -2,6 +2,12 @@
 # https://artifacthub.io/packages/helm/helm-hass/home-assistant
 ingress:
   enabled: true
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: "Home Assistant"
+    gethomepage.dev/icon: sh-home-assistant
+    gethomepage.dev/group: "General"
+    gethomepage.dev/external: "true"
   hosts:
     - host: ${ fqdn }
       paths:
@@ -143,3 +149,9 @@ addons:
           paths:
             - path: /
               pathType: ImplementationSpecific
+      annotations:
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/name: "HA Code"
+        gethomepage.dev/icon: sh-home-assistant-dark
+        gethomepage.dev/group: "Admin"
+        gethomepage.dev/external: "true"

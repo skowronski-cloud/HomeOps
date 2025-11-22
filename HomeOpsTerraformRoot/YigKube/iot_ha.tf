@@ -29,6 +29,59 @@ resource "helm_release" "home_assistant" {
   ]
   depends_on = [kubernetes_namespace.ns, kubernetes_secret.home_assistant_secrets_yaml]
 }
+
+resource "kubernetes_network_policy" "home_assistant" { 
+  
+  metadata {
+    name = "home-assistant"
+    namespace = "home-assistant"
+  }
+  spec {
+    pod_selector {
+      match_expressions {
+        key      = "app.kubernetes.io/name"
+        operator = "In"
+        values   = ["home-assistant"]
+      }
+    }
+
+    ingress {
+      ports {
+        # codeserver uses no auth so we need to restrict it ingress
+        port     = "codeserver"
+        protocol = "TCP"
+      }
+      ports {
+        # main http is on same pod so needs same restrictions + allow prometheus scraping
+        port     = "http"
+        protocol = "TCP"
+      }
+
+      from {
+        namespace_selector {
+          match_labels = {
+            "kubernetes.io/metadata.name" = "traefik-system"
+          }
+        }
+      }
+
+      from {
+        namespace_selector {
+          match_labels = {
+            "kubernetes.io/metadata.name" = "monitoring-system"
+          }
+        }
+      }
+
+    }
+
+    egress {} # single empty rule to allow all egress traffic
+
+    policy_types = ["Ingress", "Egress"]
+  }
+  
+}
+
 resource "kubernetes_secret" "home_assistant_secrets_yaml" {
   metadata {
     namespace = "home-assistant"

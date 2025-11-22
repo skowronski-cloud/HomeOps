@@ -16,6 +16,8 @@ deployment:
   replicas: ${xasc.replicaCount}
   terminationGracePeriodSeconds: 0
   minReadySeconds: 30
+  podLabels:
+    opensearch-cluster-master-http-client: "true"
 
 additionalArguments:
   #- --entryPoints.websecure.http.middlewares=traefik-system-forwardauth-authelia@kubernetescrd
@@ -84,3 +86,10 @@ ports:
         to: websecure
         scheme: https
         permanent: true
+  http-bypass:
+    port: 9090
+    exposedPort: 8080
+    expose:
+      default: true
+    protocol: TCP
+

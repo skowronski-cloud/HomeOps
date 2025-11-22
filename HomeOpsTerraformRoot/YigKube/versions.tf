@@ -169,3 +169,18 @@ variable "ver_helm_kyverno_policies" {
   default = "3.5.2"
   type    = string
 }
+variable "ver_helm_opensearch" {
+  # https://artifacthub.io/packages/helm/opensearch-project-helm-charts/opensearch
+  default = "3.3.2"
+  type = string
+}
+variable "ver_helm_fluentbit" {
+  # https://artifacthub.io/packages/helm/fluent/fluent-bit
+  default = "4.1.0"
+  type = string
+}
+variable "ver_helm_homepage" { 
+  # https://artifacthub.io/packages/helm/m0nsterrr-homepage/homepage
+  default = "4.2.0"
+  type = string
+}

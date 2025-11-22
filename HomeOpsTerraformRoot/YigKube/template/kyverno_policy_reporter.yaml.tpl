@@ -20,3 +20,19 @@ ui:
         paths:
           - path: /
             pathType: ImplementationSpecific
+  networkPolicy:
+    enabled: true
+    ingress:
+      - from:
+          - namespaceSelector:
+              matchLabels:
+                app.kubernetes.io/metadata.name: traefik-system
+
+
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/metadata.name: traefik-system

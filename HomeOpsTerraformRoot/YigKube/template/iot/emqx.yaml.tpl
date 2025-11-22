@@ -19,6 +19,12 @@ ingress:
     enabled: true
     hosts:
       - emqx-dashboard.${ingress_domain}
+    annotations:
+      gethomepage.dev/enabled: "true"
+      gethomepage.dev/name: "EQMX"
+      gethomepage.dev/icon: sh-emqx
+      gethomepage.dev/group: "Admin"
+      gethomepage.dev/external: "true"
 metrics:
   enabled: true
 
