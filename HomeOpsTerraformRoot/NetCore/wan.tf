@@ -13,6 +13,7 @@ resource "routeros_interface_vlan" "wan" {
 resource "routeros_ip_dhcp_client" "wan" {
   interface         = routeros_interface_vlan.wan.name
   add_default_route = "yes"
+  use_peer_dns = true
 }
 
 resource "routeros_interface_list" "wan" {

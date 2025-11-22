@@ -30,9 +30,14 @@ resource "routeros_wifi_configuration" "cfg2" {
     authentication_types = each.value.auth.types
     ft                   = each.value.ft
     ft_preserve_vlanid   = each.value.ft
+    ft_mobility_domain   = each.value.ft_md
     ft_over_ds           = each.value.ft
     connect_priority     = 0
     passphrase           = each.value.auth.pass
+  }
+  steering = {
+    rrm = each.value.rrm
+    wnm = each.value.wnm
   }
 }
 resource "routeros_wifi_configuration" "cfg5" {
@@ -54,8 +59,14 @@ resource "routeros_wifi_configuration" "cfg5" {
     authentication_types = each.value.auth.types
     ft                   = each.value.ft
     ft_preserve_vlanid   = each.value.ft
+    ft_mobility_domain   = each.value.ft_md
+    ft_reassociation_deadline = each.value.ft_rd
     ft_over_ds           = each.value.ft
     connect_priority     = 0
     passphrase           = each.value.auth.pass
+  }
+  steering = {
+    rrm = each.value.rrm
+    wnm = each.value.wnm
   }
 }
