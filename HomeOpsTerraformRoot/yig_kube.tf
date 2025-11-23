@@ -39,8 +39,16 @@ module "yig_kube" {
   qingping_devices = var.qingping_devices
   rtl433_devices   = var.rtl433_devices
   pull_secrets = var.pull_secrets
-}
 
+  vm_users  = var.vm_users
+  ldap_path = var.tf_ldap.path
+  ldap_domain = var.tf_ldap.domain
+}
+variable "vm_users" {
+  type = list(object({
+    username = string
+  }))
+}
 # FIXME: consolidate variables into logically connected objects
 
 
@@ -206,3 +214,8 @@ variable "pull_secrets" {
 }
 
 # NOTE: remember to publish `4347320a0004020001000502001e00f200` to `qingping/MAC/up` on bootstrap
+
+output "vm_users" {
+  value = module.yig_kube.vm_users
+  sensitive = true
+}

@@ -9,11 +9,13 @@ resource "kubernetes_namespace" "ns" {
     "traefik-system",
     "infrahub",
     "monitoring-system",
+    "vm",
     "flux-system",
     "velero",
     "multus-system",
     "kyverno-system",
     "shared-system",
+    "logging",
     "testing"
   ])
   metadata {

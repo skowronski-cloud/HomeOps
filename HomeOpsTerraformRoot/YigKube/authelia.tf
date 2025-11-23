@@ -73,6 +73,25 @@ resource "tls_private_key" "authelia_idp" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
+locals {
+  group_yig_ingress_users = "yig-ingress-users"
+  group_yig_ingress_users_dn = "CN=${local.group_yig_ingress_users},${var.ldap_path}"
+}
+resource "ldap_entry" "group_yig_ingress_users" {
+  # https://registry.terraform.io/providers/l-with/ldap/latest/docs/resources/entry
+  dn = local.group_yig_ingress_users_dn
+  data_json = jsonencode({
+    description = ["TF Managed group for Yig Ingress users"]
+    objectClass = ["top", "group"]
+    name        = [local.group_yig_ingress_users]
+    cn        = [local.group_yig_ingress_users]
+    member      = concat([for user in var.vm_users : ldap_entry.vm_users_objects[user.username].dn],["CN=daniel,${var.ldap_path}"])
+  })
+  ignore_attributes = [
+    "distinguishedName", "groupType", "instanceType", "objectCategory", "objectGUID", "objectSid", "sAMAccountName", 
+    "sAMAccountType", "uSNChanged", "uSNCreated", "whenChanged", "whenCreated",
+  ]
+}
 resource "helm_release" "authelia" {
   # https://artifacthub.io/packages/helm/authelia/authelia
   repository = "https://charts.authelia.com"
@@ -94,8 +113,8 @@ resource "helm_release" "authelia" {
 
       oidc_public_key = tls_private_key.authelia_idp.public_key_pem
 
-      ingress_base_group  = var.ingress_base_group
-      ingress_admin_group = var.ingress_admin_group
+      ingress_base_group  = var.ingress_base_group   # FIXME: import and manage from TF
+      ingress_admin_group = var.ingress_admin_group  # FIXME: import and manage from TF
 
       smtp_host = var.common_smtp.server
       smtp_port = var.common_smtp.port
@@ -106,6 +125,8 @@ resource "helm_release" "authelia" {
 
       xasc                  = local.highlyAvailableServiceConfig
       metrics_label_release = helm_release.promstack.name
+
+      group_yig_vm_users = local.group_yig_vm_users
     })
   ]
 

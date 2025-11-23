@@ -123,6 +123,29 @@ provider "registry.terraform.io/hashicorp/tls" {
   ]
 }
 
+provider "registry.terraform.io/l-with/ldap" {
+  version     = "0.12.0"
+  constraints = "0.12.0"
+  hashes = [
+    "h1:3kwBuQVvLf47DV4iMW+WSN6D/dQYjydKmIzCDOWu78k=",
+    "zh:0d8ff49c5821161d160768f39c95a42187d75a7cf0bc3d30eecbc5262680aa77",
+    "zh:176fb7a391806fc6edc354bffb5f4bf3818e2190d5504a565c9df5799c51544a",
+    "zh:32569136e055165818e33c04e2af743e85005320b2f6b37241a6dc7a1aa72b0a",
+    "zh:3419a5144dc7fe438412884b8ea647d4acd57f098a025910e1cb44a33954ae0d",
+    "zh:4913ba8ee5fdc13e2f4ec64462e781a7b8504cc65090142a0f38612918efbbcf",
+    "zh:4b37dff9b6c0067644388b812ea7654b8f16a0ac788110fda242fb30a505fb2b",
+    "zh:5f61be04c0a9d06632e5a32158938d8bef0a15d5e0d3fd10173c77c64279b408",
+    "zh:794720b552b18b977f1747db167e05b6683e3783d6f90448799cfaf79d3313fc",
+    "zh:8bf743871448c1912142bc8f4ee04011fa222161cba59fca38772ee03b38152b",
+    "zh:ba7b7e58eb5ac73f093ff9220636923d846f91ed7b4da793c5acf238686cf2fe",
+    "zh:c5f0b7794ecf418cca9051a6d081a7297d43d46eb0d4a857c45ba0021ff2f69b",
+    "zh:d1082672a68ee50f7d0167f511aea089317b3761cde47419417ed0351eee5c09",
+    "zh:e39d454d437334f4497133df3b1c7901cbbc9acaec69b789fdcc8640662d5784",
+    "zh:f1861f3d2641e4585f186c26746d8ffcca609ca10f453644bd6dc0ff664979ea",
+    "zh:f569b65999264a9416862bca5cd2a6177d94ccb0424f3a4ef424428912b9cb3c",
+  ]
+}
+
 provider "registry.terraform.io/mastercard/restapi" {
   version     = "2.0.1"
   constraints = "2.0.1"

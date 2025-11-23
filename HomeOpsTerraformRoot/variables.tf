@@ -115,3 +115,17 @@ variable "admin_ssh_key" {
   type        = string
   description = "SSH public key for admin user"
 }
+
+variable "tf_ldap" {
+  type = object({
+    host = string
+    port = number
+    user = string
+    pass = string
+    start_tls = bool
+    tls = bool
+    tls_insecure = bool
+    path = string # e.g. "CN=Users,dc=example,dc=com"
+    domain = string # e.g. "example.com"
+  })
+}

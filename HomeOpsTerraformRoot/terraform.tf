@@ -47,5 +47,10 @@ terraform {
       source  = "Mastercard/restapi"
       version = "2.0.1"
     }
+    ldap = {
+      # https://registry.terraform.io/providers/l-with/ldap/latest/docs
+      source = "l-with/ldap"
+      version = "0.12.0"
+    }
   }
 }

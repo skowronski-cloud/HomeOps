@@ -20,6 +20,16 @@ terraform {
     ]
   }
 
+  before_hook "tfstate_snapshot_before" {
+    commands = ["apply","import","destroy","state"]
+    execute  = ["bash", "-lc", "${get_original_terragrunt_dir()}/tools/tfstate_snapshot.sh before"]
+  }
+
+  after_hook "tfstate_snapshot_after" {
+    commands = ["apply","import","destroy","state"]
+    execute  = ["bash", "-lc", "${get_original_terragrunt_dir()}/tools/tfstate_snapshot.sh after"]
+  }
+
 }
 
 

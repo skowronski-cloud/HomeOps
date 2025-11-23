@@ -144,3 +144,16 @@ variable "pull_secrets" {
     email = string
   }))
 }
+
+variable "ldap_path" {
+  type = string # e.g. "CN=Users,dc=example,dc=com"
+}
+variable "ldap_domain" {
+  type = string # e.g. "example.com"
+}
+variable "vm_users" {
+  type = list(object({
+    username = string
+  }))
+}
+

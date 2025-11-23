@@ -184,3 +184,13 @@ variable "ver_helm_homepage" {
   default = "4.2.0"
   type = string
 }
+variable "ver_helm_vm_stack" {
+  # https://artifacthub.io/packages/helm/victoriametrics/victoria-metrics-k8s-stack
+  default = "0.63.6"
+  type = string
+}
+variable "ver_helm_vm_crd" {
+  # https://artifacthub.io/packages/helm/victoriametrics/victoria-metrics-operator-crds
+  default = "0.6.0"
+  type = string
+}
