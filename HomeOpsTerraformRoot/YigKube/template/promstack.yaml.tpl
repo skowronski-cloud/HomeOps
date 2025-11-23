@@ -23,6 +23,18 @@ grafana:
     lookupVolumeName: false # this breaks tfstate!
   service:
     type: ClusterIP
+  plugins:
+    - victoriametrics-metrics-datasource
+  additionalDataSources:
+    - name: VictoriaMetrics - PromQL
+      type: prometheus
+      access: proxy
+      url: http://vmauth-vm-victoria-metrics-k8s-stack.vm.svc:8427/select/0/prometheus/
+      isDefault: false
+      basicAuth: true
+      basicAuthUser: grafana
+      secureJsonData:
+        basicAuthPassword: ${grafana_vm_datasource_password}
   grafana.ini:
     server:
       root_url: https://grafana.${ingress_domain}

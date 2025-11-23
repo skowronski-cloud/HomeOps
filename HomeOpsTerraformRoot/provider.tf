@@ -30,10 +30,8 @@ provider "pagerduty" {
 }
 
 provider "ldap" {
-  host     = var.tf_ldap.host
-  port     = var.tf_ldap.port
-  bind_user     = var.tf_ldap.user
+  url           = "${var.tf_ldap.tls ? "ldaps" : "ldap"}://${var.tf_ldap.host}:${var.tf_ldap.port}"
+  bind_dn       = var.tf_ldap.user
   bind_password = var.tf_ldap.pass
-  tls           = var.tf_ldap.tls
-  tls_insecure = var.tf_ldap.tls_insecure
+  insecure      = var.tf_ldap.tls_insecure
 }

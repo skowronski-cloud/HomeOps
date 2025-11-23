@@ -19,7 +19,7 @@ terraform {
       source = "Mastercard/restapi"
     }
     ldap = {
-      source = "l-with/ldap"
+      source = "ngharo/ldap"
     }
   }
 }

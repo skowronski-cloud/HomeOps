@@ -110,18 +110,14 @@ configMap:
         policy: bypass
       - domain: "fridge.${ingress_domain}"
         policy: bypass
+      - domain: "vm-auth.${ingress_domain}"
+        policy: bypass
+
+      # last rule is catch-all
       - domain: "*.${ingress_domain}"
         subjects:
           - group: "${ingress_base_group}"
         policy: two_factor
-      - domain: "vm-insert.${ingress_domain}"
-        subjects:
-          - group: "${group_yig_vm_users}"
-        policy: one_factor
-      - domain: "vm-select.${ingress_domain}"
-        subjects:
-          - group: "${group_yig_vm_users}"
-        policy: one_factor
   authentication_backend:
     ldap:
       enabled: true

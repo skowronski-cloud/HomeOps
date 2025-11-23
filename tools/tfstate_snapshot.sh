@@ -14,6 +14,15 @@ NOW=`date +"%s = %Y-%m-%d %H:%M:%S"`
 
 cmp $SOURCE $TARGET > /dev/null 2>&1
 if [ $? -ne 0 ]; then
+  if [ $PHASE == "pre" ]; then
+    read -r -p "Hook before ${TG_CTX_COMMAND} found mismatch. Previous exec likely failed. Do you still want to commit? [y/N] " answer
+    if [[ "$answer" =~ ^[Yy]$ ]]; then
+      echo "Proceeding with snapshot."
+    else
+      echo "Aborting snapshot."
+      exit 0
+    fi
+  fi
   cp $SOURCE $TARGET
   cd $INFRA_MASTER_DIR
   ./encrypt_and_stage.sh

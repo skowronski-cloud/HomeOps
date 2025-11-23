@@ -60,29 +60,29 @@ provider "restapi" {
   }
 }
 
-data "http" "iot_emqx_ready" {
-  url    = "https://emqx-dashboard.${var.ingress_domain}/api/v5/authentication"
-  method = "GET"
-
-  request_headers = {
-    Authorization = "Basic ${base64encode("terraform:${random_password.iot_emqx_token_terraform.result}")}"
-    Content-Type  = "application/json"
-    Accept        = "application/json"
-  }
-
-  depends_on = [helm_release.iot_emqx]
-
-  retry {
-    attempts = 10
-  }
-
-  lifecycle {
-    postcondition {
-      condition     = self.status_code == 200
-      error_message = "EMQX authentication endpoint not ready (got ${self.status_code})."
-    }
-  }
-}
+#data "http" "iot_emqx_ready" {
+#  url    = "https://emqx-dashboard.${var.ingress_domain}/api/v5/authentication"
+#  method = "GET"
+#
+#  request_headers = {
+#    Authorization = "Basic ${base64encode("terraform:${random_password.iot_emqx_token_terraform.result}")}"
+#    Content-Type  = "application/json"
+#    Accept        = "application/json"
+#  }
+#
+#  depends_on = [helm_release.iot_emqx]
+#
+#  retry {
+#    attempts = 10
+#  }
+#
+#  lifecycle {
+#    postcondition {
+#      condition     = self.status_code == 200
+#      error_message = "EMQX authentication endpoint not ready (got ${self.status_code})."
+#    }
+#  }
+#}
 
 resource "restapi_object" "user" {
   for_each     = var.mqtt_accounts
@@ -113,7 +113,7 @@ resource "restapi_object" "user" {
     "password",
   ]
 
-  depends_on = [data.http.iot_emqx_ready]
+  #depends_on = [data.http.iot_emqx_ready]
 }
 
 resource "restapi_object" "acl" {
@@ -146,5 +146,5 @@ resource "restapi_object" "acl" {
     ], each.value.emqx_acl)
   })
 
-  depends_on = [data.http.iot_emqx_ready]
+  #depends_on = [data.http.iot_emqx_ready]
 }

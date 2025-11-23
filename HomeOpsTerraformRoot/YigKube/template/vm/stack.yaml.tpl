@@ -37,7 +37,7 @@ vmcluster:
       storage:
         volumeClaimTemplate:
           spec:
-            #storageClassName: ${storage_class_name}
+            storageClassName: ${storage_class_name}
             resources:
               requests:
                 storage: ${storage_size}
@@ -87,5 +87,71 @@ grafana:
 vmauth:
   enabled: true
   spec:
-    unauthorizedUserAccessSpec:
-      disabled: true
+    unauthorizedUserAccessSpec: {}
+    selectAllByDefault: true
+    userNamespaceSelector: {}
+    userSelector: {}
+
+global:
+  cluster:
+    dnsDomain: cluster.local # https://github.com/golang/go/issues/75861
+
+victoria-metrics-operator:
+  admissionWebhooks:
+    enabled: true
+    certManager:
+      enabled: true
+      issuer:
+        name: yig-ca-issuer
+        kind: ClusterIssuer
+
+extraObjects:
+  - apiVersion: operator.victoriametrics.com/v1beta1
+    kind: VMUser
+    metadata:
+      name: grafana
+      namespace: vm
+    spec:
+      username: grafana
+      password:  ${grafana_reader_pass}
+      targetRefs:
+        - crd:
+            kind: VMCluster/vmselect
+            name: vm-victoria-metrics-k8s-stack
+            namespace: vm
+          paths:
+            - "/select/0/prometheus/.*"
+  - apiVersion: operator.victoriametrics.com/v1beta1
+    kind: VMUser
+    metadata:
+      name: qingping-iot
+      namespace: vm
+    spec:
+      username: qingping-iot
+      generatePassword: true
+      targetRefs:
+        - crd:
+            kind: VMCluster/vminsert
+            name: vm-victoria-metrics-k8s-stack
+            namespace: vm
+          paths:
+            - "/insert/0/prometheus/.*"
+  - apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: vmauth
+      namespace: vm
+    spec:
+      ingressClassName: traefik
+      rules:
+        - host: vm-auth.yig.ds64.pl
+          http:
+            paths:
+              - path: /
+                pathType: Prefix
+                backend:
+                  service:
+                    name: vmauth-vm-victoria-metrics-k8s-stack
+                    port:
+                      name: http
+# FIXME: network policies!

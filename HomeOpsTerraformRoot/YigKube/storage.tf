@@ -19,3 +19,62 @@ resource "helm_release" "longhorn" {
 
   depends_on = [kubernetes_namespace.ns]
 }
+resource "kubernetes_storage_class" "longhorn_single" {
+  # this storage class uses Longhorn with a single replica for workloads that implement their own redundancy like sharding
+  # https://longhorn.io/docs/1.10.0/references/storage-class-parameters
+  storage_provisioner = "driver.longhorn.io"
+  metadata {
+    name = "longhorn-single"
+  }
+  parameters = {
+    numberOfReplicas = "1"
+    dataLocality     = "best-effort"
+    replicaAutoBalance = "best-effort"
+  }
+}
+
+resource "kubernetes_network_policy" "longhorn_frontend" { 
+  
+  metadata {
+    name = "longhorn-frontend"
+    namespace = "longhorn-system"
+  }
+  spec {
+    pod_selector {
+      match_expressions {
+        key      = "app"
+        operator = "In"
+        values   = ["longhorn-ui"]
+      }
+    }
+
+    ingress {
+      ports {
+        port     = "http"
+        protocol = "TCP"
+      }
+
+      from {
+        namespace_selector {
+          match_labels = {
+            "kubernetes.io/metadata.name" = "traefik-system"
+          }
+        }
+      }
+
+      from {
+        namespace_selector {
+          match_labels = {
+            "kubernetes.io/metadata.name" = "monitoring-system"
+          }
+        }
+      }
+
+    }
+
+    egress {} # single empty rule to allow all egress traffic
+
+    policy_types = ["Ingress", "Egress"]
+  }
+  
+}

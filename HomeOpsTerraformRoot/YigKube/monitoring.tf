@@ -2,6 +2,10 @@ resource "random_password" "promstack_grafana_pass" {
   length  = 100
   special = false
 }
+resource "random_password" "vm_grafana_pass" {
+  length  = 32
+  special = false
+}
 resource "helm_release" "promstack" {
   # https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack
   repository = "https://prometheus-community.github.io/helm-charts"
@@ -19,6 +23,8 @@ resource "helm_release" "promstack" {
     ingress_admin_group = var.ingress_admin_group
 
     common_smtp = var.common_smtp
+
+    grafana_vm_datasource_password = random_password.vm_grafana_pass.result
   })]
 
   depends_on = [helm_release.longhorn, kubernetes_namespace.ns]

@@ -48,9 +48,9 @@ terraform {
       version = "2.0.1"
     }
     ldap = {
-      # https://registry.terraform.io/providers/l-with/ldap/latest/docs
-      source = "l-with/ldap"
-      version = "0.12.0"
+      # https://registry.terraform.io/providers/ngharo/ldap/latest/docs
+      source  = "ngharo/ldap"
+      version = "2.2.0"
     }
   }
 }
