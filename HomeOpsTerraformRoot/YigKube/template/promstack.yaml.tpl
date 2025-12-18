@@ -25,6 +25,18 @@ grafana:
     type: ClusterIP
   plugins:
     - victoriametrics-metrics-datasource
+    - volkovlabs-variable-panel
+    - marcusolsson-static-datasource
+    - yesoreyeram-infinity-datasource
+    - grafana-clock-panel
+    - volkovlabs-echarts-panel
+    - ekacnet-cubismgrafana-panel
+    - marcusolsson-hourly-heatmap-panel
+    - grafana-polystat-panel
+    - benjaminfourmaux-status-panel
+    - fetzerch-sunandmoon-datasource
+    - grafana-googlesheets-datasource
+    - frser-sqlite-datasource
   additionalDataSources:
     - name: VictoriaMetrics - PromQL
       type: prometheus

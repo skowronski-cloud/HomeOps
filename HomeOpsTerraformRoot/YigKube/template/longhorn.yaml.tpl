@@ -8,6 +8,12 @@ defaultSettings:
 ingress:
   enabled: true
   host: longhorn.${ingress_domain}
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: "Longhorn"
+    gethomepage.dev/icon: sh-rancher-longhorn
+    gethomepage.dev/group: "Admin"
+    gethomepage.dev/external: "true"
 csi:
   # BUG: wait for https://github.com/longhorn/longhorn/issues/11617
   attacherReplicaCount: 1 # ${xasc.replicaCount}

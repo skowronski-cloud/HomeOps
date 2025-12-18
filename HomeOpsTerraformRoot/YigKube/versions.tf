@@ -121,7 +121,7 @@ variable "ver_helm_mktxp" {
 }
 variable "ver_docker_mktxp" {
   # https://github.com/akpw/mktxp/releases
-  default = "1.2.12"
+  default = "1.2.15"
   type    = string
 }
 variable "ver_helm_cadvisor" {

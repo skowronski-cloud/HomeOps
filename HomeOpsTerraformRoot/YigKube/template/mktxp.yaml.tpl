@@ -59,9 +59,9 @@ configmap:
 
             remote_dhcp_entry = None        # An MKTXP entry for remote DHCP info resolution (capsman/wireless)
 
-            use_comments_over_names = False  # when available, forces using comments over the interfaces names
+            #use_comments_over_names = False  # when available, forces using comments over the interfaces names
 
-            netwatch_name_label = "name" # pend https://github.com/akpw/mktxp/pull/264
+            #netwatch_name_label = "name" # pend https://github.com/akpw/mktxp/pull/264
 
             check_for_updates = True        # check for available ROS updates
 
@@ -79,7 +79,7 @@ configmap:
           minimal_collect_interval = 5    # Minimal metric collection interval
 
           verbose_mode = True            # Set it on for troubleshooting
-
+          compact_default_conf_values = True
           fetch_routers_in_parallel = False   # Set to True if you want to fetch multiple routers parallel
           max_worker_threads = 5              # Max number of worker threads that can fetch routers (parallel fetch only)
           max_scrape_duration = 10            # Max duration of individual routers' metrics collection (parallel fetch only)

@@ -107,6 +107,8 @@ resource "kubernetes_secret" "home_assistant_ha_cfg" {
       "qingping_mqtt_payload_map" : var.qingping_mqtt_payload_map
       "rtl433_devices" : var.rtl433_devices
     })
+    "mqtt_statestream.yaml" = templatefile("${path.module}/template/iot/ha/mqtt_statestream.yaml.tpl", {
+    })
     "logger.yaml" = templatefile("${path.module}/template/iot/ha/logger.yaml.tpl", {
     })
     "prometheus.yaml" = templatefile("${path.module}/template/iot/ha/prometheus.yaml.tpl", {
