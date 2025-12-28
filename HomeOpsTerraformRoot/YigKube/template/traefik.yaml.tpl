@@ -6,6 +6,7 @@ logs:
 providers:
   kubernetesCRD:
     allowExternalNameServices: true
+    allowCrossNamespace: true
   kubernetesIngress:
     allowExternalNameServices: true
 volumes:
