@@ -199,3 +199,28 @@ variable "ver_helm_vm_crd" {
   default = "0.6.0"
   type = string
 }
+variable "var_helm_minio" {
+  # https://artifacthub.io/packages/helm/minio-official/minio
+  default = "5.4.0"
+  type = string
+}
+variable "ver_helm_loki" {
+  # https://artifacthub.io/packages/helm/grafana/loki
+  default = "6.49.0"
+  type = string
+}
+variable "ver_helm_vector" {
+  # https://artifacthub.io/packages/helm/vector/vector
+  default = "0.49.0"
+  type = string
+}
+variable "ver_helm_netbox" {
+  # https://artifacthub.io/packages/helm/netbox/netbox
+  default = "7.4.7"
+  type = string
+}
+variable "ver_docker_netbox_custom" {
+  # https://github.com/danielskowronski/custom-netbox-docker-with-plugins/releases
+  default = "v4.5.2-20260210194254"
+  type    = string
+}

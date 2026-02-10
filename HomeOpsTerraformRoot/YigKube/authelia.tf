@@ -47,6 +47,34 @@ resource "kubernetes_secret" "oidc_grafana_client" {
 }
 
 
+resource "random_password" "oidc_netbox_client_secret" {
+  # TODO: this should be generated on runtime and not managed from here
+  length  = 32
+  special = false
+}
+resource "random_password" "oidc_netbox_client_id" {
+  length  = 32
+  special = false
+}
+resource "kubernetes_secret" "oidc_netbox_client" {
+  for_each = { # TODO: this is clear sign that some Secret Operator is required!
+    "traefik-system" : {},
+    "netbox" : {}
+  }
+  metadata {
+    namespace = each.key
+    name      = "oidc-netbox-client"
+  }
+  data = {
+    "client-id"     = random_password.oidc_netbox_client_id.result
+    "client-secret" = random_password.oidc_netbox_client_secret.result
+    "cookie-secret" = random_password.oidc_session_enc_key.result
+  }
+  type       = "Opaque"
+  depends_on = [kubernetes_namespace.ns]
+}
+
+
 resource "kubernetes_secret" "authelia_secrets" {
   metadata {
     namespace = "traefik-system"
@@ -91,6 +119,7 @@ resource "helm_release" "authelia" {
       ldap_user      = var.ldap_user
 
       oidc_grafana_client_id = random_password.oidc_grafana_client_id.result
+      oidc_netbox_client_id = random_password.oidc_netbox_client_id.result
 
       oidc_public_key = tls_private_key.authelia_idp.public_key_pem
 

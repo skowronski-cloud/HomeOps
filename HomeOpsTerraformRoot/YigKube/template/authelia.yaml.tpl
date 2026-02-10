@@ -40,6 +40,7 @@ secret:
   additionalSecrets:
     authelia-secrets: {}
     oidc-grafana-client: {}
+    oidc-netbox-client: {}
 
 configMap:
   telemetry:
@@ -197,6 +198,27 @@ configMap:
           claims_policy: oidccp_profile_in_id_token
           redirect_uris: 
             - https://grafana.${ingress_domain}/login/generic_oauth
+        - client_id: ${oidc_netbox_client_id}
+          client_name: "Yig NetBox"
+          public: false
+          pkce_challenge_method: S256
+          response_types:
+            - 'code'
+          grant_types:
+            - 'authorization_code'
+          access_token_signed_response_alg: 'none'
+          userinfo_signed_response_alg: 'none'
+          token_endpoint_auth_method: 'client_secret_basic'
+          client_secret:
+            path: /secrets/oidc-netbox-client/client-secret
+          scopes:
+            - openid
+            - profile
+            - email
+            - groups
+          claims_policy: oidccp_profile_in_id_token
+          redirect_uris: 
+            - https://netbox.${ingress_domain}/oauth/complete/oidc/
 
 persistence:
   enabled: true
@@ -237,5 +259,5 @@ redis:
       repository: bitnamilegacy/redis  # BUG: FUCK BROADCOM
     masterSet: mymaster
     downAfterMilliseconds: 15000 # 15s
-    failoverTimeout: 60000 # 1m
+    failoverTimeout: 60001 # 1m
     terminationGracePeriodSeconds: 30

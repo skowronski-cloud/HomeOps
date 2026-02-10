@@ -16,7 +16,7 @@ provider "helm" {
   }
   burst_limit = 100000
   experiments = {
-    manifest = true
+    manifest = false # true
   }
 }
 provider "synology" {

@@ -37,6 +37,12 @@ grafana:
     - fetzerch-sunandmoon-datasource
     - grafana-googlesheets-datasource
     - frser-sqlite-datasource
+    - marcusolsson-treemap-panel
+    - knightss27-weathermap-panel
+    - vaduga-mapgl-panel
+    - tailosstg-map-panel
+    - equansdatahub-tree-panel
+    - pgillich-tree-panel
   additionalDataSources:
     - name: VictoriaMetrics - PromQL
       type: prometheus
