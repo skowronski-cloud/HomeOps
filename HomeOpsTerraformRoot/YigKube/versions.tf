@@ -224,3 +224,8 @@ variable "ver_docker_netbox_custom" {
   default = "v4.5.2-20260210194254"
   type    = string
 }
+variable "var_helm_podinfo" {
+  # https://artifacthub.io/packages/helm/podinfo/podinfo
+  default = "6.11.2"
+  type = string
+}

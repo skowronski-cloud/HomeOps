@@ -29,4 +29,33 @@ resource "helm_release" "metallb_resources" {
   depends_on = [helm_release.metallb]
 }
 
+resource "helm_release" "podinfo" {
+  # https://artifacthub.io/packages/helm/podinfo/podinfo
+  repository = "oci://ghcr.io/stefanprodan/charts"
+  chart = "podinfo"
+  name = "podinfo"
+  namespace = "metallb"
+  
+  set  = [
+    {
+      name = "service.type"
+      value = "LoadBalancer"
+    },
+    {
+      name = "service.externalTrafficPolicy"
+      value = "Local"
+    },
+    {
+      name = "service.annotations.metallb\\.io/address-pool"
+      value = "test-bgp"
+    }
+    ,
+    {
+      name = "service.loadBalancerIP"
+      value = var.metallb_ipam["test"].bgp_addresses[0]
+     }
+  ]
+}
+
+
 # TODO: consider Cillium and some IPAM

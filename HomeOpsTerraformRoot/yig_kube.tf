@@ -43,6 +43,7 @@ module "yig_kube" {
   vm_users  = var.vm_users
   ldap_path = var.tf_ldap.path
   ldap_domain = var.tf_ldap.domain
+
 }
 variable "vm_users" {
   type = list(object({
@@ -56,6 +57,7 @@ variable "metallb_ipam" {
   type = map(object({
     name      = string
     addresses = list(string)
+    bgp_addresses = list(string)
     # TODO: add creation of DNS records in Cloudflare or ROS
     namespaces = optional(list(string))
     svcSelectors = optional(list(object({

@@ -2,6 +2,7 @@ variable "metallb_ipam" {
   type = map(object({
     name       = string
     addresses  = list(string)
+    bgp_addresses = list(string)
     namespaces = optional(list(string), [])
     svcSelectors = optional(list(object({
       key      = string
@@ -156,4 +157,3 @@ variable "vm_users" {
     username = string
   }))
 }
-
