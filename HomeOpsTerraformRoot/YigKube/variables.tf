@@ -42,7 +42,7 @@ variable "ha_postgres_instance_name" {
 }
 variable "host_interface_for_matter" {
   type    = string
-  default = "eth0"
+  default = "bond0"
 }
 
 variable "ldap_url" {

@@ -65,41 +65,41 @@ resource "helm_release" "mktxp" {
 
   depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
 }
-resource "helm_release" "cadvisor" {
-  # https://artifacthub.io/packages/helm/bitnami/cadvisor
-  repository = "oci://registry-1.docker.io/bitnamicharts/"
-  chart      = "cadvisor"
-  version    = var.ver_helm_cadvisor
-
-  name      = "cadvisor"
-  namespace = "monitoring-system"
-
-  set = [
-    {
-      name  = "metrics.enabled"
-      value = true
-    },
-    {
-      name  = "metrics.serviceMonitor.enabled"
-      value = true
-    },
-    {
-      name  = "metrics.serviceMonitor.labels.release"
-      value = helm_release.promstack.name
-    },
-    {
-      name = "image.repository"
-      value = "bitnami/cadvisor"  # BUG: FUCK BROADCOM # BUG: this one is not on legacy...
-    },
-    {
-      name = "global.security.allowInsecureImages"
-      value = "true"  # BUG: FUCK BROADCOM
-    }
-  ]
-
-
-  depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
-}
+#resource "helm_release" "cadvisor" {
+#  # https://artifacthub.io/packages/helm/bitnami/cadvisor
+#  repository = "oci://registry-1.docker.io/bitnamicharts/"
+#  chart      = "cadvisor"
+#  version    = var.ver_helm_cadvisor
+#
+#  name      = "cadvisor"
+#  namespace = "monitoring-system"
+#
+#  set = [
+#    {
+#      name  = "metrics.enabled"
+#      value = true
+#    },
+#    {
+#      name  = "metrics.serviceMonitor.enabled"
+#      value = true
+#    },
+#    {
+#      name  = "metrics.serviceMonitor.labels.release"
+#      value = helm_release.promstack.name
+#    },
+#    {
+#      name = "image.repository"
+#      value = "bitnami/cadvisor"  # BUG: FUCK BROADCOM # BUG: this one is not on legacy...
+#    },
+#    {
+#      name = "global.security.allowInsecureImages"
+#      value = "true"  # BUG: FUCK BROADCOM
+#    }
+#  ]
+#
+#
+#  depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
+#}
 resource "helm_release" "kepler" {
   # https://artifacthub.io/packages/helm/kepler/kepler
   repository = "https://sustainable-computing-io.github.io/kepler-helm-chart"

@@ -10,11 +10,12 @@ resource "routeros_ip_pool" "pool" {
   })
 }
 resource "routeros_ip_dhcp_server" "server" {
-  for_each     = var.dhcp_servers
-  name         = each.key
-  comment      = each.value.comment
-  interface    = each.value.interface
-  address_pool = each.value.address_pool
+  for_each                  = var.dhcp_servers
+  dynamic_lease_identifiers = "client-mac,client-id"
+  name                      = each.key
+  comment                   = each.value.comment
+  interface                 = each.value.interface
+  address_pool              = each.value.address_pool
   lease_script = templatefile("${path.module}/lease_script.tpl", {
     dhcp_notify_match = var.dhcp_notify_match,
     tool_email_to     = var.common_smtp.to,

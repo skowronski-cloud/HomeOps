@@ -29,11 +29,6 @@ variable "ver_helm_longhorn" {
   default = "1.10.2"
   type    = string
 }
-variable "ver_helm_mosquitto" {
-  # https://artifacthub.io/packages/helm/kfirfer/mosquitto
-  default = "1.0.7"
-  type    = string
-}
 variable "ver_helm_matter" {
   # https://artifacthub.io/packages/helm/charts-derwitt-dev/home-assistant-matter-server
   default = "4.1.5"
@@ -52,11 +47,6 @@ variable "ver_app_ha" {
 variable "ver_helm_postgresha" {
   # https://artifacthub.io/packages/helm/bitnami/postgresql-ha
   default = "16.0.22"
-  type    = string
-}
-variable "ver_helm_spoolman" {
-  # https://artifacthub.io/packages/helm/ideaplexus/spoolman
-  default = "2.4.1"
   type    = string
 }
 variable "ver_helm_certmanager" {
@@ -102,7 +92,7 @@ variable "ver_helm_fluxinstance" {
 }
 variable "ver_helm_velero" {
   # https://artifacthub.io/packages/helm/vmware-tanzu/velero
-  default = "10.1.0"
+  default = "12.1.0"
   type    = string
 }
 variable "ver_docker_velero_aws" {
@@ -198,21 +188,6 @@ variable "ver_helm_vm_stack" {
 variable "ver_helm_vm_crd" {
   # https://artifacthub.io/packages/helm/victoriametrics/victoria-metrics-operator-crds
   default = "0.6.0"
-  type = string
-}
-variable "var_helm_minio" {
-  # https://artifacthub.io/packages/helm/minio-official/minio
-  default = "5.4.0"
-  type = string
-}
-variable "ver_helm_loki" {
-  # https://artifacthub.io/packages/helm/grafana/loki
-  default = "6.49.0"
-  type = string
-}
-variable "ver_helm_vector" {
-  # https://artifacthub.io/packages/helm/vector/vector
-  default = "0.49.0"
   type = string
 }
 variable "ver_helm_netbox" {

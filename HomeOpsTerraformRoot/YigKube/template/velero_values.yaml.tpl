@@ -1,3 +1,5 @@
+---
+# https://artifacthub.io/packages/helm/vmware-tanzu/velero?modal=values
 initContainers:
 - name: velero-plugin-for-aws
   image: velero/velero-plugin-for-aws:${ver_plugin_aws}
