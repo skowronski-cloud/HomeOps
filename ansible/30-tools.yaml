@@ -1,0 +1,31 @@
+---
+- name: Install custom tools
+  hosts: yig
+  tasks:
+    - name: sen bin
+      ansible.builtin.template:
+        src: templates/sen
+        dest: /usr/local/bin/sen
+        owner: root
+        group: root
+        mode: '0755'
+    - name: sen cron
+      ansible.builtin.cron:
+        minute: "*"
+        job: "/usr/local/bin/sen | systemd-cat -t sensors_cron"
+        user: root
+    - name: kopia_snapshot bin
+      ansible.builtin.template:
+        src: templates/kopia_snapshot
+        dest: /usr/local/bin/kopia_snapshot
+        owner: root
+        group: root
+        mode: '0755'
+    - name: kopia_snapshot cron
+      ansible.builtin.cron:
+        minute: "33"
+        hour: ansible.builtin.expr("{{ hostvars[inventory_hostname].maint_hour }}")
+        job: "/usr/local/bin/kopia_snapshot"
+        user: root
+    
+    

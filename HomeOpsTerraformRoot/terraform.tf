@@ -1,5 +1,5 @@
 terraform {
-  required_version = "1.13.0"
+  required_version = "1.15.7"
   required_providers {
     routeros = {
       # https://registry.terraform.io/providers/terraform-routeros/routeros/latest

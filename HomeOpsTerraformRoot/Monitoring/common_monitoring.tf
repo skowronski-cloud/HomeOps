@@ -12,5 +12,9 @@ resource "helm_release" "common_monitoring" {
     #  "name"  = "nyarlathotep.addr"
     #  "value" = var.static_hosts.nya
     #}
+    {
+      "name" = "ha.rtl_tfa.sensorCount"
+      "value" = 12
+    }
   ]
 }

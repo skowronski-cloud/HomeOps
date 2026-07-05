@@ -33,8 +33,8 @@ ha:
   ups:
     batteryThreshold: 95
   rtl_tfa:
-    sensorCount: 11  # 8x KlimaloggPro + 1x Marbella + 1x Wind/Temp + 1x Rain
-    noEntitiesFor: 6h
+    sensorCount: 12  # 8x KlimaloggPro + 1x Marbella + 1x Wind/Temp + 1x Rain
+    noEntitiesFor: 3h
 
 thermalAlerts:
   monitorSvc: thermal

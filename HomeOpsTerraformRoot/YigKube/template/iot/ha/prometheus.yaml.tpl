@@ -22,4 +22,6 @@ filter:
       - cover.aqara_roller_shade_driver_*
       - sensor.humidifierwaterrefillterminal_*
       - climate.aqara_radiator_thermostat_*
+      - sensor.home_draught_warning_system_wind_speed
+      - sensor.ac_plug_*
 requires_auth: false

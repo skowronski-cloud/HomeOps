@@ -16,7 +16,9 @@ resource "kubernetes_namespace" "ns" {
     "kyverno-system",
     "shared-system",
     "logging",
-    "testing"
+    "testing",
+    "loki",
+    "netbox"
   ])
   metadata {
     name = each.key

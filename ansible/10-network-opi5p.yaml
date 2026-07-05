@@ -1,0 +1,38 @@
+---
+- name: Setup network configuration on dual-NIC OrangePi5+
+  hosts: orangepi5plus
+  tasks:
+    - name: Template a file to /etc/file.conf
+      ansible.builtin.template:
+        src: templates/netplan-10.yaml.j2
+        dest: /etc/netplan/10-net.yaml
+        owner: root
+        group: root
+        mode: '0600'
+      register: netplan_file10
+    - name: Template a file to /etc/file.conf
+      ansible.builtin.template:
+        src: templates/netplan-60.yaml.j2
+        dest: /etc/netplan/60-longhorn.yaml
+        owner: root
+        group: root
+        mode: '0600'
+      register: netplan_file60
+
+    - name: Apply netplan configuration
+      ansible.builtin.command: netplan apply
+      when: netplan_file10.changed or netplan_file60.changed
+      throttle: 1
+
+    - name: /etc/sysctl.d/90-bridge.conf
+      ansible.builtin.template:
+        src: templates/sysctl-bridge.conf
+        dest: /etc/sysctl.d/90-bridge.conf
+        owner: root
+        group: root
+        mode: '0644'
+      register: sysctl_file90
+    - name: Apply sysctl configuration
+      ansible.builtin.command: sysctl --system
+      when: sysctl_file90.changed
+      throttle: 1

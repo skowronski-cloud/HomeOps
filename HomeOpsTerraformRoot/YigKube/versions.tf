@@ -25,7 +25,8 @@ variable "ver_helm_metallb" {
 }
 variable "ver_helm_longhorn" {
   # https://artifacthub.io/packages/helm/longhorn/longhorn
-  default = "1.9.1"
+  #default = "1.11.2"
+  default = "1.10.2"
   type    = string
 }
 variable "ver_helm_mosquitto" {
@@ -35,17 +36,17 @@ variable "ver_helm_mosquitto" {
 }
 variable "ver_helm_matter" {
   # https://artifacthub.io/packages/helm/charts-derwitt-dev/home-assistant-matter-server
-  default = "3.0.0"
+  default = "4.1.5"
   type    = string
 }
 variable "ver_helm_ha" {
   # https://artifacthub.io/packages/helm/helm-hass/home-assistant
-  default = "0.3.24"
+  default = "0.3.55"
   type    = string
 }
 variable "ver_app_ha" {
   # https://github.com/home-assistant/core/releases
-  default = "2025.10.1"
+  default = "2026.4.3"
   type    = string
 }
 variable "ver_helm_postgresha" {

@@ -1,0 +1,78 @@
+---
+- name: Setup storage configuration on dual-NIC OrangePi5+
+  hosts: orangepi5plus
+  tasks:
+    - name: /etc/systemd/system/mnt-backups.mount
+      ansible.builtin.template:
+        src: templates/mnt-backups.mount.j2
+        dest: /etc/systemd/system/mnt-backups.mount
+        owner: root
+        group: root
+        mode: '0600'
+      register: mount_file
+    - name: /etc/systemd/system/mnt-backups.automount
+      ansible.builtin.template:
+        src: templates/mnt-backups.automount
+        dest: /etc/systemd/system/mnt-backups.automount
+        owner: root
+        group: root
+        mode: '0600'
+      register: automount_file
+    - name: Apply mount configuration
+      ansible.builtin.systemd:
+        name: mnt-backups.mount
+        enabled: true
+        state: restarted
+        daemon_reload: true
+      when: mount_file.changed or automount_file.changed
+    - name: Apply automount configuration
+      ansible.builtin.systemd:
+        name: mnt-backups.automount
+        enabled: true
+        state: restarted
+        daemon_reload: true
+      when: mount_file.changed or automount_file.changed
+    - name: Armbian-RAMLOG
+      ansible.builtin.template:
+        src: templates/armbian-ramlog
+        dest: /etc/default/armbian-ramlog
+        owner: root
+        group: root
+        mode: '0600'
+    - name: /var/lib/.kopiaignore
+      ansible.builtin.template:
+        src: templates/var-lib-kopiaignore
+        dest: /var/lib/.kopiaignore
+        owner: root
+        group: root
+        mode: '0600'
+    - name: /etc/systemd/journald.conf
+      ansible.builtin.template:
+        src: templates/journald.conf
+        dest: /etc/systemd/journald.conf
+        owner: root
+        group: root
+        mode: '0600'
+      register: journald_file
+    - name: Apply journald configuration
+      ansible.builtin.systemd:
+        name: systemd-journald
+        state: restarted
+      when: journald_file.changed
+    - name: /root/.config/kopia/repository.config
+      ansible.builtin.template:
+        src: templates/kopia-repository.config
+        dest: /root/.config/kopia/repository.config
+        owner: root
+        group: root
+        mode: '0600'
+    - name: /mnt/backups/kopia-system/repository.config.f
+      ansible.builtin.stat:
+        path: /mnt/backups/kopia-system/repository.config.f
+      register: repository_config_f
+    - name: Initialize kopia repository
+      ansible.builtin.command: kopia repository create from-config --config-file /root/.config/kopia/repository.config --password {{ hostvars[inventory_hostname].kopia_pass }}
+      when: not repository_config_f.stat.exists
+    - name: Connect kopia repository
+      ansible.builtin.command: kopia repository connect from-config --file /root/.config/kopia/repository.config --password {{ hostvars[inventory_hostname].kopia_pass }}
+    

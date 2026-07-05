@@ -1,0 +1,10 @@
+---
+- name: Install custom tools on single node
+  hosts: yig32
+  tasks:
+    - name: k0s backup cron
+      ansible.builtin.cron:
+        minute: "11"
+        hour: ansible.builtin.expr("{{ hostvars[inventory_hostname].maint_hour }}")
+        job: "/usr/local/bin/k0s backup --save-path /mnt/backups/k0s"
+        user: root

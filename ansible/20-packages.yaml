@@ -1,0 +1,40 @@
+---
+hosts: yig
+tasks:
+  - name: apt repo key - zerotier
+    ansible.builtin.apt_key:
+      url: https://raw.githubusercontent.com/zerotier/ZeroTierOne/main/doc/contact%40zerotier.com.gpg
+      state: present
+  - name: apt repo key - kopia
+    ansible.builtin.apt_key:
+      url: https://kopia.io/signing-key
+      state: present
+  - name: apt repo - kopia
+    ansible.builtin.apt_repository:
+      repo: "deb https://packages.kopia.io/apt/ stable main"
+  - name: apt upgrade
+    ansible.builtin.apt:
+      update_cache: yes
+      upgrade: dist
+      autoremove: yes
+      autoclean: yes
+      state: latest
+  - name: apt install
+    ansible.builtin.apt:
+      state: present
+      name:
+        - ncdu
+        - jq  # sen script
+        - htop
+        - jnettop
+        - pipx
+        - kopia
+        - open-iscsi  # longhorn
+        - lm-sensors  # sen script, exporters
+        - net-tools
+        - netcat-openbsd
+        - nvme-cli
+        - lvm2  # host storage
+        - bridge-utils
+        - tcpdump
+        - nftables

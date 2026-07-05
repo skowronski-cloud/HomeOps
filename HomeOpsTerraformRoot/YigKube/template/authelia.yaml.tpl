@@ -113,6 +113,10 @@ configMap:
         policy: bypass
       - domain: "vm-auth.${ingress_domain}"
         policy: bypass
+      - domain: "ggwd.${ingress_domain}"
+        policy: bypass
+      - domain: "ggwd-cache.${ingress_domain}"
+        policy: bypass
 
       # last rule is catch-all
       - domain: "*.${ingress_domain}"

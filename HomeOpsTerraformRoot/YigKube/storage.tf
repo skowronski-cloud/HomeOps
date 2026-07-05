@@ -32,7 +32,20 @@ resource "kubernetes_storage_class" "longhorn_single" {
     replicaAutoBalance = "best-effort"
   }
 }
-
+resource "kubernetes_storage_class" "longhorn_single_strict" {
+  # this storage class uses Longhorn with a single replica for workloads that implement their own redundancy like sharding
+  # https://longhorn.io/docs/1.10.0/references/storage-class-parameters
+  storage_provisioner = "driver.longhorn.io"
+  metadata {
+    name = "longhorn-single-strict"
+  }
+  parameters = {
+    numberOfReplicas = "1"
+    dataLocality     = "strict-local"
+    replicaAutoBalance = "best-effort"
+    staleReplicaTimeout = "30"
+  }
+}
 resource "kubernetes_network_policy" "longhorn_frontend" { 
   
   metadata {
