@@ -1,0 +1,78 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: common-monitoring-kubernetes
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- with .Values.promLabels }}
+    {{ toYaml . }}
+    {{- end }}
+spec:
+  groups:
+    - name: Kubernetes System
+      rules:
+        - alert: RunawayMetricsServerCPU
+          expr: sum(rate(container_cpu_usage_seconds_total{namespace="kube-system",pod=~"metrics-server.*"}[5m])) > 0.5
+          for: 15m
+          labels:
+            severity: critical
+            monitor_svc: kube_system
+          annotations:
+            summary: "Runaway Metrics Server - cluster meltdown imminent"
+            description: "Metrics Server is hogging CPU resources. This is very likely caused by k0s incorrectly discovering IP address (link-local assigned somewhere) and eveyerything gets stuck horribly self-amplifying. Immediate action is required to prevent cluster meltdown."
+        - alert: LonghornVolumeFaulted
+          expr: longhorn_volume_robustness == 3
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Longhorn volume faulted"
+            description: >
+              Volume {{`{{ $labels.volume }}`}} (PVC {{`{{ $labels.pvc }}`}}) is faulted.
+        - alert: LonghornVolumeDegraded
+          expr: longhorn_volume_robustness == 2
+          for: 30m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Longhorn volume degraded"
+            description: >
+              Volume {{`{{ $labels.volume }}`}} (PVC {{`{{ $labels.pvc }}`}}) has been degraded for more than 30 minutes.
+        - alert: LonghornVolumeUnknown
+          expr: longhorn_volume_robustness == 0
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Longhorn volume state unknown"
+            description: >
+              Volume {{`{{ $labels.volume }}`}} (PVC {{`{{ $labels.pvc }}`}}) has unknown robustness.
+        - alert: LonghornVolumeDetachedUnexpectedly
+          expr: longhorn_volume_state == 3
+          for: 30m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Longhorn volume detached"
+            description: >
+              Volume {{`{{ $labels.volume }}`}} (PVC {{`{{ $labels.pvc }}`}}) has been detached for more than 30 minutes.
+        - alert: RunawayLoadNode
+          expr: node_load15{container="node-exporter"} > 12
+          for: 60m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Runaway Load on node {{`{{ $labels.instance }}`}}"
+            description: >
+              Node {{`{{ $labels.instance }}`}} has been experiencing high load (1.5x full) for more than 60 minutes.
+        - alert: RunawayLoadTotal
+          expr: sum(node_load15{container="node-exporter"})>24
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Runaway Load on all nodes is over 100% - cluster meltdown imminent"
+            description: >
+              All nodes have been experiencing high load for more than 15 minutes. It's very likely that all nodes will die soon. Immediate action is required to prevent cluster meltdown!
+# TODO: alert for pod stuck in loop or dead or orange
