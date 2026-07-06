@@ -64,4 +64,6 @@ resource "helm_release" "postgres_ha" {
     })
   ]
   depends_on = [kubernetes_namespace.ns, kubernetes_secret.postgres_ha_credentials]
+
+  timeout = 900
 }

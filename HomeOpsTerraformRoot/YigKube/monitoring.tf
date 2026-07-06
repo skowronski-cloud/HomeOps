@@ -31,7 +31,7 @@ resource "helm_release" "promstack" {
 }
 resource "helm_release" "blackbox" {
   # https://artifacthub.io/packages/helm/prometheus-community/prometheus-blackbox-exporter
-  repository = "https://prometheus-community.github.io/helm-charts"
+  repository = "oci://ghcr.io/prometheus-community/charts"
   chart      = "prometheus-blackbox-exporter"
   version    = var.ver_helm_blackbox
 

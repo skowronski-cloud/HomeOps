@@ -28,6 +28,10 @@ postgresql:
       memory: 512Mi
       cpu: 200m
     limits: {}
+  readinessProbe:
+    failureThreshold: 600
+  livenessProbe:
+    failureThreshold: 600
 pgpool:
   image:
     repository: bitnamilegacy/pgpool  # BUG: FUCK BROADCOM

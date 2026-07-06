@@ -1,7 +1,7 @@
 # TODO: some automation to pull latest versions of var_helm
 variable "ver_helm_traefik" {
   # https://artifacthub.io/packages/helm/traefik/traefik
-  default = "36.3.0"
+  default = "41.0.1"
   type    = string
 }
 variable "ver_helm_authelia" {
@@ -15,48 +15,47 @@ variable "ver_helm_authelia" {
 }
 variable "ver_helm_k8sr" {
   # https://artifacthub.io/packages/helm/deliveryhero/k8s-resources
-  default = "0.8.1"
+  default = "0.8.2"
   type    = string
 }
 variable "ver_helm_metallb" {
   # https://artifacthub.io/packages/helm/metallb/metallb
-  default = "0.15.2"
+  default = "0.16.1"
   type    = string
 }
 variable "ver_helm_longhorn" {
   # https://artifacthub.io/packages/helm/longhorn/longhorn
-  #default = "1.11.2"
-  default = "1.10.2"
+  default = "1.12.0"
   type    = string
 }
 variable "ver_helm_matter" {
   # https://artifacthub.io/packages/helm/charts-derwitt-dev/home-assistant-matter-server
-  default = "4.1.5"
+  default = "4.1.24"
   type    = string
 }
 variable "ver_helm_ha" {
   # https://artifacthub.io/packages/helm/helm-hass/home-assistant
-  default = "0.3.55"
+  default = "0.3.69"
   type    = string
 }
 variable "ver_app_ha" {
   # https://github.com/home-assistant/core/releases
-  default = "2026.4.3"
+  default = "2026.7.1"
   type    = string
 }
 variable "ver_helm_postgresha" {
   # https://artifacthub.io/packages/helm/bitnami/postgresql-ha
-  default = "16.0.22"
+  default = "16.3.2"
   type    = string
 }
 variable "ver_helm_certmanager" {
   # https://artifacthub.io/packages/helm/cert-manager/cert-manager
-  default = "v1.18.1"
+  default = "v1.20.3"
   type    = string
 }
 variable "ver_helm_certmanagercrds" {
   # https://artifacthub.io/packages/helm/wiremind/cert-manager-crds?modal=install
-  default = "1.18.1"
+  default = "1.20.0"
   type    = string
 }
 variable "ver_helm_infrahub" {
@@ -66,28 +65,23 @@ variable "ver_helm_infrahub" {
 }
 variable "ver_helm_promstack" {
   # https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack
-  default = "77.0.0" # "75.7.0"
-  type    = string
-}
-variable "ver_helm_redis" {
-  # https://artifacthub.io/packages/helm/bitnami/redis
-  default = "21.2.6"
+  default = "87.10.1"
   type    = string
 }
 
 variable "ver_helm_blackbox" {
   # https://artifacthub.io/packages/helm/prometheus-community/prometheus-blackbox-exporter
-  default = "11.0.0"
+  default = "11.15.1"
   type    = string
 }
 variable "ver_helm_fluxoperator" {
   # https://artifacthub.io/packages/helm/flux-operator/flux-operator
-  default = "0.23.0"
+  default = "0.53.0"
   type    = string
 }
 variable "ver_helm_fluxinstance" {
   # https://artifacthub.io/packages/helm/flux-instance/flux-instance
-  default = "0.23.0"
+  default = "0.53.0"
   type    = string
 }
 variable "ver_helm_velero" {
@@ -102,17 +96,17 @@ variable "ver_docker_velero_aws" {
 }
 variable "ver_helm_snapshot_controller" {
   # https://github.com/piraeusdatastore/helm-charts/tree/main/charts/snapshot-controller
-  default = "4.1.0"
+  default = "5.1.1"
   type    = string
 }
 variable "ver_helm_mktxp" {
   # https://artifacthub.io/packages/helm/obeone/mktxp
-  default = "1.1.7"
+  default = "1.1.10"
   type    = string
 }
 variable "ver_docker_mktxp" {
   # https://github.com/akpw/mktxp/releases
-  default = "1.2.15"
+  default = "1.2.18"
   type    = string
 }
 variable "ver_helm_cadvisor" {
@@ -127,7 +121,7 @@ variable "ver_helm_kepler" {
 }
 variable "ver_helm_helmexporter" {
   # https://artifacthub.io/packages/helm/sstarcher/helm-exporter
-  default = "1.2.16+77ad21d"
+  default = "1.3.0+109c2ba"
   type    = string
 }
 variable "ver_helm_multus" {
@@ -142,17 +136,17 @@ variable "ver_helm_whereabouts" {
 }
 variable "ver_helm_emqx" {
   # https://artifacthub.io/packages/helm/emqx-operator/emqx
-  default = "5.8.8"
+  default = "5.8.9"
   type    = string
 }
 variable "ver_helm_kyverno" {
   # https://artifacthub.io/packages/helm/kyverno/kyverno
-  default = "3.5.2"
+  default = "3.8.1"
   type    = string
 }
 variable "ver_helm_kyverno_policy_reporter" {
   # https://artifacthub.io/packages/helm/policy-reporter/policy-reporter
-  default = "3.5.0"
+  default = "3.7.4"
   type    = string
 }
 variable "ver_helm_kyverno_policies" {
@@ -160,48 +154,33 @@ variable "ver_helm_kyverno_policies" {
   default = "3.5.2"
   type    = string
 }
-variable "ver_helm_opensearch" {
-  # https://artifacthub.io/packages/helm/opensearch-project-helm-charts/opensearch
-  default = "3.4.0"
-  type = string
-}
-variable "var_helm_opensearch_reloader" {
-  # https://artifacthub.io/packages/helm/stakater/reloader
-  default = "2.2.7"
-  type = string
-}
-variable "ver_helm_fluentbit" {
-  # https://artifacthub.io/packages/helm/fluent/fluent-bit
-  default = "0.54.0"
-  type = string
-}
 variable "ver_helm_homepage" { 
   # https://artifacthub.io/packages/helm/m0nsterrr-homepage/homepage
-  default = "4.2.0"
+  default = "4.13.0"
   type = string
 }
 variable "ver_helm_vm_stack" {
   # https://artifacthub.io/packages/helm/victoriametrics/victoria-metrics-k8s-stack
-  default = "0.63.6"
+  default = "0.85.10"
   type = string
 }
 variable "ver_helm_vm_crd" {
   # https://artifacthub.io/packages/helm/victoriametrics/victoria-metrics-operator-crds
-  default = "0.6.0"
+  default = "0.12.0"
   type = string
 }
 variable "ver_helm_netbox" {
   # https://artifacthub.io/packages/helm/netbox/netbox
-  default = "7.4.7"
+  default = "8.3.30"
   type = string
 }
 variable "ver_docker_netbox_custom" {
   # https://github.com/danielskowronski/custom-netbox-docker-with-plugins/releases
-  default = "v4.5.2-20260210194254"
+  default = "v4.6.4"
   type    = string
 }
-variable "var_helm_podinfo" {
+variable "ver_helm_podinfo" {
   # https://artifacthub.io/packages/helm/podinfo/podinfo
-  default = "6.11.2"
+  default = "6.14.0"
   type = string
 }

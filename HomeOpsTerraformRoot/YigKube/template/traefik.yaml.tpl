@@ -1,8 +1,7 @@
 ---
 # https://artifacthub.io/packages/helm/traefik/traefik?modal=values
-logs:
-  general:
-    level: INFO
+log:
+  level: INFO
 providers:
   kubernetesCRD:
     allowExternalNameServices: true
@@ -79,14 +78,16 @@ ingressRoute:
 
 ports:
   websecure:
-    middlewares:
-      - "traefik-system-forwardauth-authelia@kubernetescrd"
+    http:
+      middlewares:
+        - "traefik-system-forwardauth-authelia@kubernetescrd"
   web:
-    redirections:
-      entryPoint:
-        to: websecure
-        scheme: https
-        permanent: true
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
   http-bypass:
     port: 9090
     exposedPort: 8080

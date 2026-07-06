@@ -51,10 +51,10 @@ ingress:
 
 resources:
   requests:
-    cpu: 2
+    cpu: 250m
     memory: 1024Mi
   limits:
-    cpu: 99
+    cpu: 1000m
     memory: 4096Mi
 
 plugins:
@@ -78,3 +78,5 @@ postgresql:
     postgresql:
       auth:
         password: ${ postgres_password }
+worker:
+  enabled: false

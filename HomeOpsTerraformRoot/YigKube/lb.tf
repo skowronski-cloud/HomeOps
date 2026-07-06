@@ -32,6 +32,7 @@ resource "helm_release" "metallb_resources" {
 resource "helm_release" "podinfo" {
   # https://artifacthub.io/packages/helm/podinfo/podinfo
   repository = "oci://ghcr.io/stefanprodan/charts"
+  version    = var.ver_helm_podinfo
   chart = "podinfo"
   name = "podinfo"
   namespace = "metallb"
