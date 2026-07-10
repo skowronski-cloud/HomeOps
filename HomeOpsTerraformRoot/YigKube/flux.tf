@@ -32,6 +32,7 @@ resource "helm_release" "flux_operator" {
 
   name      = "flux-operator"
   namespace = "flux-system"
+  description = "Global Flux Operator for HomeFlux AHID=flux-operator/flux-operator"
 
 
   depends_on = [kubernetes_namespace.ns]
@@ -45,6 +46,7 @@ resource "helm_release" "flux_instance_homeflux" {
 
   name      = "flux-instance-homeflux"
   namespace = "flux-system"
+  description = "Global Flux Instance for HomeFlux AHID=flux-instance/flux-instance"
 
   set = [
     {

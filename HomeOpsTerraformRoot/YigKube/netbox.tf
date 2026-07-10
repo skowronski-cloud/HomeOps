@@ -30,9 +30,11 @@ resource "helm_release" "netbox" {
   # https://artifacthub.io/packages/helm/netbox/netbox
   repository = "oci://ghcr.io/netbox-community/netbox-chart/"
   chart      = "netbox"
-  name       = "netbox"
   version    = var.ver_helm_netbox
+
+  name       = "netbox"
   namespace  = "netbox"
+  description = "NetBox for IPAM and DCIM AHID=netbox/netbox"
 
   values = [templatefile("${path.module}/template/netbox_values.yaml.tpl", {
     ver_docker_netbox_custom = var.ver_docker_netbox_custom

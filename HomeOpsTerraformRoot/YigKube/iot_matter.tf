@@ -6,6 +6,8 @@ resource "helm_release" "matter" {
 
   name      = "home-assistant-matter-server"
   namespace = "home-assistant"
+  description = "Home Assistant Matter Server AHID=charts-derwitt-dev/home-assistant-matter-server"
+
   set = [
     {
       name  = "service.type"

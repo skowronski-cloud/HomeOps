@@ -11,10 +11,12 @@ resource "kubernetes_secret" "velero_synology_minio" {
 resource "helm_release" "velero" {
   # https://artifacthub.io/packages/helm/vmware-tanzu/velero
   chart      = "velero"
-  name       = "velero"
   repository = "https://vmware-tanzu.github.io/helm-charts/"
   version    = var.ver_helm_velero
+
+  name       = "velero"
   namespace  = "velero"
+  description = "Velero Backup and Restore AHID=vmware-tanzu/velero"
 
   values = [
     templatefile("${path.module}/template/velero_values.yaml.tpl", {
@@ -28,10 +30,12 @@ resource "helm_release" "velero" {
 resource "helm_release" "external_snapshot_controller" {
   # https://github.com/piraeusdatastore/helm-charts/tree/main/charts/snapshot-controller
   chart      = "snapshot-controller"
-  name       = "snapshot-controller"
   repository = "https://piraeus.io/helm-charts/"
   version    = var.ver_helm_snapshot_controller
+
+  name       = "snapshot-controller"
   namespace  = "velero"
+  description = "External Snapshot Controller for Velero AHID=piraeus-charts/snapshot-controller"
 
   depends_on = [kubernetes_namespace.ns]
 }

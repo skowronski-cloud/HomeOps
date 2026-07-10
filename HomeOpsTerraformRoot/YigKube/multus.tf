@@ -8,6 +8,7 @@ resource "helm_release" "whereabouts" {
 
   name      = "whereabouts"
   namespace = "multus-system"
+  description = "Whereabouts IPAM used primarily by Multus CNI for Longhorn AHID=bitnami/whereabouts"
 
   set = [ 
     {
@@ -31,6 +32,7 @@ resource "helm_release" "multus" {
 
   name      = "multus-cni"
   namespace = "multus-system"
+  description = "Multus CNI used primarily by Longhorn AHID=bitnami/multus-cni"
 
   set = [ 
     {

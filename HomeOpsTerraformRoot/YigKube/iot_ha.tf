@@ -6,6 +6,7 @@ resource "helm_release" "home_assistant" {
 
   name      = "home-assistant"
   namespace = "home-assistant"
+  description = "Home Assistant AHID=helm-hass/home-assistant"
 
   set = [
     {

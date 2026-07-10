@@ -23,6 +23,7 @@ resource "helm_release" "traefik" {
 
   name      = "traefik"
   namespace = "traefik-system"
+  description = "Traefik Ingress Controller AHID=traefik/traefik"
 
   values = [templatefile("${path.module}/template/traefik.yaml.tpl", {
     ca_crt_secret         = kubernetes_secret.ca_crt["traefik-system"].metadata[0].name,
@@ -55,12 +56,11 @@ resource "helm_release" "echo" {
   # https://artifacthub.io/packages/helm/ealenn/echo-server
   repository = "https://ealenn.github.io/charts"
   chart      = "echo-server"
+  
+
   name       = "echo-server"
   namespace  = "default"
-
-
-
-
+  description = "Test echo server AHID=ealenn/echo-server"
 
   set = [
     {
@@ -132,6 +132,7 @@ resource "helm_release" "homepage" {
 
   name      = "homepage"
   namespace = "traefik-system"
+  description = "Homepage landing site AHID=m0nsterrr-homepage/homepage"
 
   values = [templatefile("${path.module}/template/homepage.yaml.tpl", {
     ingress_domain = var.ingress_domain

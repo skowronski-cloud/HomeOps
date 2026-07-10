@@ -7,6 +7,7 @@ resource "helm_release" "vm_crd" {
 
   name      = "vm-crd"
   namespace = "vm"
+  description = "Victoria Metrics Operator CRDs AHID=victoriametrics/victoria-metrics-operator-crds"
 }
 resource "helm_release" "vm_stack" {
   # https://docs.victoriametrics.com/helm/victoria-metrics-k8s-stack/
@@ -17,6 +18,7 @@ resource "helm_release" "vm_stack" {
 
   name      = "vm"
   namespace = "vm"
+  description = "Victoria Metrics Stack AHID=victoriametrics/victoria-metrics-k8s-stack"
 
   values = [
     templatefile("${path.module}/template/vm/stack.yaml.tpl", {

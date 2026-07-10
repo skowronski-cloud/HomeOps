@@ -7,6 +7,7 @@ resource "helm_release" "longhorn" {
 
   name      = "longhorn"
   namespace = "longhorn-system"
+  description = "Longhorn storage provider AHID=longhorn/longhorn"
 
   # TODO: default backup store - https://artifacthub.io/packages/helm/longhorn/longhorn#other-settings
 

@@ -55,6 +55,7 @@ resource "helm_release" "postgres_ha" {
 
   name      = var.ha_postgres_instance_name
   namespace = "home-assistant"
+  description = "PostgreSQL HA for Home Assistant AHID=bitnami/postgresql-ha"
 
   values = [
     templatefile("${path.module}/template/iot/home_assistant_postgres.yaml.tpl", {

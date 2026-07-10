@@ -6,10 +6,9 @@ resource "helm_release" "metallb" {
 
   name      = "metallb"
   namespace = "metallb"
+  description = "MetalLB LoadBalancer for Kubernetes AHID=metallb/metallb"
 
   depends_on = [kubernetes_namespace.ns]
-
-
 }
 
 resource "helm_release" "metallb_resources" {
@@ -20,7 +19,6 @@ resource "helm_release" "metallb_resources" {
 
   name      = "metallb-resources"
   namespace = "metallb"
-
 
   values = [templatefile("${path.module}/template/metallb_resources.yaml.tpl", {
     metallb_ipam           = var.metallb_ipam
@@ -34,8 +32,10 @@ resource "helm_release" "podinfo" {
   repository = "oci://ghcr.io/stefanprodan/charts"
   version    = var.ver_helm_podinfo
   chart = "podinfo"
+
   name = "podinfo"
   namespace = "metallb"
+  description = "Podinfo test app for MetalLB AHID=podinfo/podinfo"
   
   set  = [
     {

@@ -8,6 +8,7 @@ resource "helm_release" "kyverno" {
 
   name      = "kyverno"
   namespace = "kyverno-system"
+  description = "Kyverno Policy Engine for Kubernetes AHID=kyverno/kyverno"
 
 
   values = [
@@ -27,7 +28,7 @@ resource "helm_release" "kyverno_policy_reporter" {
 
   name      = "kyverno-policy-reporter"
   namespace = "kyverno-system"
-
+  description = "Kyverno Policy Reporter for Kubernetes AHID=policy-reporter/policy-reporter"
 
   values = [
     templatefile("${path.module}/template/kyverno_policy_reporter.yaml.tpl", {
@@ -46,6 +47,7 @@ resource "helm_release" "kyverno_policies" {
 
   name      = "kyverno-policies"
   namespace = "kyverno-system"
+  description = "Kyverno Policies for Kubernetes AHID=kyverno/kyverno-policies"
 
 
   values = [

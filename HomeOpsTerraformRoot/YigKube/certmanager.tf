@@ -23,6 +23,7 @@ resource "helm_release" "certmanager_crds" {
 
   name      = "cert-manager-crds"
   namespace = "traefik-system"
+  description = "Global CertManager CRDs AHID=wiremind/cert-manager-crds"
 
   depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
 }
@@ -35,6 +36,7 @@ resource "helm_release" "certmanager" {
 
   name      = "cert-manager"
   namespace = "traefik-system"
+  description = "Global CertManager AHID=cert-manager/cert-manager"
 
   depends_on = [helm_release.longhorn, kubernetes_namespace.ns, helm_release.certmanager_crds]
 }

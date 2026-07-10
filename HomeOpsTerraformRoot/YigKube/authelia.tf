@@ -109,6 +109,7 @@ resource "helm_release" "authelia" {
 
   name      = "authelia"
   namespace = "traefik-system"
+  description = "Authelia Identity Provider for Traefik AHID=authelia/authelia"
 
   values = [
     templatefile("${path.module}/template/authelia.yaml.tpl", {

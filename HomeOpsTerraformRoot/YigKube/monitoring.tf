@@ -14,6 +14,7 @@ resource "helm_release" "promstack" {
 
   name      = "kube-prometheus-stack"
   namespace = "monitoring-system"
+  description = "Prometheus Stack for Kubernetes AHID=prometheus-community/kube-prometheus-stack"
 
   values = [templatefile("${path.module}/template/promstack.yaml.tpl", {
     grafana_admin_pass = random_password.promstack_grafana_pass.result
@@ -37,6 +38,7 @@ resource "helm_release" "blackbox" {
 
   name      = "prometheus-blackbox-exporter"
   namespace = "monitoring-system"
+  description = "Prometheus Blackbox Exporter AHID=prometheus-community/prometheus-blackbox-exporter"
 
   values = [templatefile("${path.module}/template/blackbox.yaml.tpl", {
     grafana_admin_pass = random_password.promstack_grafana_pass.result
@@ -54,6 +56,7 @@ resource "helm_release" "mktxp" {
 
   name      = "mktxp"
   namespace = "monitoring-system"
+  description = "MikroTik Exporter for Prometheus AHID=obeone/mktxp"
 
   values = [templatefile("${path.module}/template/mktxp.yaml.tpl", {
     ingress_domain                = var.ingress_domain
@@ -108,6 +111,7 @@ resource "helm_release" "kepler" {
 
   name      = "kepler"
   namespace = "monitoring-system"
+  description = "Kepler Energy Efficiency Monitoring AHID=kepler/kepler"
 
   set = [
     {
@@ -131,6 +135,7 @@ resource "helm_release" "helm_exporter" {
 
   name      = "helm-exporter"
   namespace = "monitoring-system"
+  description = "Helm Exporter for Prometheus AHID=sstarcher/helm-exporter"
 
   values = [templatefile("${path.module}/template/helmexporter.yaml.tpl", {
     metrics_label_release = helm_release.promstack.name

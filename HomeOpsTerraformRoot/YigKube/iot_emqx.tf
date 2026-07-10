@@ -27,6 +27,7 @@ resource "helm_release" "iot_emqx" {
 
   name      = "emqx"
   namespace = "home-assistant"
+  description = "EMQX MQTT Broker for IoT AHID=emqx-operator/emqx"
 
   values = [templatefile("${path.module}/template/iot/emqx.yaml.tpl", {
     mqtt_accounts           = var.mqtt_accounts
