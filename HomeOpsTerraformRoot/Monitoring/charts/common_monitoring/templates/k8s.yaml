@@ -12,6 +12,22 @@ spec:
   groups:
     - name: Kubernetes System
       rules:
+        - alert: RunawaySnapshotsPerVolume
+          expr: count by (volume) (longhorn_snapshot_actual_size_bytes) > 100
+          labels:
+            severity: critical
+            monitor_svc: longhorn
+          annotations:
+            summary: "Runaway Snapshots per Volume"
+            description: "Volume {{`{{ $labels.volume }}`}} has more than 100 snapshots. This is very likely caused by a loop. Immediate action is required to prevent Longhorn stalling."
+        - alert: RunawaySnapshotsGlobal
+          expr: count(longhorn_snapshot_actual_size_bytes) > 1000
+          labels:
+            severity: critical
+            monitor_svc: longhorn
+          annotations:
+            summary: "Runaway Snapshots Total"
+            description: "There are more than 1000 snapshots in total. This is very likely caused by a loop. Immediate action is required to prevent Longhorn stalling."
         - alert: RunawayMetricsServerCPU
           expr: sum(rate(container_cpu_usage_seconds_total{namespace="kube-system",pod=~"metrics-server.*"}[5m])) > 0.5
           for: 15m
@@ -22,41 +38,32 @@ spec:
             summary: "Runaway Metrics Server - cluster meltdown imminent"
             description: "Metrics Server is hogging CPU resources. This is very likely caused by k0s incorrectly discovering IP address (link-local assigned somewhere) and eveyerything gets stuck horribly self-amplifying. Immediate action is required to prevent cluster meltdown."
         - alert: LonghornVolumeFaulted
-          expr: longhorn_volume_robustness == 3
+          expr: longhorn_volume_robustness{state="faulted"}==1
           for: 5m
           labels:
             severity: critical
           annotations:
             summary: "Longhorn volume faulted"
             description: >
-              Volume {{`{{ $labels.volume }}`}} (PVC {{`{{ $labels.pvc }}`}}) is faulted.
+              Volume {{`{{ $labels.volume }}`}} on node {{`{{ $labels.node }}`}} (PVC {{`{{ $labels.pvc_namespace }}`}}/{{`{{ $labels.pvc }}`}}) is faulted.
         - alert: LonghornVolumeDegraded
-          expr: longhorn_volume_robustness == 2
+          expr: longhorn_volume_robustness{state="degraded"}==1
           for: 30m
           labels:
             severity: critical
           annotations:
             summary: "Longhorn volume degraded"
             description: >
-              Volume {{`{{ $labels.volume }}`}} (PVC {{`{{ $labels.pvc }}`}}) has been degraded for more than 30 minutes.
+              Volume {{`{{ $labels.volume }}`}} on node {{`{{ $labels.node }}`}} (PVC {{`{{ $labels.pvc_namespace }}`}}/{{`{{ $labels.pvc }}`}}) has been degraded for more than 30 minutes.
         - alert: LonghornVolumeUnknown
-          expr: longhorn_volume_robustness == 0
+          expr: longhorn_volume_robustness{state="unknown"}==1
           for: 15m
           labels:
             severity: critical
           annotations:
             summary: "Longhorn volume state unknown"
             description: >
-              Volume {{`{{ $labels.volume }}`}} (PVC {{`{{ $labels.pvc }}`}}) has unknown robustness.
-        - alert: LonghornVolumeDetachedUnexpectedly
-          expr: longhorn_volume_state == 3
-          for: 30m
-          labels:
-            severity: critical
-          annotations:
-            summary: "Longhorn volume detached"
-            description: >
-              Volume {{`{{ $labels.volume }}`}} (PVC {{`{{ $labels.pvc }}`}}) has been detached for more than 30 minutes.
+              Volume {{`{{ $labels.volume }}`}} on node {{`{{ $labels.node }}`}} (PVC {{`{{ $labels.pvc_namespace }}`}}/{{`{{ $labels.pvc }}`}}) has unknown robustness.
         - alert: RunawayLoadNode
           expr: node_load15{container="node-exporter"} > 12
           for: 60m

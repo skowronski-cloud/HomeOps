@@ -28,8 +28,8 @@ ha:
   noEntitiesFor: 30m
   qingping:
     sensorCount: 4
-    CO2NotReportingFor: 2h
-    noEntitiesFor: 2h
+    CO2NotReportingFor: 1h
+    noEntitiesFor: 1h
   ups:
     batteryThreshold: 95
   rtl_tfa:

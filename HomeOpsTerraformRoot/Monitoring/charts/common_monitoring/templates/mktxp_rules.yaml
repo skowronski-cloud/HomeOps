@@ -12,6 +12,14 @@ spec:
   groups:
     - name: Mikrotik
       rules:
+        - alert: MikrotikMemoryUsageHigh
+          expr: mktxp_system_free_memory < 32*1024*1024
+          for: 5m
+          labels:
+            severity: critical
+            monitor_svc: {{ $.Values.mikrotik.monitorSvc }}
+          annotations:
+            summary: "Less than 32MB free memory on Mikrotik"
         - alert: MikrotikLatencyToAnycastHigh
           expr: mktxp_netwatch_icmp_rtt_avg_ms{name=~".*1\\.1\\.1\\.1.*"} > {{ .Values.mikrotik.latencyWarningAnycast.threshold }}
           for: {{ .Values.mikrotik.latencyWarningAnycast.for }}

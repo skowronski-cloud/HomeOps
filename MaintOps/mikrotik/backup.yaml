@@ -1,0 +1,7 @@
+---
+- name: RouterOS Upgrade
+  hosts: mikrotik
+  gather_facts: false
+  tasks:
+    - name: Perform backup
+      import_tasks: lib/perform_backup.yaml
