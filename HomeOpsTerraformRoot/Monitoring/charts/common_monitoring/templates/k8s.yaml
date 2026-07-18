@@ -13,18 +13,18 @@ spec:
     - name: Kubernetes System
       rules:
         - alert: RunawaySnapshotsPerVolume
-          expr: count by (volume) (longhorn_snapshot_actual_size_bytes) > 100
+          expr: count by (volume) (longhorn_snapshot_actual_size_bytes) > 64
           labels:
             severity: critical
-            monitor_svc: longhorn
+            monitor_svc: kube_storage
           annotations:
             summary: "Runaway Snapshots per Volume"
-            description: "Volume {{`{{ $labels.volume }}`}} has more than 100 snapshots. This is very likely caused by a loop. Immediate action is required to prevent Longhorn stalling."
+            description: "Volume {{`{{ $labels.volume }}`}} has more than 64 snapshots. This is very likely caused by a loop. Immediate action is required to prevent Longhorn stalling."
         - alert: RunawaySnapshotsGlobal
           expr: count(longhorn_snapshot_actual_size_bytes) > 1000
           labels:
             severity: critical
-            monitor_svc: longhorn
+            monitor_svc: kube_storage
           annotations:
             summary: "Runaway Snapshots Total"
             description: "There are more than 1000 snapshots in total. This is very likely caused by a loop. Immediate action is required to prevent Longhorn stalling."
@@ -41,6 +41,7 @@ spec:
           expr: longhorn_volume_robustness{state="faulted"}==1
           for: 5m
           labels:
+            monitor_svc: kube_storage
             severity: critical
           annotations:
             summary: "Longhorn volume faulted"
@@ -50,6 +51,7 @@ spec:
           expr: longhorn_volume_robustness{state="degraded"}==1
           for: 30m
           labels:
+            monitor_svc: kube_storage
             severity: critical
           annotations:
             summary: "Longhorn volume degraded"
@@ -59,6 +61,7 @@ spec:
           expr: longhorn_volume_robustness{state="unknown"}==1
           for: 15m
           labels:
+            monitor_svc: kube_storage
             severity: critical
           annotations:
             summary: "Longhorn volume state unknown"
@@ -68,6 +71,7 @@ spec:
           expr: node_load15{container="node-exporter"} > 12
           for: 60m
           labels:
+            monitor_svc: kube_system
             severity: critical
           annotations:
             summary: "Runaway Load on node {{`{{ $labels.instance }}`}}"
@@ -77,6 +81,7 @@ spec:
           expr: sum(node_load15{container="node-exporter"})>24
           for: 15m
           labels:
+            monitor_svc: kube_system
             severity: critical
           annotations:
             summary: "Runaway Load on all nodes is over 100% - cluster meltdown imminent"

@@ -24,4 +24,6 @@ filter:
       - climate.aqara_radiator_thermostat_*
       - sensor.home_draught_warning_system_wind_speed
       - sensor.ac_plug_*
+      - sensor.aqara_fp300_*
+      - sensor.home_draught_warning_system_*
 requires_auth: false

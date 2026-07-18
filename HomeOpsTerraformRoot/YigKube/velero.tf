@@ -54,8 +54,9 @@ resource "kubernetes_manifest" "longhorn_vsc" {
     driver         = "driver.longhorn.io"
     deletionPolicy = "Delete"
     parameters = {
-      type        = "bi"
-      export-type = "raw"
+      #type        = "bi"
+      type        = "snap"
+      #export-type = "raw"
     }
   }
   depends_on = [helm_release.external_snapshot_controller]
