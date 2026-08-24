@@ -75,7 +75,7 @@ grafana:
       client_id: $__file{/etc/secrets/auth_generic_oauth/client-id} 
       client_secret: $__file{/etc/secrets/auth_generic_oauth/client-secret}
       role_attribute_path: contains(groups[*], '${ingress_admin_group}') && 'Admin' || 'Viewer'
-      scopes: openid profile email groups
+      scopes: openid profile email groups offline_access
       empty_scopes: false
       allow_sign_up: true
       auto_login: false

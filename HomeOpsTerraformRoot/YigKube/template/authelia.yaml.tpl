@@ -89,7 +89,7 @@ configMap:
         name: 'authelia_session'
         inactivity: '1h'
         expiration: '1d'
-        remember_me: '7d'
+        remember_me: '28d'
   # FIXME: access_control section should be in separate config map, not managed by main helm chart
   access_control:
     rules:
@@ -189,6 +189,7 @@ configMap:
             - 'code'
           grant_types:
             - 'authorization_code'
+            - 'refresh_token'
           access_token_signed_response_alg: 'none'
           userinfo_signed_response_alg: 'none'
           token_endpoint_auth_method: 'client_secret_basic'
@@ -199,6 +200,7 @@ configMap:
             - profile
             - email
             - groups
+            - offline_access
           claims_policy: oidccp_profile_in_id_token
           redirect_uris: 
             - https://grafana.${ingress_domain}/login/generic_oauth
