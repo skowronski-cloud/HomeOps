@@ -26,4 +26,5 @@ filter:
       - sensor.ac_plug_*
       - sensor.aqara_fp300_*
       - sensor.home_draught_warning_system_*
+      - sensor.*_virtual_*_temperature
 requires_auth: false

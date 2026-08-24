@@ -12,6 +12,7 @@ module "monitoring" {
   ingress_domain         = var.yig_ingress_domain
   gatus_final_local_icmp = var.gatus_final_local_icmp
   gatus_final_local_tcp  = var.gatus_final_local_tcp
+  smarthome_rules_tooHot  = var.smarthome_rules_tooHot
 }
 
 variable "pagerduty" {
@@ -48,4 +49,9 @@ variable "yig_email_notification_addresses" {
   type = object({
     quire_yig = string
   })
+}
+
+variable "smarthome_rules_tooHot" {
+  type = any
+  default = {}
 }

@@ -1,0 +1,25 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: common-monitoring-smarthome
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- with .Values.promLabels }}
+    {{ toYaml . }}
+    {{- end }}
+spec:
+  groups:
+    - name: SmartHomeRules
+      rules:
+        {{- range .Values.smarthome.tooHot }}
+        - alert: TooHotIn{{ .name }}
+          expr: homeassistant_sensor_temperature_celsius{entity="{{ .sensor }}"}>= {{ .threshold }}
+          for: {{ .for }}
+          labels:
+            severity: {{ .severity }}
+            monitor_svc: {{ $.Values.smarthome.monitorSvc }}
+          annotations:
+            summary: "Too hot in {{ .name }}"
+            description: "Temperature in {{ .name }} is above {{ .threshold }}°C for {{ .for }}"
+        {{- end }}

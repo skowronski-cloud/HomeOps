@@ -76,7 +76,6 @@ variable "monitoring_services" {
       pd_name        = "[k8s] Storage"
       pd_description = "Longhorn, Velero"
       prom_svc_label = "kube_storage"
-      # TODO: check Longhorn exporters and define alerts      # longhorn_volume_state,longhorn_volume_write_latency,longhorn_volume_read_latency,longhorn_node_status,longhorn_disk_status
       # TODO: check Velero exporters and define alerts        # velero_*
     },
     "ingress" = {

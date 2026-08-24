@@ -18,6 +18,7 @@ terraform {
       "${get_original_terragrunt_dir()}/../HomeOpsData/wifi.tfvars",
       "${get_original_terragrunt_dir()}/../HomeOpsData/yig.tfvars",
       "${get_original_terragrunt_dir()}/../HomeOpsData/bgp.tfvars",
+      "${get_original_terragrunt_dir()}/../HomeOpsData/monitoring.tfvars",
     ]
   }
 

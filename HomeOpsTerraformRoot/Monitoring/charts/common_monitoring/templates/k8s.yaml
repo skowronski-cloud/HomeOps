@@ -38,7 +38,7 @@ spec:
             summary: "Runaway Metrics Server - cluster meltdown imminent"
             description: "Metrics Server is hogging CPU resources. This is very likely caused by k0s incorrectly discovering IP address (link-local assigned somewhere) and eveyerything gets stuck horribly self-amplifying. Immediate action is required to prevent cluster meltdown."
         - alert: LonghornVolumeFaulted
-          expr: longhorn_volume_robustness{state="faulted"}==1
+          expr: longhorn_volume_robustness{state="faulted",pvc_namespace!="velero"}==1
           for: 5m
           labels:
             monitor_svc: kube_storage
@@ -48,7 +48,7 @@ spec:
             description: >
               Volume {{`{{ $labels.volume }}`}} on node {{`{{ $labels.node }}`}} (PVC {{`{{ $labels.pvc_namespace }}`}}/{{`{{ $labels.pvc }}`}}) is faulted.
         - alert: LonghornVolumeDegraded
-          expr: longhorn_volume_robustness{state="degraded"}==1
+          expr: longhorn_volume_robustness{state="degraded",pvc_namespace!="velero"}==1
           for: 30m
           labels:
             monitor_svc: kube_storage
@@ -58,7 +58,7 @@ spec:
             description: >
               Volume {{`{{ $labels.volume }}`}} on node {{`{{ $labels.node }}`}} (PVC {{`{{ $labels.pvc_namespace }}`}}/{{`{{ $labels.pvc }}`}}) has been degraded for more than 30 minutes.
         - alert: LonghornVolumeUnknown
-          expr: longhorn_volume_robustness{state="unknown"}==1
+          expr: longhorn_volume_robustness{state="unknown",pvc_namespace!="velero"}==1
           for: 15m
           labels:
             monitor_svc: kube_storage

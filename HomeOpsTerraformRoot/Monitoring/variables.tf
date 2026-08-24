@@ -36,3 +36,9 @@ variable "gatus_port" {
   type    = number
   default = 30001
 }
+
+
+variable "smarthome_rules_tooHot" {
+  type = any
+  default = {}
+}

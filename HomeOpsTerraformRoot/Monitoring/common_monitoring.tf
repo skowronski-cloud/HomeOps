@@ -15,6 +15,9 @@ resource "helm_release" "common_monitoring" {
     {
       "name" = "ha.rtl_tfa.sensorCount"
       "value" = 12
-    }
+    },
+  ]
+  values = [
+    yamlencode(var.smarthome_rules_tooHot)
   ]
 }
