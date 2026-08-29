@@ -13,6 +13,7 @@ resource "routeros_routing_bgp_connection" "yig_peer" {
   }
   local {
     role = "ebgp"
+    port = 179
   }
   tcp_md5_key = var.password
 }
