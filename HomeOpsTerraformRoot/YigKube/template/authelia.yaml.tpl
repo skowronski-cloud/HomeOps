@@ -165,6 +165,12 @@ configMap:
   identity_providers:
     oidc:
       enabled: true
+      lifespans:
+        custom:
+          ${oidc_grafana_client_id}:
+            access_token: '1h'
+            refresh_token: '14d'
+            id_token: '1h'
       hmac_secret: 
         secret_name: authelia-secrets
       jwks:
@@ -192,7 +198,7 @@ configMap:
             - 'refresh_token'
           access_token_signed_response_alg: 'none'
           userinfo_signed_response_alg: 'none'
-          token_endpoint_auth_method: 'client_secret_basic'
+          token_endpoint_auth_method: 'client_secret_post'
           client_secret:
             path: /secrets/oidc-grafana-client/client-secret
           scopes:
