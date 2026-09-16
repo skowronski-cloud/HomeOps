@@ -73,6 +73,13 @@ resource "kubernetes_network_policy" "home_assistant" {
           }
         }
       }
+      from {
+        namespace_selector {
+          match_labels = {
+            "kubernetes.io/metadata.name" = "vm"
+          }
+        }
+      }
 
     }
 

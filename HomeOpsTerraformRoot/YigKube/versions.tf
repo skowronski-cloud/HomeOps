@@ -161,7 +161,7 @@ variable "ver_helm_homepage" {
 }
 variable "ver_helm_vm_stack" {
   # https://artifacthub.io/packages/helm/victoriametrics/victoria-metrics-k8s-stack
-  default = "0.91.2"
+  default = "0.92.1"
   type = string
 }
 variable "ver_helm_vm_crd" {

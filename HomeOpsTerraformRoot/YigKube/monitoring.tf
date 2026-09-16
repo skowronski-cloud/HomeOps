@@ -8,6 +8,7 @@ resource "random_password" "vm_grafana_pass" {
 }
 resource "helm_release" "promstack" {
   # https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack
+  # WARNING: THIS CHART MAY NOT BE DELETED - IT PROVIDES ORIGINAL PROMETHEUS CRDS, VM CONVERTS AND SYNC THEM TO NATIVE ONES
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "kube-prometheus-stack"
   version    = var.ver_helm_promstack
@@ -127,22 +128,22 @@ resource "helm_release" "kepler" {
 
   depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
 }
-resource "helm_release" "helm_exporter" {
-  # https://artifacthub.io/packages/helm/sstarcher/helm-exporter
-  repository = "https://shanestarcher.com/helm-charts/"
-  chart      = "helm-exporter"
-  version    = var.ver_helm_helmexporter
-
-  name      = "helm-exporter"
-  namespace = "monitoring-system"
-  description = "Helm Exporter for Prometheus AHID=sstarcher/helm-exporter"
-
-  values = [templatefile("${path.module}/template/helmexporter.yaml.tpl", {
-    metrics_label_release = helm_release.promstack.name
-    ingress_domain        = var.ingress_domain
-    common_smtp           = var.common_smtp
-  })]
-
-
-  depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
-}
+#resource "helm_release" "helm_exporter" {
+#  # https://artifacthub.io/packages/helm/sstarcher/helm-exporter
+#  repository = "https://shanestarcher.com/helm-charts/"
+#  chart      = "helm-exporter"
+#  version    = var.ver_helm_helmexporter
+#
+#  name      = "helm-exporter"
+#  namespace = "monitoring-system"
+#  description = "Helm Exporter for Prometheus AHID=sstarcher/helm-exporter"
+#
+#  values = [templatefile("${path.module}/template/helmexporter.yaml.tpl", {
+#    metrics_label_release = helm_release.promstack.name
+#    ingress_domain        = var.ingress_domain
+#    common_smtp           = var.common_smtp
+#  })]
+#
+#
+#  depends_on = [helm_release.longhorn, kubernetes_namespace.ns]
+#}

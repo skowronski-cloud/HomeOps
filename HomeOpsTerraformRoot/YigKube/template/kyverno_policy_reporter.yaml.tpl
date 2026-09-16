@@ -27,6 +27,10 @@ ui:
           - namespaceSelector:
               matchLabels:
                 app.kubernetes.io/metadata.name: traefik-system
+      - from:
+          - namespaceSelector:
+              matchLabels:
+                app.kubernetes.io/metadata.name: vm
 
 
 networkPolicy:

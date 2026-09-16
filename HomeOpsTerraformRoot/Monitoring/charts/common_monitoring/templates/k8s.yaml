@@ -67,6 +67,16 @@ spec:
             summary: "Longhorn volume state unknown"
             description: >
               Volume {{`{{ $labels.volume }}`}} on node {{`{{ $labels.node }}`}} (PVC {{`{{ $labels.pvc_namespace }}`}}/{{`{{ $labels.pvc }}`}}) has unknown robustness.
+        - alert: LonghornVolumesDisappeared
+          expr: count(longhorn_volume_robustness{pvc_namespace!="velero"})<3
+          for: 15m
+          labels:
+            monitor_svc: kube_storage
+            severity: critical
+          annotations:
+            summary: "Longhorn volumes disappeared"
+            description: >
+              The number of Longhorn volumes has dropped below the expected threshold. This indicates exporter died or Longhorn is in a bad state. All monitoring of Longhorn is gone.
         - alert: RunawayLoadNode
           expr: node_load15{container="node-exporter"} > 12
           for: 60m

@@ -97,6 +97,22 @@ configMap:
         resources:
           - '/-/healthy'
         policy: bypass
+      - domain: "vm-alert.${ingress_domain}"
+        resources:
+          - '/-/healthy'
+        policy: bypass
+      - domain: "vm-alertmanager.${ingress_domain}"
+        resources:
+          - '/-/healthy'
+        policy: bypass
+      - domain: "vm-select.${ingress_domain}"
+        resources:
+          - '/-/healthy'
+        policy: bypass
+      - domain: "vm-agent.${ingress_domain}"
+        resources:
+          - '/-/healthy'
+        policy: bypass
       - domain: "emqx-dashboard.${ingress_domain}"
         resources:
           - '/api/'
@@ -210,6 +226,7 @@ configMap:
           claims_policy: oidccp_profile_in_id_token
           redirect_uris: 
             - https://grafana.${ingress_domain}/login/generic_oauth
+            - https://prom-grafana.${ingress_domain}/login/generic_oauth
         - client_id: ${oidc_netbox_client_id}
           client_name: "Yig NetBox"
           public: false

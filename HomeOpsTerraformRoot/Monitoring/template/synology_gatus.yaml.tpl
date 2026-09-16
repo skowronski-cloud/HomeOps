@@ -14,24 +14,94 @@ alerting:
   pagerduty:
     integration-key: ${ pagerduty_yf_key }
 endpoints:
-  - name: "Prometheus Final"
+
+  - name: "VM-Select Final"
     group: 00 Yig Services
     extra-labels:
       protocol: "https"
-      url: "https://prometheus.${ ingress_domain }/-/healthy"
-    url: "https://prometheus.${ ingress_domain }/-/healthy"
+      url: "https://vm-select.${ ingress_domain }/-/healthy"
+    url: "https://vm-select.${ ingress_domain }/-/healthy"
     client:
       insecure: true # certs are validated on Prometheus, ignore invalid certs here
     interval: 30s
     conditions:
       - "[STATUS] == 200"
-#      - "[BODY] == pat(*Prometheus Server is Healthy*)'"
     alerts:
       - type: pagerduty
         failure-threshold: 20 # 10 minutes
         success-threshold: 6 # 3 minutes
         send-on-resolved: true
-        description: "Prometheus ingress is down (HTTP API didn't return healthy for 10 minutes)"
+        description: "VM-Select ingress is down (HTTP API didn't return healthy for 10 minutes)"
+  - name: "VM-AlertManager Final"
+    group: 00 Yig Services
+    extra-labels:
+      protocol: "https"
+      url: "https://vm-alertmanager.${ ingress_domain }/-/healthy"
+    url: "https://vm-alertmanager.${ ingress_domain }/-/healthy"
+    client:
+      insecure: true # certs are validated on Prometheus, ignore invalid certs here
+    interval: 30s
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: pagerduty
+        failure-threshold: 20 # 10 minutes
+        success-threshold: 6 # 3 minutes
+        send-on-resolved: true
+        description: "VM-AlertManager ingress is down (HTTP API didn't return healthy for 10 minutes)"
+  - name: "VM-Alert Final"
+    group: 00 Yig Services
+    extra-labels:
+      protocol: "https"
+      url: "https://vm-alert.${ ingress_domain }/-/healthy"
+    url: "https://vm-alert.${ ingress_domain }/-/healthy"
+    client:
+      insecure: true # certs are validated on Prometheus, ignore invalid certs here
+    interval: 30s
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: pagerduty
+        failure-threshold: 20 # 10 minutes
+        success-threshold: 6 # 3 minutes
+        send-on-resolved: true
+        description: "VM-Alert ingress is down (HTTP API didn't return healthy for 10 minutes)"
+  - name: "VM-Agent Final"
+    group: 00 Yig Services
+    extra-labels:
+      protocol: "https"
+      url: "https://vm-agent.${ ingress_domain }/-/healthy"
+    url: "https://vm-agent.${ ingress_domain }/-/healthy"
+    client:
+      insecure: true # certs are validated on Prometheus, ignore invalid certs here
+    interval: 30s
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: pagerduty
+        failure-threshold: 20 # 10 minutes
+        success-threshold: 6 # 3 minutes
+        send-on-resolved: true
+        description: "VM-Agent ingress is down (HTTP API didn't return healthy for 10 minutes)"
+
+###  - name: "Prometheus Final"
+###    group: 00 Yig Services
+###    extra-labels:
+###      protocol: "https"
+###      url: "https://prometheus.${ ingress_domain }/-/healthy"
+###    url: "https://prometheus.${ ingress_domain }/-/healthy"
+###    client:
+###      insecure: true # certs are validated on Prometheus, ignore invalid certs here
+###    interval: 30s
+###    conditions:
+###      - "[STATUS] == 200"
+####      - "[BODY] == pat(*Prometheus Server is Healthy*)'"
+###    alerts:
+###      - type: pagerduty
+###        failure-threshold: 20 # 10 minutes
+###        success-threshold: 6 # 3 minutes
+###        send-on-resolved: true
+###        description: "Prometheus ingress is down (HTTP API didn't return healthy for 10 minutes)"
 %{ for name, host in gatus_final_local_icmp }
   - name: "${ name }"
     group: 10 Yig Hosts

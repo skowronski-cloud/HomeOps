@@ -17,6 +17,7 @@ CustomResources:
         s3ForcePathStyle: "true"
         s3Url: https://${synology_velero_minio.host}:${synology_velero_minio.port}
         insecureSkipTLSVerify: "true"
+        region: dummy # ref: https://github.com/velero-io/velero/issues/9963
   # https://velero.io/docs/main/api-types/schedule/
   # TODO: add labels for easdier management
   - name: daily-quick-backup

@@ -1,5 +1,5 @@
 terraform {
-  required_version = "1.15.7"
+  required_version = "1.16.2"
   required_providers {
     routeros = {
       # https://registry.terraform.io/providers/terraform-routeros/routeros/latest
@@ -10,7 +10,7 @@ terraform {
     helm = {
       # https://registry.terraform.io/providers/hashicorp/helm/latest
       source  = "hashicorp/helm"
-      version = "3.2.0"
+      version = "3.3.0"
     }
     kubernetes = {
       # https://registry.terraform.io/providers/hashicorp/kubernetes/latest

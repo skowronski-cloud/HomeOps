@@ -31,7 +31,8 @@ resource "random_password" "oidc_grafana_client_id" {
 resource "kubernetes_secret" "oidc_grafana_client" {
   for_each = { # TODO: this is clear sign that some Secret Operator is required!
     "traefik-system" : {},
-    "monitoring-system" : {}
+    "monitoring-system" : {},
+    "vm": {}
   }
   metadata {
     namespace = each.key

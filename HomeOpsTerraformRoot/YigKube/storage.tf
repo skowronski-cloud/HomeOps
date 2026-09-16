@@ -83,6 +83,58 @@ resource "kubernetes_network_policy" "longhorn_frontend" {
           }
         }
       }
+      from {
+        namespace_selector {
+          match_labels = {
+            "kubernetes.io/metadata.name" = "vm"
+          }
+        }
+      }
+
+    }
+
+    egress {} # single empty rule to allow all egress traffic
+
+    policy_types = ["Ingress", "Egress"]
+  }
+  
+}
+resource "kubernetes_network_policy" "longhorn_backend" { 
+  
+  metadata {
+    name = "longhorn-backend"
+    namespace = "longhorn-system"
+  }
+  spec {
+    pod_selector {
+      match_expressions {
+        key      = "app"
+        operator = "In"
+        values   = ["longhorn-manager"]
+      }
+    }
+
+    ingress {
+      ports {
+        port     = "http"
+        protocol = "TCP"
+      }
+
+
+      from {
+        namespace_selector {
+          match_labels = {
+            "kubernetes.io/metadata.name" = "monitoring-system"
+          }
+        }
+      }
+      from {
+        namespace_selector {
+          match_labels = {
+            "kubernetes.io/metadata.name" = "vm"
+          }
+        }
+      }
 
     }
 

@@ -1,7 +1,8 @@
 resource "kubernetes_secret" "ca_crt" {
   for_each = {
     "traefik-system" : {},
-    "monitoring-system" : {}
+    "monitoring-system" : {},
+    "vm" : {}
   }
   metadata {
     name      = "ca-crt"
