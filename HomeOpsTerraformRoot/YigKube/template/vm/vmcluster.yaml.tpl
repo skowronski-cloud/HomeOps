@@ -66,3 +66,10 @@ vmcluster:
     vminsert:
       enabled: true
       replicaCount: 3
+      resources:
+        requests:
+          cpu: 200m
+          memory: 256Mi
+        limits:
+          cpu: 1000m
+          memory: 1Gi

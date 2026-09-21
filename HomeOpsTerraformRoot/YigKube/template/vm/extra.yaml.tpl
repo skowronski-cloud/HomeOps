@@ -1,20 +1,5 @@
 ---
 extraObjects:
-  - apiVersion: operator.victoriametrics.com/v1beta1  # TODO: remove this once Prom Grafana is dropped
-    kind: VMUser
-    metadata:
-      name: grafana
-      namespace: vm
-    spec:
-      username: grafana
-      password: ${grafana_reader_pass}
-      targetRefs:
-        - crd:
-            kind: VMCluster/vmselect
-            name: vm-victoria-metrics-k8s-stack
-            namespace: vm
-          paths:
-            - "/select/0/prometheus/.*"
   - apiVersion: operator.victoriametrics.com/v1beta1
     kind: VMUser
     metadata:
@@ -30,7 +15,7 @@ extraObjects:
             namespace: vm
           paths:
             - "/insert/0/prometheus/.*"
-  - apiVersion: networking.k8s.io/v1  # TODO: WTF?
+  - apiVersion: networking.k8s.io/v1
     kind: Ingress
     metadata:
       name: vmauth

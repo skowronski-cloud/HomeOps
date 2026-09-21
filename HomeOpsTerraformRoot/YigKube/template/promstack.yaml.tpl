@@ -8,7 +8,7 @@ nodeExporter:
     type: ClusterIP
 
 grafana:
-  enabled: true
+  enabled: false
   adminPassword: "${grafana_admin_pass}"
   ingress:
     enabled: true
@@ -98,7 +98,7 @@ grafana:
       readOnly: true
 
 alertmanager:
-  enabled: true
+  enabled: false
   config:
     route:
       group_by: []
@@ -130,7 +130,7 @@ alertmanager:
       - alertmanager.${ingress_domain}
 
 prometheus:
-  enabled: true
+  enabled: false
   ingress:
     enabled: true
     ingressClassName: "traefik"
