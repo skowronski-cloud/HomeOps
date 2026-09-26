@@ -11,8 +11,9 @@ filter:
       - sensor.nettigo_air_monitor_sps30_pm2_5
       - sensor.nettigo_air_monitor_sps30_pm10
       - sensor.rtl433_*_temperature
-      - sensor.rtl433_*_moisture
-      - sensor.rtl433_*_conductivity
+      - sensor.wh52_*_temperature
+      - sensor.wh52_*_moisture
+      - sensor.wh52_*_conductivity
       - sensor.rtl433_*_rain_*
       - sensor.rtl433_*_wind_*
       - sensor.sun_solar_*
