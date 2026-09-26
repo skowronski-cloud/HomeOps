@@ -23,6 +23,76 @@ sensor:
       model: "30.3239.02"
       name: "TFA ${device.alias}"
 %{ endfor ~}
+%{ for device_id, device in rtl433_devices["fineoffset_wh52"] ~}
+  - name: "Temperature"
+    unique_id: "rtl433_fineoffset_wh52_${device.topic_id}_${device.name}_temperature"
+    #object_id: "rtl433_fineoffset_wh52_${device.topic_id}_${device.name}_temperature"
+    state_topic: "rtl_433/devices/Fineoffset-WH52/${device.topic_id}/temperature_C"
+    unit_of_measurement: "°C"
+    device_class: "temperature"
+    state_class: "measurement"
+    expire_after: 300
+    device:
+      identifiers: ["fineoffset_wh52_${device.topic_id}"]
+      manufacturer: "Fine Offset / Ecowitt"
+      model: "WH52"
+      name: "WH52 ${device.alias}"
+  - name: "Soil Moisture"
+    unique_id: "rtl433_fineoffset_wh52_${device.topic_id}_${device.name}_moisture"
+    #object_id: "rtl433_fineoffset_wh52_${device.topic_id}_${device.name}_moisture"
+    state_topic: "rtl_433/devices/Fineoffset-WH52/${device.topic_id}/moisture"
+    unit_of_measurement: "%"
+    device_class: "moisture"
+    state_class: "measurement"
+    expire_after: 300
+    device:
+      identifiers: ["fineoffset_wh52_${device.topic_id}"]
+      manufacturer: "Fine Offset / Ecowitt"
+      model: "WH52"
+      name: "WH52 ${device.alias}"
+  - name: "Conductivity"
+    unique_id: "rtl433_fineoffset_wh52_${device.topic_id}_${device.name}_conductivity"
+    #object_id: "rtl433_fineoffset_wh52_${device.topic_id}_${device.name}_conductivity"
+    state_topic: "rtl_433/devices/Fineoffset-WH52/${device.topic_id}/conductivity_uS_cm"
+    unit_of_measurement: "µS/cm"
+    device_class: "conductivity"
+    state_class: "measurement"
+    expire_after: 300
+    device:
+      identifiers: ["fineoffset_wh52_${device.topic_id}"]
+      manufacturer: "Fine Offset / Ecowitt"
+      model: "WH52"
+      name: "WH52 ${device.alias}"
+  - name: "Battery"
+    unique_id: "rtl433_fineoffset_wh52_${device.topic_id}_${device.name}_battery"
+    #object_id: "rtl433_fineoffset_wh52_${device.topic_id}_${device.name}_battery"
+    state_topic: "rtl_433/devices/Fineoffset-WH52/${device.topic_id}/battery_ok"
+    value_template: "{{ ((value | float * 99) | round(0)) + 1 }}"
+    unit_of_measurement: "%"
+    device_class: "battery"
+    state_class: "measurement"
+    entity_category: "diagnostic"
+    expire_after: 300
+    device:
+      identifiers: ["fineoffset_wh52_${device.topic_id}"]
+      manufacturer: "Fine Offset / Ecowitt"
+      model: "WH52"
+      name: "WH52 ${device.alias}"
+  - name: "Battery Voltage"
+    unique_id: "rtl433_fineoffset_wh52_${device.topic_id}_${device.name}_battery_voltage"
+    #object_id: "rtl433_fineoffset_wh52_${device.topic_id}_${device.name}_battery_voltage"
+    state_topic: "rtl_433/devices/Fineoffset-WH52/${device.topic_id}/battery_mV"
+    unit_of_measurement: "mV"
+    device_class: "voltage"
+    state_class: "measurement"
+    entity_category: "diagnostic"
+    expire_after: 300
+    device:
+      identifiers: ["fineoffset_wh52_${device.topic_id}"]
+      manufacturer: "Fine Offset / Ecowitt"
+      model: "WH52"
+      name: "WH52 ${device.alias}"
+%{ endfor ~}
 %{ for device_id, device in rtl433_devices["tfa_303181"] ~}
   - name: "Temperature"
     unique_id: "rtl433_tfa_303181_${device.topic_id}_${device.name}_temperature"
