@@ -20,12 +20,12 @@ CustomResources:
         region: dummy # ref: https://github.com/velero-io/velero/issues/9963
   # https://velero.io/docs/main/api-types/schedule/
   # TODO: add labels for easdier management
-  - name: daily-quick-backup
+  - name: daily-quick-backup # those are snapshots
     fullnameOverride: daily-quick-backup
     apiVersion: velero.io/v1
     kind: Schedule
     spec:
-      schedule: 0 4 * * 1-6 # every day except sunday at 4:00 UTC
+      schedule: 0 5 * * 1-6 # every day except sunday at 5:00 UTC = 7 CEST
       template:
         snapshotMoveData: false
         includedNamespaces:
@@ -34,19 +34,19 @@ CustomResources:
         includedResources:
           - '*'
         excludedResources: []
-        ttl: 2160h0m0s # 90d
+        ttl: 360h0m0s # 15d
         labelSelector:
           matchExpressions:
             - key: skipQuickBackup
               operator: NotIn
               values:
                 - "true"
-  - name: weekly-full-backup
+  - name: weekly-full-backup # real backups
     fullnameOverride: weekly-full-backup
     apiVersion: velero.io/v1
     kind: Schedule
     spec:
-      schedule: 0 4 * * 0 # every sunday at 4:00 UTC 
+      schedule: 0 8 * * 0 # every sunday at 8:00 UTC = 10 CEST
       template:
         snapshotMoveData: true
         includedNamespaces:
@@ -55,6 +55,6 @@ CustomResources:
         includedResources:
           - '*'
         excludedResources: []
-        ttl: 2160h0m0s # 90d
+        ttl: 1464h0m0s # 61d
         uploaderConfig:
-          parallelFilesUpload: 2 # upload also includes checksum and compression, 1 per node is safe, 4 per node means meltdown
+          parallelFilesUpload: 1 # upload also includes checksum and compression, 1 per node is safe, 4 per node means meltdown
