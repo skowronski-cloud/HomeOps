@@ -20,9 +20,9 @@
     - Grafana:
         href: https://grafana.${ ingress_domain } # FIXME
         icon: sh-grafana
-    - OpenSearch:
-        href: https://opensearch.${ ingress_domain } # FIXME
-        icon: sh-opensearch
+    - VictoriaLogs:
+        href: https://victoria-logs.${ ingress_domain }/select/vmui/
+        icon: sh-victoriametrics
 - Alerting:
     - Gatus:
         href: ${ gatus_url }

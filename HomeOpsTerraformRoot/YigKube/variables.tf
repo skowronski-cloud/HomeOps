@@ -1,9 +1,9 @@
 variable "metallb_ipam" {
   type = map(object({
-    name       = string
-    addresses  = list(string)
+    name          = string
+    addresses     = list(string)
     bgp_addresses = list(string)
-    namespaces = optional(list(string), [])
+    namespaces    = optional(list(string), [])
     svcSelectors = optional(list(object({
       key      = string
       operator = string
@@ -34,6 +34,30 @@ variable "yig_ca_crt" {
 }
 variable "yig_ca_key" {
   type = string
+}
+variable "victoria_logs" {
+  description = "Credentials for sending logs to and querying the NAS VictoriaLogs instance"
+  sensitive   = true
+  type = object({
+    writer_username     = string
+    writer_password     = string
+    reader_username     = string
+    reader_password     = string
+    ingress_proxy_token = string
+  })
+}
+variable "victoria_logs_config" {
+  description = "Non-secret connection and collector settings for the NAS VictoriaLogs instance"
+  type = object({
+    host                   = string
+    api_port               = number
+    vlagent_cluster_name   = string
+    vlagent_max_disk_usage = string
+    vlagent_cpu_request    = string
+    vlagent_cpu_limit      = string
+    vlagent_memory_request = string
+    vlagent_memory_limit   = string
+  })
 }
 
 variable "ha_postgres_instance_name" {
@@ -139,10 +163,10 @@ variable "mikrotik_monitoring_router_ip" {
 
 variable "pull_secrets" {
   type = map(object({
-    server = string
+    server   = string
     username = string
     password = string
-    email = string
+    email    = string
   }))
 }
 

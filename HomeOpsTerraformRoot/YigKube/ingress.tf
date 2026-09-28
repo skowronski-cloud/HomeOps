@@ -2,7 +2,8 @@ resource "kubernetes_secret" "ca_crt" {
   for_each = {
     "traefik-system" : {},
     "monitoring-system" : {},
-    "vm" : {}
+    "vm" : {},
+    "logging" : {}
   }
   metadata {
     name      = "ca-crt"
@@ -22,8 +23,8 @@ resource "helm_release" "traefik" {
   chart      = "traefik"
   version    = var.ver_helm_traefik
 
-  name      = "traefik"
-  namespace = "traefik-system"
+  name        = "traefik"
+  namespace   = "traefik-system"
   description = "Traefik Ingress Controller AHID=traefik/traefik"
 
   values = [templatefile("${path.module}/template/traefik.yaml.tpl", {
@@ -57,10 +58,10 @@ resource "helm_release" "echo" {
   # https://artifacthub.io/packages/helm/ealenn/echo-server
   repository = "https://ealenn.github.io/charts"
   chart      = "echo-server"
-  
 
-  name       = "echo-server"
-  namespace  = "default"
+
+  name        = "echo-server"
+  namespace   = "default"
   description = "Test echo server AHID=ealenn/echo-server"
 
   set = [
@@ -111,19 +112,19 @@ resource "kubernetes_config_map" "homepage" {
   }
   data = {
     "kubernetes.yaml" = templatefile("${path.module}/template/homepage/kubernetes.yaml.tpl", {})
-    "settings.yaml" = templatefile("${path.module}/template/homepage/settings.yaml.tpl", {})
-    "custom.css" = templatefile("${path.module}/template/homepage/custom.css.tpl", {})
-    "custom.js" = templatefile("${path.module}/template/homepage/custom.js.tpl", {})
-    "bookmarks.yaml" = templatefile("${path.module}/template/homepage/bookmarks.yaml.tpl", {})
+    "settings.yaml"   = templatefile("${path.module}/template/homepage/settings.yaml.tpl", {})
+    "custom.css"      = templatefile("${path.module}/template/homepage/custom.css.tpl", {})
+    "custom.js"       = templatefile("${path.module}/template/homepage/custom.js.tpl", {})
+    "bookmarks.yaml"  = templatefile("${path.module}/template/homepage/bookmarks.yaml.tpl", {})
     "services.yaml" = templatefile("${path.module}/template/homepage/services.yaml.tpl", {
       ingress_domain = var.ingress_domain
-      gatus_url = "http://${var.synology_velero_minio.host}:30001"
+      gatus_url      = "http://${var.synology_velero_minio.host}:30001"
     })
     "widgets.yaml" = templatefile("${path.module}/template/homepage/widgets.yaml.tpl", {})
-    "docker.yaml" = ""
+    "docker.yaml"  = ""
     "proxmox.yaml" = ""
   }
-  
+
 }
 resource "helm_release" "homepage" {
   # https://artifacthub.io/packages/helm/m0nsterrr-homepage/homepage
@@ -131,8 +132,8 @@ resource "helm_release" "homepage" {
   chart      = "homepage"
   version    = var.ver_helm_homepage
 
-  name      = "homepage"
-  namespace = "traefik-system"
+  name        = "homepage"
+  namespace   = "traefik-system"
   description = "Homepage landing site AHID=m0nsterrr-homepage/homepage"
 
   values = [templatefile("${path.module}/template/homepage.yaml.tpl", {

@@ -12,5 +12,8 @@ terraform {
     synology = {
       source = "synology-community/synology"
     }
+    tls = {
+      source = "hashicorp/tls"
+    }
   }
 }

@@ -1,3 +1,10 @@
+defaultDashboards:
+  sources:
+    victorialogs-single-node:
+      enabled: true
+    victorialogs-vlagent:
+      enabled: true
+
 grafana:
   enabled: true
   adminPassword: "${grafana_admin_pass}"
@@ -16,6 +23,7 @@ grafana:
     type: ClusterIP
   plugins:
     - victoriametrics-metrics-datasource
+    - victoriametrics-logs-datasource
     - volkovlabs-variable-panel
     - marcusolsson-static-datasource
     - yesoreyeram-infinity-datasource

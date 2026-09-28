@@ -12,6 +12,8 @@ module "yig_kube" {
   mqtt_accounts             = var.yig_mqtt_accounts
   yig_ca_crt                = var.yig_ca_crt
   yig_ca_key                = var.yig_ca_key
+  victoria_logs             = var.yig_victoria_logs
+  victoria_logs_config      = var.yig_victoria_logs_config
   host_interface_for_matter = var.yig_host_interface_for_matter
   ldap_basedn               = var.yig_ldap_basedn
   ldap_filter               = var.yig_ldap_filter
@@ -38,10 +40,10 @@ module "yig_kube" {
   metallb_ipam     = var.metallb_ipam
   qingping_devices = var.qingping_devices
   rtl433_devices   = var.rtl433_devices
-  pull_secrets = var.pull_secrets
+  pull_secrets     = var.pull_secrets
 
-  vm_users  = var.vm_users
-  ldap_path = var.tf_ldap.path
+  vm_users    = var.vm_users
+  ldap_path   = var.tf_ldap.path
   ldap_domain = var.tf_ldap.domain
 
 }
@@ -55,8 +57,8 @@ variable "vm_users" {
 
 variable "metallb_ipam" {
   type = map(object({
-    name      = string
-    addresses = list(string)
+    name          = string
+    addresses     = list(string)
     bgp_addresses = list(string)
     # TODO: add creation of DNS records in Cloudflare or ROS
     namespaces = optional(list(string))
@@ -208,16 +210,16 @@ variable "rtl433_devices" {
 }
 variable "pull_secrets" {
   type = map(object({
-    server = string
+    server   = string
     username = string
     password = string
-    email = string
+    email    = string
   }))
 }
 
 # NOTE: remember to publish `4347320a0004020001000502001e00f200` to `qingping/MAC/up` on bootstrap
 
 output "vm_users" {
-  value = module.yig_kube.vm_users
+  value     = module.yig_kube.vm_users
   sensitive = true
 }

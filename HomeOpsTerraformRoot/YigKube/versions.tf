@@ -154,25 +154,30 @@ variable "ver_helm_kyverno_policies" {
   default = "3.9.0"
   type    = string
 }
-variable "ver_helm_homepage" { 
+variable "ver_helm_homepage" {
   # https://artifacthub.io/packages/helm/m0nsterrr-homepage/homepage
   default = "5.1.1"
-  type = string
+  type    = string
 }
 variable "ver_helm_vm_stack" {
   # https://artifacthub.io/packages/helm/victoriametrics/victoria-metrics-k8s-stack
   default = "0.92.1"
-  type = string
+  type    = string
 }
 variable "ver_helm_vm_crd" {
   # https://artifacthub.io/packages/helm/victoriametrics/victoria-metrics-operator-crds
   default = "0.14.0"
-  type = string
+  type    = string
+}
+variable "ver_app_vlagent" {
+  # https://github.com/VictoriaMetrics/VictoriaLogs/releases
+  default = "v1.52.0"
+  type    = string
 }
 variable "ver_helm_netbox" {
   # https://artifacthub.io/packages/helm/netbox/netbox
   default = "8.3.63"
-  type = string
+  type    = string
 }
 variable "ver_docker_netbox_custom" {
   # https://github.com/danielskowronski/custom-netbox-docker-with-plugins/releases
@@ -182,5 +187,5 @@ variable "ver_docker_netbox_custom" {
 variable "ver_helm_podinfo" {
   # https://artifacthub.io/packages/helm/podinfo/podinfo
   default = "6.14.1"
-  type = string
+  type    = string
 }
