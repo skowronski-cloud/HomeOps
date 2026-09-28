@@ -46,7 +46,7 @@ CustomResources:
     apiVersion: velero.io/v1
     kind: Schedule
     spec:
-      schedule: 0 8 * * 0 # every sunday at 8:00 UTC = 10 CEST
+      schedule: 0 5 * * 0 # every sunday at 5:00 UTC = 7 CEST
       template:
         snapshotMoveData: true
         includedNamespaces:

@@ -18,7 +18,7 @@ spec:
             severity: critical
             monitor_svc: kube_storage
           annotations:
-            summary: "Runaway Snapshots per Volume"
+            summary: "Runaway Snapshots per Volume - {{`{{ $labels.volume }}`}}"
             description: "Volume {{`{{ $labels.volume }}`}} has more than 64 snapshots. This is very likely caused by a loop. Immediate action is required to prevent Longhorn stalling."
         - alert: RunawaySnapshotsGlobal
           expr: count(longhorn_snapshot_actual_size_bytes) > 1000
@@ -44,7 +44,7 @@ spec:
             monitor_svc: kube_storage
             severity: critical
           annotations:
-            summary: "Longhorn volume faulted"
+            summary: "Longhorn volume faulted - {{`{{ $labels.pvc_namespace }}`}}/{{`{{ $labels.pvc }}`}}"
             description: >
               Volume {{`{{ $labels.volume }}`}} on node {{`{{ $labels.node }}`}} (PVC {{`{{ $labels.pvc_namespace }}`}}/{{`{{ $labels.pvc }}`}}) is faulted.
         - alert: LonghornVolumeDegraded
@@ -54,7 +54,7 @@ spec:
             monitor_svc: kube_storage
             severity: critical
           annotations:
-            summary: "Longhorn volume degraded"
+            summary: "Longhorn volume degraded - {{`{{ $labels.pvc_namespace }}`}}/{{`{{ $labels.pvc }}`}}"
             description: >
               Volume {{`{{ $labels.volume }}`}} on node {{`{{ $labels.node }}`}} (PVC {{`{{ $labels.pvc_namespace }}`}}/{{`{{ $labels.pvc }}`}}) has been degraded for more than 30 minutes.
         - alert: LonghornVolumeUnknown
@@ -64,7 +64,7 @@ spec:
             monitor_svc: kube_storage
             severity: critical
           annotations:
-            summary: "Longhorn volume state unknown"
+            summary: "Longhorn volume state unknown - {{`{{ $labels.pvc_namespace }}`}}/{{`{{ $labels.pvc }}`}}"
             description: >
               Volume {{`{{ $labels.volume }}`}} on node {{`{{ $labels.node }}`}} (PVC {{`{{ $labels.pvc_namespace }}`}}/{{`{{ $labels.pvc }}`}}) has unknown robustness.
         - alert: LonghornVolumesDisappeared
@@ -97,4 +97,26 @@ spec:
             summary: "Runaway Load on all nodes is over 100% - cluster meltdown imminent"
             description: >
               All nodes have been experiencing high load for more than 15 minutes. It's very likely that all nodes will die soon. Immediate action is required to prevent cluster meltdown!
+              groups:
+        - alert: PVCUsageDropped
+          expr: |
+            (
+              max by (cluster, namespace, persistentvolumeclaim) (
+                kubelet_volume_stats_used_bytes{} offset 1m
+              )
+              -
+              max by (cluster, namespace, persistentvolumeclaim) (
+                kubelet_volume_stats_used_bytes{}
+              )
+            ) / 1024^3 > 2
+          for: 0s
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            monitor_svc: kube_storage
+          annotations:
+            summary: "PVC usage dropped by more than 2 GiB - {{`{{ $labels.namespace }}`}}/{{`{{ $labels.persistentvolumeclaim }}`}}"
+            description: >-
+              {{`{{ $labels.namespace }}`}}/{{`{{ $labels.persistentvolumeclaim }}`}}
+              decreased by {{`{{ $value }}`}} GiB over one minute.
 # TODO: alert for pod stuck in loop or dead or orange
